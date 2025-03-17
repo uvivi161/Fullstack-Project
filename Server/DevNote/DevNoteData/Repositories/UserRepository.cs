@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DevNote.Core.Models;
+using DevNote.Core.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,50 +9,41 @@ using System.Threading.Tasks;
 
 namespace DevNote.Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _context;
-
         public UserRepository(DataContext context)
         {
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAllUsersAsync()
+        public IEnumerable<User> Get()
         {
-            return await _context.Users.ToListAsync();
+            return _context.Users.ToList();
         }
 
-        public async Task<User?> GetUserByIdAsync(int id)
+        public User GetByMail(string email)
         {
-            return await _context.Users.FindAsync(id);
+            var user = _context.Users.FirstOrDefault(f => f.Email == email);
+
+            return user;
         }
 
-        public async Task<User?> GetUserByEmailAsync(string email)
+        public void PostNewUser(User us)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            _context.Users.Add(us);
         }
 
-        public async Task AddUserAsync(User user)
+        public void Put(User u, User us)
         {
-            await _context.Users.AddAsync(user);
-            await _context.SaveChangesAsync();
+            u.Email = us.Email;
+            u.PasswordHash = us.PasswordHash;
         }
 
-        public async Task UpdateUserAsync(User user)
+        public void Delete(User u)
         {
-            _context.Users.Update(user);
-            await _context.SaveChangesAsync();
+            _context.Users.Remove(u);
         }
 
-        public async Task DeleteUserAsync(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
-        }
     }
 }

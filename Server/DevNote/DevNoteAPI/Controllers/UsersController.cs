@@ -1,6 +1,10 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
+using DevNote.API.Models;
 using DevNote.Core.Dto_s;
+using DevNote.Core.Models;
 using DevNote.Core.Services;
+using DevNote.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,54 +19,71 @@ namespace DevNote.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService context, IMapper mapper)
         {
-            _userService = userService;
+            _userService = context;
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<UserDto>> GetUsers()
+        //מחזיר רשימת לקוחות
+        // GET: api/<UsersController>
+        [HttpGet("Admin")]
+        [Authorize(Policy = "AdminOnly")]
+        public ActionResult<User> Get()
         {
-            var users = _userService.GetUsers();
-            return Ok(_mapper.Map<IEnumerable<UserDto>>(users));
+            var list = _userService.Get();
+            var listDto = new List<UserDto>();
+            foreach (var user in list)
+            {
+                listDto.Add(_mapper.Map<UserDto>(user));
+            }
+            return Ok(listDto);
         }
 
-        // 🔹 2️⃣ התחברות משתמש קיים
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+
+        //שליפת לקוח לפי mail
+        // GET api/<UsersController>/5
+        [HttpGet("user_mail- Admin")]
+        [Authorize(Policy = "AdminOnly")]
+        public ActionResult GetByMail(string mail)
         {
-            var result = await _userService.LoginUserAsync(loginDto);
-            if (!result.Success) return Unauthorized(result.Message);
-            return Ok(result);
+            var user = _userService.GetByMail(mail);
+            var userDto = _mapper.Map<UserDto>(user);
+            if (user == null)
+                return NotFound("name is not found:(");
+            return Ok(userDto);
+
         }
 
-        //// POST api/<UsersController>
-        //[HttpPost]
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/<UsersController>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/<UsersController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
-
-        // 🔹 3️⃣ שליפת כל המשתמשים (רק למנהלים)
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        //הוספת לקוח
+        // POST api/<UsersController>
+        [HttpPost]
+        public ActionResult PostNewUser([FromBody] UserPostModel us)
         {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
+            var user = new User {Email = us.Email,CreatedAt=new DateTime() ,PasswordHash = us.Password,Role = us.Role};
+            if (_userService.PostNewUser(user))
+                return Ok();
+            return NotFound("this business is already exist");
         }
+
+        //עדכון פרטי לקוח מסוים לפי קוד לקוח
+        // PUT api/<UsersController>/5
+        [HttpPut("update user")]
+        public ActionResult Put(int id, [FromBody] UserPostModel us)
+        {
+            var user = new User { Email = us.Email, PasswordHash = us.Password};
+            if (_userService.Put(id, user))
+                return Ok();
+            return NotFound($"this user {id} is not exist");
+        }
+
+        [HttpDelete]
+        [Authorize(Policy = "AdminOnly")]
+        public ActionResult Delete(int id)
+        {
+            if (_userService.Delete(id))
+                return Ok();
+            return NotFound("this user is not exist");
+        } 
     }
 }

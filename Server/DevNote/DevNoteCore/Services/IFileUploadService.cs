@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace DevNote.Core.Services
 {
-    public interface IFileUploadService
-    {
-    }
+    //public interface IFileUploadService
+    //{
+    //    Task<string> UploadFileAsync(IFormFile file);
+    //}
 }
+
+
+

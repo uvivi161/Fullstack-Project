@@ -10,10 +10,10 @@ namespace DevNote.Core.Services
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserDto>> GetAllUsersAsync();
-        Task<UserDto?> GetUserByIdAsync(int id);
-        Task<UserDto?> GetUserByEmailAsync(string email);
-        Task<bool> RegisterUserAsync(RegisterDto registerDto);
-        Task<AuthResponseDto?> AuthenticateUserAsync(LoginDto loginDto);
+        IEnumerable<User> Get();
+        User GetByMail(string mail);
+        bool PostNewUser(User us);
+        bool Put(int id, User us);
+        bool Delete(int id);
     }
 }
