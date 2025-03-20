@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { MatToolbar } from '@angular/material/toolbar';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { LoginComponent } from "../components/login/login.component";
 
 @Component({
   selector: 'app-root',
   imports: [
+    RouterLink,
+    RouterLinkActive,
     RouterOutlet,
     MatToolbar,
 ],

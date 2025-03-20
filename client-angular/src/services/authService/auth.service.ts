@@ -11,9 +11,9 @@ export class AuthService {
   constructor(private http: HttpClient) { }
                    
   login(email: string, password: string) {
-    debugger;
     return this.http.post(`${this.url}/login`, {password, email}).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);
+      console.log(res.token);
       alert('Login Successful');
     },
     (error: any) => {
@@ -40,7 +40,7 @@ export class AuthService {
   } 
 
   signIn(email: string, password: string, role:string){
-    this.http.post(`${this.url}/register`, { password, role}).subscribe((res:any) => {
+    this.http.post(`${this.url}/register`, {email, password, role}).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);     
       alert('Sign in Successful');
     },

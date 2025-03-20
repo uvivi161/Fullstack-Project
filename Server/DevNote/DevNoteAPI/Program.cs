@@ -191,10 +191,10 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseCors("AllowAll");
 app.UseAuthentication();
 
 app.UseAuthorization();
-app.UseCors("AllowAll");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

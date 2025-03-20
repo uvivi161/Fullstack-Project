@@ -27,7 +27,7 @@ namespace DevNote.API.Controllers
 
         //מחזיר רשימת לקוחות
         // GET: api/<UsersController>
-        [HttpGet("Admin")]
+        [HttpGet("getAllUser-admin")]
         [Authorize(Policy = "AdminOnly")]
         public ActionResult<User> Get()
         {
@@ -43,7 +43,7 @@ namespace DevNote.API.Controllers
 
         //שליפת לקוח לפי mail
         // GET api/<UsersController>/5
-        [HttpGet("user_mail- Admin")]
+        [HttpGet("getByMail-admin")]
         [Authorize(Policy = "AdminOnly")]
         public ActionResult GetByMail(string mail)
         {
@@ -68,16 +68,16 @@ namespace DevNote.API.Controllers
 
         //עדכון פרטי לקוח מסוים לפי קוד לקוח
         // PUT api/<UsersController>/5
-        [HttpPut("update user")]
+        [HttpPut("updateUser/{id}")]
         public ActionResult Put(int id, [FromBody] UserPostModel us)
         {
-            var user = new User { Email = us.Email, PasswordHash = us.Password};
+            var user = new User { Email = us.Email, PasswordHash = us.Password, Role= us.Role};
             if (_userService.Put(id, user))
                 return Ok();
             return NotFound($"this user {id} is not exist");
         }
 
-        [HttpDelete]
+        [HttpDelete("deleteUser-admin")]
         [Authorize(Policy = "AdminOnly")]
         public ActionResult Delete(int id)
         {

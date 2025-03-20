@@ -38,6 +38,7 @@ namespace DevNote.Data.Repositories
         {
             u.Email = us.Email;
             u.PasswordHash = us.PasswordHash;
+            u.Role = us.Role;
         }
 
         public void Delete(User u)
