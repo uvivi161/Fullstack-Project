@@ -11,5 +11,10 @@
   ],
   "include": [
     "src/**/*.d.ts"
-  ]
+  ],
+  "serve": {
+  "options": {
+    "proxyConfig": "proxy.conf.json"
+  }
+}
 }

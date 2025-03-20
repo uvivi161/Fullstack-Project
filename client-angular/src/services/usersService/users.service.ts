@@ -33,12 +33,10 @@ export class UsersService {
   }
 
   deleteUser(id: string){
-    debugger;
     return this.http.delete(`${this.url}/deleteUser-admin`, { params: { id } });
   }
 
   updateUser(user: any, id:number){
-    debugger;
     return this.http.put(`${this.url}/updateUser/${id}`, user);
   }
 }

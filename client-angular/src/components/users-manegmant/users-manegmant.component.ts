@@ -48,7 +48,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
+import { MatCard, MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule, MatSpinner } from '@angular/material/progress-spinner';
 import { HttpClientModule } from '@angular/common/http';
 
 // import { CustomerEditDialog } from './customer-edit-dialog.component';
@@ -68,7 +69,9 @@ import { UserUpdateDialogeComponent } from '../user-update-dialoge/user-update-d
     MatDialogModule,
     MatInputModule,
     MatIconModule,
+    MatProgressSpinnerModule,
     MatCardModule,
+    MatSpinner
     // CustomerEditDialog
   ],
   // templateUrl: './customer-management.component.html',
@@ -79,6 +82,9 @@ export class UsersManegmantComponent implements OnInit {
   hasSearched = false;
   customers: any[] = [];
   displayedColumns: string[] = ['email','role','actions'];
+  isSearching: boolean = false;
+  searchResults: any = null;
+  hasSearch = false;
 
   constructor(private userService: UsersService, private dialog: MatDialog) {}
 
@@ -100,7 +106,6 @@ export class UsersManegmantComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // const updatedUser = { id, ...result };
-        debugger;
         this.userService.updateUser(result, id).subscribe(() => this.loadCustomers());
       }
     });
@@ -108,7 +113,6 @@ export class UsersManegmantComponent implements OnInit {
 
   deleteCustomer(id: number) {
     console.log(id);
-    debugger;
     
     if (confirm('האם אתה בטוח שברצונך למחוק את הלקוח?')) {
       this.userService.deleteUser(id.toString()).subscribe(() => this.loadCustomers());
@@ -122,13 +126,57 @@ export class UsersManegmantComponent implements OnInit {
   //   this.userService.getUserByMail(mail).subscribe(() => this.loadCustomers());
   // }
 
-  searchCustomer(email: string): void {
-    this.hasSearched = true;
-    if (email && email.trim() !== '') {
-      const user = this.userService.getUserByMail(email).subscribe(() => this.loadCustomers());
+  // searchCustomer(email: string): void {
+  //   this.hasSearched = true;
+  //   if (email && email.trim() !== '') {
+  //     const user = this.userService.getUserByMail(email).subscribe(() => this.loadCustomers());
 
-    } else {
-      this.hasSearched = false;
-    }
+  //   } else {
+  //     this.hasSearched = false;
+  //   }
+  // }
+  
+  searchCustomer(email: string) {
+    this.isSearching = true;
+    this.hasSearched = true;
+    this.searchResults = null;
+  
+    
+    const MINIMUM_SPINNER_TIME = 2000; // 10 שניות
+    const startTime = Date.now();
+
+    // קראי לפונקציה מהשירות
+    this.userService.getUserByMail(email).subscribe({
+      next: (customer) => {
+        const timeElapsed = Date.now() - startTime;
+        const remainigTime = MINIMUM_SPINNER_TIME - timeElapsed;
+
+        if(remainigTime > 0){
+          setTimeout(() => {
+            this.finishSearch(customer);
+          }, remainigTime);
+        }else{
+          this.finishSearch(customer);
+        }
+      },
+      error: (err) => {
+        console.error('Error fetching customer', err);
+        const timeElapsed = Date.now() - startTime;
+        const remainigTime = MINIMUM_SPINNER_TIME - timeElapsed;
+
+        if(remainigTime > 0){
+          setTimeout(() => {
+            this.finishSearch(null);
+          },remainigTime);
+        }else{
+          this.finishSearch(null);
+        }
+      }
+    });
+  }
+
+  finishSearch(customer :any){
+    this.searchResults = customer;
+    this.isSearching = false;
   }
 }

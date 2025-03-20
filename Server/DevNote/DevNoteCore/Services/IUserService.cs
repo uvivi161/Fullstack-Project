@@ -15,5 +15,6 @@ namespace DevNote.Core.Services
         bool PostNewUser(User us);
         bool Put(int id, User us);
         bool Delete(int id);
+        
     }
 }

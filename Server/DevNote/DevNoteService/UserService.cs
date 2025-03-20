@@ -66,6 +66,9 @@ namespace DevNote.Service
             _IUserRepository.Delete(user);
             _irm.save();
             return true;
-        } 
+        }
+
+      
+
     }
 }
