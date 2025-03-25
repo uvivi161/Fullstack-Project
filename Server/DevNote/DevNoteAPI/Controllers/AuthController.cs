@@ -80,7 +80,8 @@ namespace DevNote.API.Controllers
             {
                 Email = model.Email,
                 PasswordHash = model.Password,
-                Role = model.Role
+                Role = model.Role,
+                country = model.Country
             };
             _userService.PostNewUser(user);
             // יצירת ה-JWT עם התפקיד של המשתמש

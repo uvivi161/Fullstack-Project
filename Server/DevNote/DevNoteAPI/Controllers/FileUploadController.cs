@@ -7,30 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DevNote.API.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
+    [ApiController]
+    [Route("api/[controller]")]
     public class FileUploadController : ControllerBase
     {
-        //private readonly IFileUploadService _fileUploadService;
-        //public FileUploadController(IFileUploadService fileUploadService)
-        //{
-        //    _fileUploadService = fileUploadService;
-        //}
-
-        ////// GET: api/<FileUpload>
-        ////[HttpGet]
-        ////public IEnumerable<string> Get()
-        ////{
-        ////    return new string[] { "value1", "value2" };
-        ////}
-
-        ////// GET api/<FileUpload>/5
-        ////[HttpGet("{id}")]
-        ////public string Get(int id)
-        ////{
-        ////    return "value";
-        ////}
-
         //// POST api/<FileUpload>
         //[HttpPost("upload")]
         //public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
@@ -48,40 +28,40 @@ namespace DevNote.API.Controllers
         //    return Ok(new { fileUrl });
         //}
 
-        ////// PUT api/<FileUpload>/5
-        ////[HttpPut("{id}")]
-        ////public void Put(int id, [FromBody]string value)
-        ////{
-        ////}
-
-        ////// DELETE api/<FileUpload>/5
-        ////[HttpDelete("{id}")]
-        ////public void Delete(int id)
-        ////{
-        ////}
-        ///
-        //private readonly IAmazonS3 _s3Client;
-
-        //public FileUploadController(IAmazonS3 s3Client)
+        //// PUT api/<FileUpload>/5
+        //[HttpPut("{id}")]
+        //public void Put(int id, [FromBody]string value)
         //{
-        //    _s3Client = s3Client;
-        //} 
-
-        //[HttpGet("presigned-url")]
-        //public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
-        //{
-        //    var request = new GetPreSignedUrlRequest
-        //    {
-        //        BucketName = "devnote-mp3-files",
-        //        Key = fileName,
-        //        Verb = HttpVerb.PUT,
-        //        Expires = DateTime.UtcNow.AddMinutes(5),
-        //        ContentType = "mp3" // או סוג הקובץ המתאים
-        //    };
-
-        //    string url = _s3Client.GetPreSignedURL(request);
-        //    return Ok(new { url });
         //}
+
+        //// DELETE api/<FileUpload>/5
+        //[HttpDelete("{id}")]
+        //public void Delete(int id)
+        //{
+        //}
+
+        private readonly IAmazonS3 _s3Client;
+
+        public FileUploadController(IAmazonS3 s3Client)
+        {
+            _s3Client = s3Client;
+        }
+
+        [HttpGet("presigned-url")]
+        public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
+        {
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = "devnote-files",
+                Key = fileName,
+                Verb = HttpVerb.PUT,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+                ContentType = "mp3/pdf" // או סוג הקובץ המתאים
+            };
+
+            string url = _s3Client.GetPreSignedURL(request);
+            return Ok(new { url });
+        }
 
 
 
@@ -93,17 +73,53 @@ namespace DevNote.API.Controllers
 
         //    var request = new PutObjectRequest
         //    {
-        //        BucketName = "devnote-mps-files", // **👈 יש לשנות בהתאם**
+        //        BucketName = "devnote-files", // **👈 יש לשנות בהתאם**
         //        Key = file.FileName,
         //        InputStream = file.OpenReadStream(),
         //        ContentType = file.ContentType
-        //    }; 
+        //    };
 
         //    var response = await _s3Client.PutObjectAsync(request);
         //    if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
         //        return Ok(new { message = "הקובץ הועלה בהצלחה ל-S3!", fileName = file.FileName });
-              
+
         //    return StatusCode(500, "שגיאה בהעלאת הקובץ.");
         //}
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [HttpPost("direct-upload")]
+        public async Task<IActionResult> UploadFile([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("קובץ חסר!");
+
+            try
+            {
+                var request = new PutObjectRequest
+                {
+                    BucketName = "devnote-files",
+                    Key = file.FileName,
+                    InputStream = file.OpenReadStream(),
+                    ContentType = file.ContentType
+                };
+
+                var response = await _s3Client.PutObjectAsync(request);
+                if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                    return Ok(new { message = "הקובץ הועלה בהצלחה ל-S3!", fileName = file.FileName });
+
+                return StatusCode(500, "שגיאה בהעלאת הקובץ.");
+            }
+            catch (AmazonS3Exception ex)
+            {
+                // שגיאות שקשורות ל-S3
+                return StatusCode(500, $"S3 Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                // כל שגיאה אחרת
+                return StatusCode(500, $"General Error: {ex.Message}");
+            }
+        }
+
     }
 }

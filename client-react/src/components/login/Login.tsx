@@ -49,23 +49,51 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
 
             try {
                 debugger;
+                const response = await axios.post<{ token: string }>('https://localhost:7170/api/Auth/login', {
+                    email: emailRef.current?.value,
+                    password: passwordRef.current?.value
+                });
+                const token = response.data.token
+                sessionStorage.setItem('token', token)
+                debugger;
+                interface User {
+                    id: number;
+                    email: string;
+                    role: string;
+                    country: string;
+                }
 
+                const userResponse = await axios.get<User>('https://localhost:7170/api/Users/getByMail-admin', {
+                    params: { email: emailRef.current?.value },
+                    headers: {Authorization: `Bearer ${token}`}
+                });
                 
-                const token = await axios.post('https://localhost:7170/api/Auth/login');
-                console.log(token);
-            // try {
-            //     const response = await axios.post('https://localhost:7170/api/Auth/login', {
-            //         email: emailRef.current?.value,
-            //         password: passwordRef.current?.value
-            //     });
-            //     usersDispatch({
-            //         type: 'ADD',
-            //         data: {
-            //             id: response.data.user.id,
-            //             email: response.data.user.email,
-            //             password: response.data.user.password
-            //         }
-            //     });
+                const fetchedUser = userResponse.data;
+                 
+                usersDispatch({
+                    type: 'ADD',
+                    data: {
+                        id: fetchedUser.id,
+                        email: fetchedUser.email,
+                        password: '',
+                        role: fetchedUser.role,
+                        country: fetchedUser.country
+                    }
+                });
+            
+                // try {
+                //     const response = await axios.post('https://localhost:7170/api/Auth/login', {
+                //         email: emailRef.current?.value,
+                //         password: passwordRef.current?.value
+                //     });
+                //     usersDispatch({
+                //         type: 'ADD',
+                //         data: {
+                //             id: response.data.user.id,
+                //             email: response.data.user.email,
+                //             password: response.data.user.password
+                //         }
+                //     });
                 onClick(); setLoggedIn(true); setOpenL(!openL);
             } catch (error) {
                 alert("this user is not valid")

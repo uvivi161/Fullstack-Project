@@ -11,6 +11,39 @@
     </div>
   </div>
 
+
+<!-- Spinner -->
+@if (isSearching) {
+  <div class="spinner-container">
+    <mat-progress-spinner mode="indeterminate" diameter="40"></mat-progress-spinner>
+  </div>
+}
+
+<!-- Search Result -->
+@if (searchResults && !isSearching) {
+  <div class="search-result">
+    <h3>תוצאה:</h3>
+    <mat-card>
+      <p><strong>אימייל:</strong> {{ searchResults.email }}</p>
+      <p><strong>תפקיד:</strong> {{ searchResults.role }}</p>
+      <button mat-icon-button color="primary" (click)="editCustomer(searchResults, searchResults.id)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteCustomer(searchResults.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-card>
+  </div>
+}
+
+<!-- No Results -->
+@else if (!searchResults && hasSearched && !isSearching) {
+  <div class="no-results">
+    <mat-icon>search_off</mat-icon>
+    <p>לא נמצאו תוצאות</p>
+  </div>
+}
+
 <mat-card>
     @if (customers.length > 0) {
   <table mat-table [dataSource]="customers" class="mat-elevation-z8">

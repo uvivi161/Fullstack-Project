@@ -16,11 +16,17 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
     const [user, usersDispatch] = useContext(UserContext);
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const roleRef = useRef<HTMLInputElement>(null);
+    const countryRef = useRef<HTMLInputElement>(null);
 
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [countryError, setCountryError] = useState(false);
+    const [roleError, setRoleError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState("");
     const [passwordHelperText, setPasswordHelperText] = useState("");
+    const [countryHelperText, setCountryHelperText] = useState("");
+    const [roleHelperText, setRoleHelperText] = useState("");
 
     const handleAdd = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -44,12 +50,42 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
             setPasswordHelperText("");
         }
 
+        if (!countryRef.current?.value) {
+            setCountryError(true);
+            setCountryHelperText("Country is required");
+            isValid = false;
+        } else {
+            setCountryError(false);
+            setCountryHelperText("");
+        }
+
+        if (!roleRef.current?.value) {
+            setRoleError(true);
+            setRoleHelperText("Role is required");
+            isValid = false;
+        } else {
+            setRoleError(false);
+            setRoleHelperText("");
+        }
+
+
         if (isValid) {
-            debugger;
             try {
-                debugger;
-                const token = await axios.post('https://localhost:7170/api/Auth/login');
-                console.log(token);
+                interface RegisterResponse {
+                    token: string;
+                }
+
+                const res = await axios.post<RegisterResponse>('https://localhost:7170/api/Auth/register', {
+                    email: emailRef.current?.value,
+                    password: passwordRef.current?.value,
+                    role: roleRef.current?.value,
+                    country: countryRef.current?.value
+                });
+
+                const token = res.data.token;
+                sessionStorage.setItem('token', token);
+                
+                console.log(res);
                 
                 // const response = await axios.post('https://localhost:7170/api/Auth/register', {
                 //     email: emailRef.current?.value,
@@ -82,6 +118,16 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
         setPasswordHelperText("");
     };
 
+    const handleCountryChange = () => {
+        setPasswordError(false);
+        setPasswordHelperText("");
+    };
+
+    const handleRoleChange = () => {
+        setPasswordError(false);
+        setPasswordHelperText("");
+    };
+
     const [openL, setOpenL] = useState(false);
     const [isLogin, setLoggedIn] = useState(false);
 
@@ -103,6 +149,10 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
                             <TextField type="password" label='userPassword' inputRef={passwordRef}
                                 error={passwordError} helperText={passwordHelperText}
                                 onChange={handlePasswordChange} />
+                            <TextField label='Country' inputRef={countryRef} error={countryError}
+                                helperText={countryHelperText} onChange={handleCountryChange}/>
+                            <TextField label='userRole' inputRef={roleRef} error={roleError}
+                                helperText={roleHelperText} onChange={handleRoleChange}/>
                             <Button type="submit">SignIn</Button>
                         </form>
                     </Box>

@@ -84,6 +84,8 @@ namespace DevNote.API.Controllers
             if (_userService.Delete(id))
                 return Ok();
             return NotFound("this user is not exist");
-        } 
+        }
+
+
     }
 }

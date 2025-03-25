@@ -1,22 +1,46 @@
 
+import { RouterProvider } from 'react-router-dom'
 import './App.css'
+import AppLayout from './components/Layout/AppLayout'
 import LogIn from './components/login/Login'
 import SignIn from './components/login/SignIn'
+import { initialUserState, UserContext, UserReducer } from './components/login/UserReducer'
+import { Box } from '@mui/material'
+import { useReducer } from 'react'
+import { myRouter } from './Router'
 
 function App() {
 
+  const [user, dispatch] = useReducer(UserReducer, initialUserState)
 
   return (<>
-  <LogIn onClick={function (): void { console.log("clicked log in")
+  {/* <LogIn onClick={function (): void { console.log("clicked log in")
     } }></LogIn>
 
     <SignIn onSignin={function (): void { console.log("clicked sign in")
     } }>
       
-    </SignIn>
+    </SignIn> */}
 
 
 
+<Box sx={{
+        height: "100vh",
+        overflowY:'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        // backgroundImage: `url(${backgroundImg})`,
+        backgroundSize: "cover",
+        backgroundPosition: "cover",
+        backgroundAttachment: "fixed",
+        position: "relative",
+        color: "white",
+        width: "100%"
+      }}>
+        <UserContext value={[user, dispatch]}>
+          <RouterProvider router={myRouter} />
+        </UserContext>
+      </Box>
   </>)
 }
 

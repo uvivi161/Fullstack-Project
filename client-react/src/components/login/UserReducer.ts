@@ -2,16 +2,14 @@ import { createContext, Dispatch } from "react"
 
 export type user = {
     id: number,
-    firstName: string,
-    lastName: string,
     email: string,
     password: string,
-    adress: string,
-    phone: string
+    role: string,
+    country: string
 }
 
 type Action = {
-    type: 'ADD' | 'UPDATE' | 'GET' | 'DELETE',
+    type: 'ADD' | 'UPDATE' |  'GET' | 'DELETE',
     data: Partial<user>,  
 }
 
@@ -24,17 +22,17 @@ export const UserReducer = (state: user, action: Action): user => {
                 id: action.data.id ?? state.id,
                 email: action.data.email ?? state.email,
                 password: action.data.password ?? state.password,
+                role: action.data.role ?? state.role,
+                country: action.data.country ?? state.country
             }
         case 'UPDATE':
             return {
                 ...state,
                 id: action.data.id ?? state.id,
-                firstName: action.data.firstName ?? state.firstName,
-                lastName: action.data.lastName ?? state.lastName,
                 email: action.data.email ?? state.email,
                 password: action.data.password ?? state.password,
-                adress: action.data.adress ?? state.adress,
-                phone: action.data.phone ?? state.phone,
+                role: action.data.role ?? state.role,
+                country: action.data.country ?? state.country
             };
         case 'GET':
             return state;
@@ -47,12 +45,10 @@ export const UserReducer = (state: user, action: Action): user => {
 }
 
 export const initialUserState: user = {
-    firstName: 'INITIAL',
-    lastName: 'initial',
     email: '',
     password: '',
-    adress: '',
-    phone: '',
+    role: '',
+    country: '',
     id: 0
 };
 

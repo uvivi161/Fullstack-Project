@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GraphComponent } from './graph.component';
+import { CityYearlyChartComponent } from './graph.component';
 
 describe('GraphComponent', () => {
-  let component: GraphComponent;
-  let fixture: ComponentFixture<GraphComponent>;
+  let component: CityYearlyChartComponent;
+  let fixture: ComponentFixture<CityYearlyChartComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GraphComponent]
+      imports: [CityYearlyChartComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(GraphComponent);
+    fixture = TestBed.createComponent(CityYearlyChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

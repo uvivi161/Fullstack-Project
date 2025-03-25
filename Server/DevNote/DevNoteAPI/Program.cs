@@ -108,8 +108,71 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using Amazon.S3;
+using Amazon;
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.Runtime;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+
+//var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+
+//var credentials = new BasicAWSCredentials(
+//builder.Configuration["AWS:AccessKey"],
+//builder.Configuration["AWS:SecretKey"]
+////AccessKey,
+////SecretAccess
+//);
+
+//var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+////var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
+
+//var s3Client = new AmazonS3Client(credentials, region);
+
+//builder.Services.AddSingleton<IAmazonS3>(s3Client);
+//Console.WriteLine(s3Client);
+
+
+//// 1. יצירת AWSOptions עם Region
+//var awsOptions = new AWSOptions
+//{
+//    Region = Amazon.RegionEndpoint.EUNorth1
+//};
+
+//// 2. רישום AWSOptions וה-S3 Service
+///
+
+var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+
+var credentials = new BasicAWSCredentials(
+builder.Configuration["AWS:AccessKey"],
+builder.Configuration["AWS:SecretKey"]
+//AccessKey,
+//SecretAccess
+);
+
+var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
+//var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
+
+var s3Client = new AmazonS3Client(credentials, region);
+
+builder.Services.AddSingleton<IAmazonS3>(s3Client);
+Console.WriteLine(s3Client);
+
+
+
+
+
+
+
+
+
+
+
+//builder.Services.AddDefaultAWSOptions(awsOptions);
+//builder.Services.AddAWSService<IAmazonS3>();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -126,6 +189,7 @@ builder.Services.AddSwaggerGen(options =>
         Description = "Bearer Authentication with JWT Token",
         Type = SecuritySchemeType.Http
     });
+
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -145,7 +209,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-
+builder.Services.AddScoped<IUserStatisticsRepository, UserStatisticsRepository>();
+builder.Services.AddScoped<IUserStatisticsService, UserStatisticsService>();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
