@@ -2,10 +2,11 @@ import { createContext, Dispatch } from "react"
 
 export type user = {
     id: number,
-    email: string,
+    mail: string,
     password: string,
     role: string,
-    country: string
+    country: string,
+    companyName: string
 }
 
 type Action = {
@@ -20,19 +21,22 @@ export const UserReducer = (state: user, action: Action): user => {
             return {
                 ...state,
                 id: action.data.id ?? state.id,
-                email: action.data.email ?? state.email,
+                mail: action.data.mail ?? state.mail,
                 password: action.data.password ?? state.password,
                 role: action.data.role ?? state.role,
-                country: action.data.country ?? state.country
+                country: action.data.country ?? state.country,
+                companyName: action.data.companyName ?? state.companyName
             }
         case 'UPDATE':
             return {
                 ...state,
                 id: action.data.id ?? state.id,
-                email: action.data.email ?? state.email,
+                mail: action.data.mail ?? state.mail,
                 password: action.data.password ?? state.password,
                 role: action.data.role ?? state.role,
-                country: action.data.country ?? state.country
+                country: action.data.country ?? state.country,
+                companyName: action.data.companyName ?? state.companyName
+
             };
         case 'GET':
             return state;
@@ -45,10 +49,11 @@ export const UserReducer = (state: user, action: Action): user => {
 }
 
 export const initialUserState: user = {
-    email: '',
+    mail: '',
     password: '',
     role: '',
     country: '',
+    companyName: '',
     id: 0
 };
 

@@ -8,7 +8,7 @@ namespace DevNote.Core.Dto_s
 {
     public class RegisterDto
     {
-        public string Email { get; set; } = string.Empty;
+        public string Mail { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public string Role { get; set; } = "User"; // ברירת מחדל: משתמש רגיל
         public string Country { get; set; }

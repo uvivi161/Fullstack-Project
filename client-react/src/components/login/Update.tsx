@@ -36,9 +36,7 @@ const Update:React.FC<UpdateProps> = ({onClose}) => {
         try {
             const response = await axios.put("http://localhost:3000/api/user", {
                 id: user.id,
-                firstName: firstNmaeRef.current?.value || user.firstName,
-                lastName: lastNameRef.current?.value || '',
-                email: emailRef.current?.value || user.email,
+                mail: emailRef.current?.value || user.mail,
                 password: passwordRef.current?.value || user.password,
                 adress: adressRef.current?.value || '',
                 phone: phoneRef.current?.value || ''
@@ -51,13 +49,8 @@ const Update:React.FC<UpdateProps> = ({onClose}) => {
             usersDispatch({
                 type: 'UPDATE',
                 data: {
-                    firstName: firstNmaeRef.current?.value || user.firstName,
-                    lastName: lastNameRef.current?.value || '',
-                    email: emailRef.current?.value || user.email,
-                    password: passwordRef.current?.value || user.password,
-                    adress: adressRef.current?.value || '',
-                    phone: phoneRef.current?.value || ''
-                    
+                    mail: emailRef.current?.value || user.mail,
+                    password: passwordRef.current?.value || user.password,                    
                 }
             })
             handleClose();

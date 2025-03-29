@@ -11,6 +11,7 @@ namespace DevNote.Core.Repositories
     {
         IEnumerable<User> Get();
         User GetByMail(string mail);
+        IEnumerable<User> GetByCompany(string company);
         void PostNewUser(User us);
         void Put(User u, User us);
         void Delete(User u);

@@ -12,6 +12,7 @@ namespace DevNote.Core.Services
     {
         IEnumerable<User> Get();
         User GetByMail(string mail);
+        IEnumerable<User> GetByCompany(string company);
         bool PostNewUser(User us);
         bool Put(int id, User us);
         bool Delete(int id);

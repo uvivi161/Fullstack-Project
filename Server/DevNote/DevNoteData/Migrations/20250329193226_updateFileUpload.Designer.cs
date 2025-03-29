@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevNote.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250320194920_UserStatistics")]
-    partial class UserStatistics
+    [Migration("20250329193226_updateFileUpload")]
+    partial class updateFileUpload
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,9 +50,6 @@ namespace DevNote.Data.Migrations
                     b.Property<string>("S3Key")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
@@ -151,8 +148,7 @@ namespace DevNote.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId")
-                        .IsUnique();
+                    b.HasIndex("FileId");
 
                     b.ToTable("Transcriptions");
                 });
@@ -164,6 +160,10 @@ namespace DevNote.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -210,29 +210,22 @@ namespace DevNote.Data.Migrations
 
             modelBuilder.Entity("DevNote.Core.Models.FileUpload", b =>
                 {
-                    b.HasOne("DevNote.Core.Models.User", "User")
+                    b.HasOne("DevNote.Core.Models.User", null)
                         .WithMany("Files")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.Transcription", b =>
                 {
                     b.HasOne("DevNote.Core.Models.FileUpload", "File")
-                        .WithOne("Transcription")
-                        .HasForeignKey("DevNote.Core.Models.Transcription", "FileId")
+                        .WithMany()
+                        .HasForeignKey("FileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("File");
-                });
-
-            modelBuilder.Entity("DevNote.Core.Models.FileUpload", b =>
-                {
-                    b.Navigation("Transcription");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.User", b =>

@@ -22,11 +22,17 @@ namespace DevNote.Data.Repositories
             return _context.Users.ToList();
         }
 
-        public User GetByMail(string email)
+        public User GetByMail(string Mail)
         {
-            var user = _context.Users.FirstOrDefault(f => f.Email == email);
+            var user = _context.Users.FirstOrDefault(f => f.Mail == Mail);
 
             return user;
+        }
+
+        public IEnumerable<User> GetByCompany(string company)
+        {
+            var users = _context.Users.Where(u => u.CompanyName == company).ToList();
+            return users;
         }
 
         public void PostNewUser(User us)
@@ -36,9 +42,10 @@ namespace DevNote.Data.Repositories
 
         public void Put(User u, User us)
         {
-            u.Email = us.Email;
+            u.Mail = us.Mail;
             u.PasswordHash = us.PasswordHash;
             u.Role = us.Role;
+            u.CompanyName = us.CompanyName;
         }
 
         public void Delete(User u)

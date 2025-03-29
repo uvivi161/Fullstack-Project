@@ -12,10 +12,11 @@ export const btnUpdateContext = createContext<[boolean, Dispatch<SetStateAction<
 const CreateAvatar = () => {
 
   const [user] = useContext(UserContext);
-
+  console.log(user.mail);
+  
   return (
     <Stack direction="row" spacing={2}>                                  
-      <Avatar sx={{ bgcolor:"#3b3c71" }}>{user.email?.charAt(0)}</Avatar>
+      <Avatar sx={{ bgcolor:"#3b3c71" }}>{user.mail?.charAt(0)}</Avatar>
     </Stack>                                                              
   );
 }

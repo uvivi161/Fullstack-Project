@@ -1,7 +1,10 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
+using DevNote.API.Models;
+using DevNote.Core.Models;
 using DevNote.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -41,26 +44,43 @@ namespace DevNote.API.Controllers
         //}
 
         private readonly IAmazonS3 _s3Client;
+        private readonly IFileUploadService _FileService;
 
-        public FileUploadController(IAmazonS3 s3Client)
+        public FileUploadController(IAmazonS3 s3Client, IFileUploadService context)
         {
             _s3Client = s3Client;
+            _FileService = context;
         }
 
         [HttpGet("presigned-url")]
         public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName)
         {
+            //var request = new GetPreSignedUrlRequest
+            //{
+            //    BucketName = "devnote-files",
+            //    Key = fileName,
+            //    Verb = HttpVerb.PUT,
+            //    Expires = DateTime.UtcNow.AddMinutes(5),
+            //    ContentType = fileName.EndsWith(".pdf") ? "application/pdf" : "audio/mpeg"
+            //};
+
+            //string url = _s3Client.GetPreSignedURL(request);
+            //return Ok(new { url });
+
+            string s3Key = $"uploads/{Guid.NewGuid()}_{fileName}";
+
             var request = new GetPreSignedUrlRequest
             {
                 BucketName = "devnote-files",
-                Key = fileName,
+                Key = s3Key,  // 🟢 שימוש ב-S3 Key הנכון
                 Verb = HttpVerb.PUT,
                 Expires = DateTime.UtcNow.AddMinutes(5),
-                ContentType = "mp3/pdf" // או סוג הקובץ המתאים
+                ContentType = fileName.EndsWith(".pdf") ? "application/pdf" : "audio/mpeg"
             };
 
             string url = _s3Client.GetPreSignedURL(request);
-            return Ok(new { url });
+
+            return Ok(new { url, s3Key }); // 🔹 מחזירים גם את ה-S3 Key
         }
 
 
@@ -119,6 +139,15 @@ namespace DevNote.API.Controllers
                 // כל שגיאה אחרת
                 return StatusCode(500, $"General Error: {ex.Message}");
             }
+        }
+
+        [HttpPost("UploadTo-DB")]
+        public async Task<IActionResult> UploadFileToDB([FromBody] FileUploadPostModel fi)
+        {
+            var file = new FileUpload { FileName = fi.FileName, FileUrl = fi.FileUrl, S3Key = fi.S3Key, UserId = fi.UserId };
+            if (_FileService.PostNewFile(file))
+                return Ok();
+            return NotFound("this file is already exist");
         }
 
     }

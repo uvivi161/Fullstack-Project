@@ -28,7 +28,7 @@ namespace DevNote.API.Controllers
         //מחזיר רשימת לקוחות
         // GET: api/<UsersController>
         [HttpGet("getAllUser-admin")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public ActionResult<User> Get()
         {
             var list = _userService.Get();
@@ -44,7 +44,7 @@ namespace DevNote.API.Controllers
         //שליפת לקוח לפי mail
         // GET api/<UsersController>/5
         [HttpGet("getByMail-admin")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public ActionResult GetByMail(string mail)
         {
             var user = _userService.GetByMail(mail);
@@ -55,15 +55,27 @@ namespace DevNote.API.Controllers
 
         }
 
+        [HttpGet("getByCompanyName")]
+        public ActionResult GetByCompany(string company)
+        { 
+            var users = _userService.GetByCompany(company);
+            var usersDtos = new List<UserDto>();
+            foreach(var user in users)
+            {
+                usersDtos.Add(_mapper.Map<UserDto>(user));
+            }
+            return Ok(usersDtos);
+        }
+
         //הוספת לקוח
         // POST api/<UsersController>
         [HttpPost]
         public ActionResult PostNewUser([FromBody] UserPostModel us)
         {
-            var user = new User {Email = us.Email,CreatedAt=new DateTime() ,PasswordHash = us.Password,Role = us.Role};
+            var user = new User {Mail = us.Mail,CreatedAt=new DateTime() ,PasswordHash = us.Password,Role = us.Role, CompanyName = us.CompanyName};
             if (_userService.PostNewUser(user))
                 return Ok();
-            return NotFound("this business is already exist");
+            return NotFound("this user is already exist");
         }
 
         //עדכון פרטי לקוח מסוים לפי קוד לקוח
@@ -71,7 +83,7 @@ namespace DevNote.API.Controllers
         [HttpPut("updateUser/{id}")]
         public ActionResult Put(int id, [FromBody] UserPostModel us)
         {
-            var user = new User { Email = us.Email, PasswordHash = us.Password, Role= us.Role};
+            var user = new User { Mail = us.Mail, PasswordHash = us.Password, Role= us.Role, CompanyName = us.CompanyName};
             if (_userService.Put(id, user))
                 return Ok();
             return NotFound($"this user {id} is not exist");

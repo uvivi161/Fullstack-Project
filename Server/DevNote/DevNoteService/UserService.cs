@@ -32,6 +32,10 @@ namespace DevNote.Service
         {
             return _IUserRepository.GetByMail(mail);
         }
+        public IEnumerable<User> GetByCompany(string company)
+        {
+            return _IUserRepository.GetByCompany(company);
+        }
 
         public bool PostNewUser(User us)
         {

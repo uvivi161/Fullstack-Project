@@ -10,8 +10,9 @@ namespace DevNote.Core.Dto_s
     {
         //public string userName { get; set; }
         public int Id { get; set; }
-        public string email { get; set; }
+        public string Mail { get; set; }
         public string password { get; set; }
         public string Role { get; set; }
+        public string CompanyName { get; set; }
     }
 }

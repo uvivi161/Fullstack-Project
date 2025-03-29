@@ -211,6 +211,9 @@ builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserStatisticsRepository, UserStatisticsRepository>();
 builder.Services.AddScoped<IUserStatisticsService, UserStatisticsService>();
+builder.Services.AddScoped<IFileUploadRepository, FileUploadRepository>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
+
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));

@@ -52,7 +52,7 @@ namespace DevNote.API.Controllers
         public IActionResult Login([FromBody] LoginModel model)
         {
             // שליפת המשתמש מה-DB לפי שם משתמש
-            var user = _userService.GetByMail(model.Email);
+            var user = _userService.GetByMail(model.Mail);
 
             // אם המשתמש לא קיים או שהסיסמה לא תואמת
             if (user == null || user.PasswordHash != model.Password)
@@ -69,7 +69,7 @@ namespace DevNote.API.Controllers
         [HttpPost("register")]
         public IActionResult register([FromBody] UserPostModel model)
         {
-            var checkUser = _userService.GetByMail(model.Email);
+            var checkUser = _userService.GetByMail(model.Mail);
             // בדיקה האם קיים משתמש עם אותו מייל
             if (checkUser != null)
             {
@@ -78,7 +78,7 @@ namespace DevNote.API.Controllers
             // הוספת המשתמש למסד הנתונים
             var user = new User
             {
-                Email = model.Email,
+                Mail = model.Mail,
                 PasswordHash = model.Password,
                 Role = model.Role,
                 country = model.Country

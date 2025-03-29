@@ -50,7 +50,7 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
             try {
                 debugger;
                 const response = await axios.post<{ token: string }>('https://localhost:7170/api/Auth/login', {
-                    email: emailRef.current?.value,
+                    Mail: emailRef.current?.value,
                     password: passwordRef.current?.value
                 });
                 const token = response.data.token
@@ -58,13 +58,14 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
                 debugger;
                 interface User {
                     id: number;
-                    email: string;
+                    mail: string;
                     role: string;
                     country: string;
+                    companyName: string;
                 }
 
                 const userResponse = await axios.get<User>('https://localhost:7170/api/Users/getByMail-admin', {
-                    params: { email: emailRef.current?.value },
+                    params: { Mail: emailRef.current?.value },
                     headers: {Authorization: `Bearer ${token}`}
                 });
                 
@@ -74,10 +75,11 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
                     type: 'ADD',
                     data: {
                         id: fetchedUser.id,
-                        email: fetchedUser.email,
+                        mail: fetchedUser.mail,
                         password: '',
                         role: fetchedUser.role,
-                        country: fetchedUser.country
+                        country: fetchedUser.country,
+                        companyName: fetchedUser.companyName
                     }
                 });
             

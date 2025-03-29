@@ -76,7 +76,7 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
                 }
 
                 const res = await axios.post<RegisterResponse>('https://localhost:7170/api/Auth/register', {
-                    email: emailRef.current?.value,
+                    Mail: emailRef.current?.value,
                     password: passwordRef.current?.value,
                     role: roleRef.current?.value,
                     country: countryRef.current?.value
@@ -86,7 +86,30 @@ const SignIn: React.FC<Props> = ({ onSignin }) => {
                 sessionStorage.setItem('token', token);
                 
                 console.log(res);
+                interface User {
+                    id: number;
+                    mail: string;
+                    role: string;
+                    country: string;
+                }
+
+                const userResponse = await axios.get<User>('https://localhost:7170/api/Users/getByMail-admin', {
+                    params: { Mail: emailRef.current?.value },
+                    headers: {Authorization: `Bearer ${token}`}
+                });
                 
+                const fetchedUser = userResponse.data;
+                 
+                usersDispatch({
+                    type: 'ADD',
+                    data: {
+                        id: fetchedUser.id,
+                        mail: fetchedUser.mail,
+                        password: '',
+                        role: fetchedUser.role,
+                        country: fetchedUser.country
+                    }
+                });
                 // const response = await axios.post('https://localhost:7170/api/Auth/register', {
                 //     email: emailRef.current?.value,
                 //     password: passwordRef.current?.value                    

@@ -3,7 +3,8 @@
     public class FileUploadPostModel
     {
         public string FileName { get; set; } = string.Empty;
-        public string FileUrl { get; set; } = string.Empty; // לינק ל-S3
-        public int UserId { get; set; } // ייתכן שיגיע מה-JWT ולא כחלק מהבקשה
+        public string FileUrl { get; set; } = string.Empty; // Amazon S3 URL
+        public int UserId { get; set; }
+        public string S3Key { get; set; }
     }
 }

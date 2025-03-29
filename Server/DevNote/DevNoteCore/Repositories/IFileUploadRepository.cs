@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNote.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,7 @@ namespace DevNote.Core.Repositories
 {
     public interface IFileUploadRepository
     {
+        IEnumerable<FileUpload> Get();
+        void PostNewFile(FileUpload fi);
     }
 }
