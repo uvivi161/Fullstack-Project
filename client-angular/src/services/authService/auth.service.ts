@@ -10,15 +10,15 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
                    
-  login(email: string, password: string) {
-    return this.http.post(`${this.url}/login`, {password, email}).subscribe((res:any) => {
+  login(mail: string, password: string) {
+    return this.http.post(`${this.url}/login`, {password, mail}).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);
       console.log(res.token);
       alert('Login Successful');
     },
     (error: any) => {
       if(error.status === 401){
-        alert('Invalid email or password');
+        alert('Invalid mail or password');
         return;
       }
       if(error.status === 400){
@@ -39,14 +39,14 @@ export class AuthService {
       sessionStorage.removeItem('token');
   } 
 
-  signIn(email: string, password: string, role:string){
-    this.http.post(`${this.url}/register`, {email, password, role}).subscribe((res:any) => {
+  signIn(mail: string, password: string, role:string){
+    this.http.post(`${this.url}/register`, {mail, password, role}).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);     
       alert('Sign in Successful');
     },
     (error: any) => {
       if(error.status === 409){
-        alert('Email already exists');
+        alert('mail already exists');
         return;
       }
       if(error.status === 400){

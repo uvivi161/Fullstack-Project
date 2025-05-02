@@ -205,6 +205,7 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 });
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
@@ -213,7 +214,10 @@ builder.Services.AddScoped<IUserStatisticsRepository, UserStatisticsRepository>(
 builder.Services.AddScoped<IUserStatisticsService, UserStatisticsService>();
 builder.Services.AddScoped<IFileUploadRepository, FileUploadRepository>();
 builder.Services.AddScoped<IFileUploadService, FileUploadService>();
-
+builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
+builder.Services.AddScoped<ITranscriptionRepository, TranscriptionRepository>();
+builder.Services.AddScoped<ITranscriptionService, TranscriptionService>();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));

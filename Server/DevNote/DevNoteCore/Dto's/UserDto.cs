@@ -14,5 +14,6 @@ namespace DevNote.Core.Dto_s
         public string password { get; set; }
         public string Role { get; set; }
         public string CompanyName { get; set; }
+        public string Country { get; set; }
     }
 }

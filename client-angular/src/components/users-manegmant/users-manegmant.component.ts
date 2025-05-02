@@ -1,43 +1,4 @@
-// import { Component } from '@angular/core';
-// import { UsersService } from '../../services/usersService/users.service';
-
-// @Component({
-//   selector: 'app-users-manegmant',
-//   imports: [],
-//   templateUrl: './users-manegmant.component.html',
-//   styleUrl: './users-manegmant.component.css'
-// })
-// export class UsersManegmantComponent {
-
-//   constructor(private userService : UsersService) { }
-
-//   users: any[] = [];
-
-//   ngOnInit(){
-//     this.userService.getUsers().subscribe((users: any) => {
-//       this.users = users;
-//     });
-//   }
-
-//   deleteUser(id: string){
-//     this.userService.deleteUser(id).subscribe(() => {
-//       this.users = this.users.filter(user => user.id !== id);
-//     });
-//   }
-
-//   getUserByMail(mail: string){
-//     this.userService.getUserByMail(mail).subscribe((user: any) => {}
-//     );}
-
-//   // isFieldInvalid(fieldName: string): boolean | undefined {
-//   //   const control = this.signInForm.get(fieldName);
-//   //   return control?.invalid && control?.touched;
-//   // }
-
-
-// }
-
-
+// עובד מצוין
 
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -81,7 +42,7 @@ import { UserUpdateDialogeComponent } from '../user-update-dialoge/user-update-d
 export class UsersManegmantComponent implements OnInit {
   hasSearched = false;
   customers: any[] = [];
-  displayedColumns: string[] = ['email','role','actions'];
+  displayedColumns: string[] = ['mail','role','country','companyName','actions'];
   isSearching: boolean = false;
   searchResults: any = null;
   hasSearch = false;
@@ -93,7 +54,10 @@ export class UsersManegmantComponent implements OnInit {
   }
 
   loadCustomers() {
-    this.userService.getUsers().subscribe(data => this.customers = data);
+    this.userService.getUsers().subscribe(data => {
+      console.log('data', data);      
+      this.customers = data});
+    
   }
 
   editCustomer(customer: any, id :number) {
@@ -118,25 +82,25 @@ export class UsersManegmantComponent implements OnInit {
       this.userService.deleteUser(id.toString()).subscribe(() => this.loadCustomers());
     }
   }
-  // updateSearchEmail(event: Event): void {
+  // updateSearchmail(event: Event): void {
   //   const value = (event.target as HTMLInputElement).value;
-  //   this.searchEmail.set(value);
+  //   this.searchmail.set(value);
   // }
-  // searchEmail(mail: string){
+  // searchmail(mail: string){
   //   this.userService.getUserByMail(mail).subscribe(() => this.loadCustomers());
   // }
 
-  // searchCustomer(email: string): void {
+  // searchCustomer(mail: string): void {
   //   this.hasSearched = true;
-  //   if (email && email.trim() !== '') {
-  //     const user = this.userService.getUserByMail(email).subscribe(() => this.loadCustomers());
+  //   if (mail && mail.trim() !== '') {
+  //     const user = this.userService.getUserByMail(mail).subscribe(() => this.loadCustomers());
 
   //   } else {
   //     this.hasSearched = false;
   //   }
   // }
   
-  searchCustomer(email: string) {
+  searchCustomer(mail: string) {
     this.isSearching = true;
     this.hasSearched = true;
     this.searchResults = null;
@@ -146,7 +110,7 @@ export class UsersManegmantComponent implements OnInit {
     const startTime = Date.now();
 
     // קראי לפונקציה מהשירות
-    this.userService.getUserByMail(email).subscribe({
+    this.userService.getUserByMail(mail).subscribe({
       next: (customer) => {
         const timeElapsed = Date.now() - startTime;
         const remainigTime = MINIMUM_SPINNER_TIME - timeElapsed;
@@ -180,3 +144,8 @@ export class UsersManegmantComponent implements OnInit {
     this.isSearching = false;
   }
 }
+
+
+
+
+

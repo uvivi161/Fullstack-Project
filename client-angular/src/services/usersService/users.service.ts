@@ -39,4 +39,6 @@ export class UsersService {
   updateUser(user: any, id:number){
     return this.http.put(`${this.url}/updateUser/${id}`, user);
   }
+
+
 }

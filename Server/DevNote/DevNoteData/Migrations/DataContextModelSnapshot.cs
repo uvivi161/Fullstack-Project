@@ -58,6 +58,29 @@ namespace DevNote.Data.Migrations
                     b.ToTable("Files");
                 });
 
+            modelBuilder.Entity("DevNote.Core.Models.Meeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("occurredIn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meetings");
+                });
+
             modelBuilder.Entity("DevNote.Core.Models.Permissions", b =>
                 {
                     b.Property<int>("Id")
@@ -133,19 +156,22 @@ namespace DevNote.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FileId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TranscribedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TranscribedText")
+                    b.Property<string>("OriginalFileUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TranscriptionPdfUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId");
 
                     b.ToTable("Transcriptions");
                 });
@@ -169,6 +195,9 @@ namespace DevNote.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -183,7 +212,28 @@ namespace DevNote.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("MeetingId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("DevNote.Core.Models.UserMeeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("MeetingId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsersMeeting");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.UserRole", b =>
@@ -214,15 +264,16 @@ namespace DevNote.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DevNote.Core.Models.Transcription", b =>
+            modelBuilder.Entity("DevNote.Core.Models.User", b =>
                 {
-                    b.HasOne("DevNote.Core.Models.FileUpload", "File")
-                        .WithMany()
-                        .HasForeignKey("FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("DevNote.Core.Models.Meeting", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("MeetingId");
+                });
 
-                    b.Navigation("File");
+            modelBuilder.Entity("DevNote.Core.Models.Meeting", b =>
+                {
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.User", b =>

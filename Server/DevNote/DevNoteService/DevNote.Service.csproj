@@ -7,12 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="4.0.0-preview.13" />
+    <PackageReference Include="itext7" Version="7.1.15" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
+	<PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="1.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DevNoteCore\DevNote.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="fonts\DAVID.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

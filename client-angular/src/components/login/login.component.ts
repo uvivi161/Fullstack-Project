@@ -27,7 +27,7 @@ export class LoginComponent{
   hidePassword = true;
 
   logInForm = new FormGroup({
-    email: new FormControl<string>('', [Validators.required]),
+    mail: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [Validators.required])
   });
   constructor(private fb: FormBuilder, private authService: AuthService) { }
@@ -35,7 +35,7 @@ export class LoginComponent{
   // ngOnInit(): void {
   //   // יצירת טופס ריאקטיבי עם ולידציות
   //   this.logInForm = this.fb.group({
-  //     email: ['', [Validators.required, Validators.email]],
+  //     mail: ['', [Validators.required, Validators.mail]],
   //     password: ['', [Validators.required, Validators.minLength(3)]]
   //   });
   // }
@@ -51,7 +51,7 @@ export class LoginComponent{
     if (this.logInForm.valid) {
       console.log('פרטי התחברות:', this.logInForm.value);
       // כאן תוסיף קריאה לשירות ההתחברות שלך
-      this.authService.login(this.logInForm.value.email as string, this.logInForm.value.password as string);
+      this.authService.login(this.logInForm.value.mail as string, this.logInForm.value.password as string);
       
     }
   }

@@ -90,7 +90,7 @@ namespace DevNote.API.Controllers
         }
 
         [HttpDelete("deleteUser-admin")]
-        [Authorize(Policy = "AdminOnly")]
+        //[Authorize(Policy = "AdminOnly")]
         public ActionResult Delete(int id)
         {
             if (_userService.Delete(id))

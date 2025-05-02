@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DevNote.Core.Dto_s;
+using DevNote.Core.Services;
+using DevNote.Service;
+using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,36 +11,47 @@ namespace DevNote.API.Controllers
     [ApiController]
     public class TranscriptionController : ControllerBase
     {
-        // GET: api/<TranscriptionController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ITranscriptionService _service;
+
+        public TranscriptionController(ITranscriptionService service)
         {
-            return new string[] { "value1", "value2" };
+            _service = service;
         }
 
-        // GET api/<TranscriptionController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpPost("transcribe")]
+        public async Task<IActionResult> TranscribeAudio([FromBody] TranscriptionDto request)
         {
-            return "value";
+            var result = await _service.TranscribeAndSaveAsync(request);
+            if (!result.Success)
+                return BadRequest(result.ErrorMessage);
+
+            return Ok(new
+            {
+                result.TranscriptText,
+                result.TranscriptionId,
+                result.FileUrl,
+                result.PdfUrl
+            });
         }
 
-        // POST api/<TranscriptionController>
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
 
-        // PUT api/<TranscriptionController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [HttpPost("save-edited-transcription")]
+        public async Task<IActionResult> SaveEditedTranscription([FromBody] SaveEditedTranscriptDto dto)
         {
-        }
+            var result = await _service.SaveEditedTranscriptAsync(dto);
+            if (string.IsNullOrWhiteSpace(result))
+                return StatusCode(500, "אירעה שגיאה בשמירת התמלול.");
 
-        // DELETE api/<TranscriptionController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(new { PdfUrl = result });
         }
+        //[HttpPost("transcribe")]
+        //public async Task<IActionResult> TranscribeAudio([FromBody] TranscriptionDto request)
+        //{
+        //    var result = await _service.TranscribeAndUploadAsync(request.FileUrl, request.UserId);
+        //    if (!result.Success)
+        //        return BadRequest(result.Message);
+
+        //    return Ok(new { result.DownloadUrl });
+        //}
     }
 }

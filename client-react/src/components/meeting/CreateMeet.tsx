@@ -1,8 +1,10 @@
-
 // import React, { useContext, useEffect, useState } from 'react';
 // import axios from 'axios';
-// import { Button } from '@mui/material';
+// import { Button, Checkbox, Grid, Typography, Paper } from '@mui/material';
 // import { UserContext } from '../login/UserReducer';
+// import FileUploader from './FileUploader';
+// import CheckBoxIcon from '@mui/icons-material/CheckBox';
+// import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 
 // interface User {
 //   id: number;
@@ -11,20 +13,18 @@
 //   companyName: string;
 // }
 
-// const CreateMeet = () => {
+// const CreateMeeting = () => {
 //   const [users, setUsers] = useState<User[]>([]);
 //   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 //   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
-//   const [selectedCompany, setSelectedCompany] = useState('');
 //   const [loading, setLoading] = useState(true);
 //   const [user] = useContext(UserContext);
 
 //   useEffect(() => {
 //     axios.get('https://localhost:7170/api/Users/getAllUser-admin')
 //       .then(response => {
-//         console.log('Fetched users:', response.data); // בדיקה האם הנתונים תקינים
 //         setUsers(response.data);
-//         setFilteredUsers(response.data); // נוודא שהרשימה המלאה מוצגת בהתחלה
+//         setFilteredUsers(response.data);
 //         setLoading(false);
 //         select();
 //       })
@@ -32,18 +32,7 @@
 //         console.error('Error fetching users:', error);
 //         setLoading(false);
 //       });
-
 //   }, []);
-
-//   // useEffect(() => {
-//   //   if (!selectedCompany.trim()) {
-//   //     setFilteredUsers(users); // אם אין חיפוש, נציג את כל המשתמשים
-//   //   } else {
-//   //     setFilteredUsers(
-//   //       users.filter(user => user.company?.toLowerCase().includes(selectedCompany.toLowerCase()))
-//   //     );
-//   //   }
-//   // }, [selectedCompany, users]);
 
 //   const toggleSelection = (user: User) => {
 //     setSelectedUsers(prevSelected =>
@@ -54,87 +43,119 @@
 //   };
 
 //   const select = () => {
-//     debugger;
-//       const company = user.companyName;
-//       axios.get(`https://localhost:7170/api/Users/getByCompanyName?company=${company}`)
+//     const company = user.companyName;
+//     axios.get(`https://localhost:7170/api/Users/getByCompanyName?company=${company}`)
 //       .then(response => {
-//       console.log('Fetched usersByCompany:', response.data); // בדיקה האם הנתונים תקינים
-//       setFilteredUsers(response.data);
+//         setFilteredUsers(response.data);
 //       })
 //       .catch(error => {
-//       console.error('Error fetching users:', error);
-//       setLoading(false);
+//         console.error('Error fetching users:', error);
+//         setLoading(false);
 //       });
-//   }
+//   };
+
+//   const allSelected = selectedUsers.length === filteredUsers.length;
 
 //   return (
-//     <div style={{color: '#000'}}>
-//       {/* <label>בחר חברה:</label>
-//       <input
-//         type="text"
-//         value={selectedCompany}
-//         onChange={e => setSelectedCompany(e.target.value)}
-//         placeholder="הכנס שם חברה"
-//       />
-//       <Button onClick={() => select()}>search...</Button>
-//        */}
-//       {loading ? (
-//         <p>טוען משתמשים...</p>
-//       ) : (
-//         <>
-//             {/* <Button onClick={() => setSelectedUsers(filteredUsers)}>בחר הכל</Button> */}
-//             <ul>
-//             {filteredUsers.length > 0 ? (
-//               filteredUsers.map(user => (
-//               <li key={user.id} style={{ display: 'flex', alignItems: 'center', color: '#000', marginBottom: '8px' }}>
-//               <input
-//               type="checkbox"
-//               checked={selectedUsers.includes(user)}
-//               onChange={() => toggleSelection(user)}
-//               style={{ marginRight: '8px' }}
-//               />
-//               <span>{user.mail}</span>
-//               <span style={{ marginLeft: 'auto', marginRight: '150px', whiteSpace: 'nowrap' }}>{user.companyName}</span>
-//               </li>
-//               ))
-//             ) : (
-//               <p>לא נמצאו משתמשים</p>
-//             )}
-//             </ul>
-//             <Button
-//               onClick={() => {
-//               if (selectedUsers.length === filteredUsers.length) {
-//                 setSelectedUsers([]); // הסר סימון מהכל
-//               } else {
-//                 setSelectedUsers(filteredUsers); // בחר הכל
-//               }
-//               }}
-//             >
-//               {selectedUsers.length === filteredUsers.length ? 'הסר סימון מהכל' : 'בחר הכל'}
-//             </Button>
+//     <Grid container spacing={4} sx={{ padding: 2 }}>
+//       {/* צד שמאל - רשימת עובדים */}
+//       <Grid item xs={12} md={6}>
+//         <Paper
+//           elevation={0}
+//           sx={{
+//             width: '100%',
+//             padding: 2,
+//             backgroundColor: 'transparent',
+//             border: '2px solid #595047',
+//             borderRadius: '12px',
+//             boxSizing: 'border-box',
+//           }}
+//         >
+//           <Typography variant="h5" gutterBottom>בחר את המשתתפים</Typography>
+//           {loading ? (
+//             <Typography variant="body1">טוען משתמשים...</Typography>
+//           ) : (
+//             <>
+//               <Grid container direction="column" spacing={2}>
+//                 {filteredUsers.length > 0 ? (
+//                   filteredUsers.map(user => (
+//                     <Grid item key={user.id} container alignItems="center">
+//                       <Grid item>
+//                         <Checkbox
+//                           checked={selectedUsers.includes(user)}
+//                           onChange={() => toggleSelection(user)}
+//                         />
+//                       </Grid>
+//                       <Grid item xs>
+//                         <Typography variant="body1">{user.mail}</Typography>
+//                       </Grid>
+//                     </Grid>
+//                   ))
+//                 ) : (
+//                   <Typography variant="body1">לא נמצאו משתמשים</Typography>
+//                 )}
+//               </Grid>
 
-//           {/* <h3>משתמשים שנבחרו:</h3>
-//           <ul>
-//             {selectedUsers.map(user => (
-//               <li key={user.id}>{user.Mail}</li>
-//             ))}
-//           </ul> */}
-//         </>
-//       )}
-//     </div>
+//               <Button
+//                 fullWidth
+//                 sx={{
+//                   mt: 2,
+//                   border: '2px solid #595047',
+//                   color: '#595047',
+//                   backgroundColor: 'transparent',
+//                   borderRadius: '8px',
+//                   transition: 'all 0.3s ease',
+//                   '&:hover': {
+//                     backgroundColor: '#595047',
+//                     color: '#fff',
+//                   },
+//                 }}
+//                 startIcon={allSelected ? <IndeterminateCheckBoxIcon /> : <CheckBoxIcon />}
+//                 onClick={() => {
+//                   if (allSelected) {
+//                     setSelectedUsers([]);
+//                   } else {
+//                     setSelectedUsers(filteredUsers);
+//                   }
+//                 }}
+//               >
+//                 {allSelected ? 'הסר סימון מהכל' : 'בחר הכל'}
+//               </Button>
+//             </>
+//           )}
+//         </Paper>
+//       </Grid>
+
+//       {/* צד ימין - העלאת קובץ */}
+//       <Grid item xs={12} md={6}>
+//         <Paper sx={{ padding: 10 }}>
+//           <Typography variant="h5" gutterBottom>העלה ????קובץ</Typography>
+//           <FileUploader />
+//         </Paper>
+//       </Grid>
+//     </Grid>
 //   );
 // };
 
-// export default CreateMeet;
+// export default CreateMeeting;
+
+
+
+
+
+
 
 
 
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Checkbox, Grid, Typography, Paper } from '@mui/material';
+import {
+  Button, Checkbox, Grid, Typography, Paper, TextField, Snackbar, Alert
+} from '@mui/material'; // הוספתי TextField, Snackbar, Alert
 import { UserContext } from '../login/UserReducer';
-import FileUploader from '../FileUploader';
-// import FileUploader from './FileUploader'; // מייבא את קומפוננטת העלאת הקובץ
+import FileUploader from './FileUploader';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
 
 interface User {
   id: number;
@@ -147,8 +168,14 @@ const CreateMeeting = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+  const [meetingTitle, setMeetingTitle] = useState('');
   const [loading, setLoading] = useState(true);
   const [user] = useContext(UserContext);
+
+  // Alert states
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
+  const [snackSeverity, setSnackSeverity] = useState<'success' | 'error'>('success');
 
   useEffect(() => {
     axios.get('https://localhost:7170/api/Users/getAllUser-admin')
@@ -172,77 +199,153 @@ const CreateMeeting = () => {
     );
   };
 
-    const select = () => {
-    debugger;
-      const company = user.companyName;
-      axios.get(`https://localhost:7170/api/Users/getByCompanyName?company=${company}`)
+  const select = () => {
+    const company = user.companyName;
+    axios.get(`https://localhost:7170/api/Users/getByCompanyName?company=${company}`)
       .then(response => {
-      console.log('Fetched usersByCompany:', response.data); // בדיקה האם הנתונים תקינים
-      setFilteredUsers(response.data);
+        setFilteredUsers(response.data);
       })
       .catch(error => {
-      console.error('Error fetching users:', error);
-      setLoading(false);
+        console.error('Error fetching users:', error);
+        setLoading(false);
       });
-  }
+  };
+
+  const handleCreateMeeting = async () => {
+    if (!meetingTitle.trim() || selectedUsers.length === 0) {
+      setSnackMessage('אנא הזן כותרת ובחר משתתפים');
+      setSnackSeverity('error');
+      setSnackOpen(true);
+      return;
+    }
+
+    try {
+      await axios.post('https://localhost:7170/api/Meetings', {
+        title: meetingTitle,
+        creatorId: user.id,
+        participantIds: selectedUsers.map(u => u.id),
+      });
+
+      setSnackMessage('המפגש נוצר בהצלחה!');
+      setSnackSeverity('success');
+      setSnackOpen(true);
+      setMeetingTitle('');
+      setSelectedUsers([]);
+    } catch (error) {
+      console.error('Error creating meeting:', error);
+      setSnackMessage('שגיאה ביצירת המפגש');
+      setSnackSeverity('error');
+      setSnackOpen(true);
+    }
+  };
+
+  const allSelected = selectedUsers.length === filteredUsers.length;
 
   return (
-    <Grid container spacing={3} style={{ padding: '20px' }}>
-      {/* חצי שמאלי - רשימת העובדים */}
+    <Grid container spacing={4} sx={{ padding: 2 }}>
+      {/* צד שמאל - רשימת עובדים */}
       <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '20px' }}>
+        <Paper
+          elevation={0}
+          sx={{
+            width: '100%',
+            padding: 2,
+            backgroundColor: 'transparent',
+            border: '2px solid #595047',
+            borderRadius: '12px',
+            boxSizing: 'border-box',
+          }}
+        >
           <Typography variant="h5" gutterBottom>בחר את המשתתפים</Typography>
           {loading ? (
             <Typography variant="body1">טוען משתמשים...</Typography>
           ) : (
             <>
-              <div>
-                <Grid container direction="column" spacing={2}>
-                  {filteredUsers.length > 0 ? (
-                    filteredUsers.map(user => (
-                      <Grid item key={user.id} container alignItems="center">
-                        <Grid item>
-                          <Checkbox
-                            checked={selectedUsers.includes(user)}
-                            onChange={() => toggleSelection(user)}
-                          />
-                        </Grid>
-                        <Grid item xs>
-                          <Typography variant="body1">{user.mail}</Typography>
-                        </Grid>
+              <Grid container direction="column" spacing={2}>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map(user => (
+                    <Grid item key={user.id} container alignItems="center">
+                      <Grid item>
+                        <Checkbox
+                          checked={selectedUsers.includes(user)}
+                          onChange={() => toggleSelection(user)}
+                        />
                       </Grid>
-                    ))
-                  ) : (
-                    <Typography variant="body1">לא נמצאו משתמשים</Typography>
-                  )}
-                </Grid>
-                <Button
-                  variant="outlined"
-                  onClick={() => {
-                    if (selectedUsers.length === filteredUsers.length) {
-                      setSelectedUsers([]); // הסר סימון מהכל
-                    } else {
-                      setSelectedUsers(filteredUsers); // בחר הכל
-                    }
-                  }}
-                  fullWidth
-                  style={{ marginTop: '10px' }}
-                >
-                  {selectedUsers.length === filteredUsers.length ? 'הסר סימון מהכל' : 'בחר הכל'}
-                </Button>
-              </div>
+                      <Grid item xs>
+                        <Typography variant="body1">{user.mail}</Typography>
+                      </Grid>
+                    </Grid>
+                  ))
+                ) : (
+                  <Typography variant="body1">לא נמצאו משתמשים</Typography>
+                )}
+              </Grid>
+
+              <Button
+                fullWidth
+                sx={{
+                  mt: 2,
+                  border: '2px solid #595047',
+                  color: '#595047',
+                  backgroundColor: 'transparent',
+                  borderRadius: '8px',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    backgroundColor: '#595047',
+                    color: '#fff',
+                  },
+                }}
+                startIcon={allSelected ? <IndeterminateCheckBoxIcon /> : <CheckBoxIcon />}
+                onClick={() => {
+                  if (allSelected) {
+                    setSelectedUsers([]);
+                  } else {
+                    setSelectedUsers(filteredUsers);
+                  }
+                }}
+              >
+                {allSelected ? 'הסר סימון מהכל' : 'בחר הכל'}
+              </Button>
+
+              {/* שדה כותרת */}
+              <TextField
+                fullWidth
+                label="כותרת המפגש"
+                variant="outlined"
+                sx={{ mt: 3 }}
+                value={meetingTitle}
+                onChange={e => setMeetingTitle(e.target.value)}
+              />
+
+              {/* כפתור יצירת מפגש */}
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ mt: 2 }}
+                onClick={handleCreateMeeting}
+              >
+                צור מפגש
+              </Button>
             </>
           )}
         </Paper>
       </Grid>
 
-      {/* חצי ימין - העלאת קובץ */}
+      {/* צד ימין - העלאת קובץ */}
       <Grid item xs={12} md={6}>
-        <Paper style={{ padding: '20px' }}>
+        <Paper sx={{ padding: 5 ,backgroundColor: 'transparent', border: '2px solid #595047', borderRadius: '12px'}}>
           <Typography variant="h5" gutterBottom>העלה קובץ</Typography>
-          <FileUploader /> {/* כאן נטמיע את קומפוננטת העלאת הקובץ */}
+          <FileUploader />
         </Paper>
       </Grid>
+
+      {/* AlertSnackBar */}
+      <Snackbar open={snackOpen} autoHideDuration={4000} onClose={() => setSnackOpen(false)}>
+        <Alert onClose={() => setSnackOpen(false)} severity={snackSeverity} sx={{ width: '100%' }}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
     </Grid>
   );
 };

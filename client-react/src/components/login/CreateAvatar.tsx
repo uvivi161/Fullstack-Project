@@ -1,23 +1,106 @@
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
+// import Avatar from '@mui/material/Avatar';
+// import Stack from '@mui/material/Stack';
+// import { UserContext } from './UserReducer';
+// import { createContext, Dispatch, SetStateAction, useContext } from 'react';
+
+
+// export const btnUpdateContext = createContext<[boolean, Dispatch<SetStateAction<Boolean>>]>([
+//   {} as boolean,
+//   () => { },
+// ]);
+
+// const CreateAvatar = () => {
+
+//   const [user] = useContext(UserContext);
+  
+//   return (
+//     <Stack direction="row" spacing={2}>                                  
+//       <Avatar sx={{ bgcolor:"#595047" }}>{user.mail?.charAt(0)}</Avatar>
+//     </Stack>                                                              
+//   );
+// }
+// export default CreateAvatar
+
+import React, { useContext, useState } from 'react';
+import { Avatar, IconButton, Menu, MenuItem, ListItemIcon, Tooltip } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { UserContext } from './UserReducer';
-import { createContext, Dispatch, SetStateAction, useContext } from 'react';
-
-
-export const btnUpdateContext = createContext<[boolean, Dispatch<SetStateAction<Boolean>>]>([
-  {} as boolean,
-  () => { },
-]);
+import { useNavigate } from 'react-router-dom';
 
 const CreateAvatar = () => {
+  const [user, usersDispatch] = useContext(UserContext);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
-  const [user] = useContext(UserContext);
-  console.log(user.mail);
-  
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem('token');
+    usersDispatch({ type: 'DELETE', data: {} });
+    handleClose();
+    navigate('/'); // חזרה לדף הבית
+  };
+
   return (
-    <Stack direction="row" spacing={2}>                                  
-      <Avatar sx={{ bgcolor:"#3b3c71" }}>{user.mail?.charAt(0)}</Avatar>
-    </Stack>                                                              
+    <>
+      <Tooltip title="Account settings">
+        <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+          <Avatar sx={{ bgcolor: "#595047" }}>
+            {user?.mail?.charAt(0)?.toUpperCase() || <span>?</span>}
+          </Avatar>
+        </IconButton>
+      </Tooltip>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        onClick={handleClose}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            '& .MuiAvatar-root': {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&::before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <MenuItem onClick={logout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          Logout
+        </MenuItem>
+      </Menu>
+    </>
   );
-}
-export default CreateAvatar
+};
+
+export default CreateAvatar;

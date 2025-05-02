@@ -15,6 +15,7 @@ namespace DevNote.Core
         public MappingProfile()
         {
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Meeting, MeetingDto>().ReverseMap();
 
         }
     }

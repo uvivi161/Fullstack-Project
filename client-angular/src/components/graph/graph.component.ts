@@ -181,7 +181,6 @@ export class CityYearlyChartComponent implements OnInit {
   fetchCityYearlyData(): void {
     this.loading = true;
     this.error = null;
-    
     this.http.get<CityYearlyData[]>('https://localhost:7170/api/UserStatistics/cities-yearly?fromYear=2020&toYear=2025')
       .subscribe({
         next: (data) => {

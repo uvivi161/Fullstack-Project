@@ -3,6 +3,18 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  background-image: url("../src/assets/images/background.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  /* min-height: 100vh; */
+  color: rgb(var(--foreground-rgb));
 }
 
 .logo {
@@ -40,3 +52,4 @@
 .read-the-docs {
   color: #888;
 }
+

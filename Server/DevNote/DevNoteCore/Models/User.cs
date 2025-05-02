@@ -16,6 +16,7 @@ namespace DevNote.Core.Models
         public string country { get; set; }
         public string CompanyName { get; set; }
 
+        List<Meeting> MeetingList { get; set; }= new List<Meeting>();
         public List<FileUpload> Files { get; set; } = new();
     }
 }

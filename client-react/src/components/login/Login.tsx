@@ -2,11 +2,32 @@ import { useContext, useRef, useState } from "react";
 import { UserContext } from "./UserReducer";
 import { Box, Button, Grid2 as Grid, Modal, TextField } from "@mui/material";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const style = {
-    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+const styles = {
+    box:{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
     width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,
+    },
+    button: {
+        backgroundColor: 'transparent',
+        border: '2px solid #5A504F', // צבע כמו בתמונה
+        color: '#5A504F',
+        fontFamily: "'Dancing Script', cursive",
+        fontSize: '1.5rem',
+        padding: '0.5rem 2rem',
+        borderRadius: '12px',
+        cursor: 'pointer',
+        width: '250px',
+        // transition: 'all 0.3s ease',
+    },
+    hover: {
+        backgroundColor: '#5A504F',
+        color: '#fff',
+    }
+
 };
+
 
 interface LogInProps {
     onClick: () => void;
@@ -16,7 +37,7 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
     const [user, usersDispatch] = useContext(UserContext);
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
-
+    const navigate = useNavigate();
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [emailHelperText, setEmailHelperText] = useState("");
@@ -48,14 +69,12 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
         if (isValid) {
 
             try {
-                debugger;
                 const response = await axios.post<{ token: string }>('https://localhost:7170/api/Auth/login', {
                     Mail: emailRef.current?.value,
                     password: passwordRef.current?.value
                 });
                 const token = response.data.token
                 sessionStorage.setItem('token', token)
-                debugger;
                 interface User {
                     id: number;
                     mail: string;
@@ -82,21 +101,8 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
                         companyName: fetchedUser.companyName
                     }
                 });
-            
-                // try {
-                //     const response = await axios.post('https://localhost:7170/api/Auth/login', {
-                //         email: emailRef.current?.value,
-                //         password: passwordRef.current?.value
-                //     });
-                //     usersDispatch({
-                //         type: 'ADD',
-                //         data: {
-                //             id: response.data.user.id,
-                //             email: response.data.user.email,
-                //             password: response.data.user.password
-                //         }
-                //     });
                 onClick(); setLoggedIn(true); setOpenL(!openL);
+                navigate('/app');
             } catch (error) {
                 alert("this user is not valid")
             }
@@ -115,19 +121,23 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
 
     const [openL, setOpenL] = useState(false);
     const [isLogin, setLoggedIn] = useState(false);
+    const [hovered, setHovered] = useState(false);
 
     return (
-        <UserContext value={[user, usersDispatch]}>
+        // <UserContext value={[user, usersDispatch]}>
             <Grid container>
                 <Grid size={10}>
                     {!isLogin && (
-                        <Button sx={{ width: "100px", backgroundColor: "#3b3c71", marginLeft: "15px" }}
-                            variant="contained" onClick={() => setOpenL(!openL)}>Log In</Button>
+                        <Button style={hovered ? { ...styles.button, ...styles.hover } : styles.button}
+                        onMouseEnter={() => setHovered(true)}
+                        onMouseLeave={() => setHovered(false)}
+                        // onClick={() => setShowLogIn(true)}
+                            variant="contained" onClick={() => setOpenL(!openL)}>Let's Start</Button>
                     )}
                 </Grid>
                 <Modal open={openL} onClose={() => setOpenL(false)}
                     sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Box sx={style}>
+                    <Box sx={styles.box}>
                         <form onSubmit={handleAdd}>
                             <TextField label='userEmail' inputRef={emailRef} error={emailError}
                                 helperText={emailHelperText} onChange={handleEmailChange} />
@@ -139,7 +149,7 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
                     </Box>
                 </Modal>
             </Grid>
-        </UserContext>
+        // </UserContext>
     );
 };
 

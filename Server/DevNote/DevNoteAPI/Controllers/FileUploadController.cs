@@ -83,7 +83,20 @@ namespace DevNote.API.Controllers
             return Ok(new { url, s3Key }); // 🔹 מחזירים גם את ה-S3 Key
         }
 
+        [HttpGet("presigned-url-download")]
+        public IActionResult GetDownloadUrl([FromQuery] string s3Key)
+        {
+            var request = new GetPreSignedUrlRequest
+            {
+                BucketName = "devnote-files",
+                Key = s3Key,
+                Verb = HttpVerb.GET,
+                Expires = DateTime.UtcNow.AddMinutes(5),
+            };
 
+            var url = _s3Client.GetPreSignedURL(request);
+            return Ok(new { url });
+        }
 
         //[HttpPost("direct-upload")]
         //public async Task<IActionResult> UploadFile([FromForm] IFormFile file)

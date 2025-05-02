@@ -20,6 +20,8 @@ namespace DevNote.Data
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<RolePermissions> RolePermissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<UserMeeting> UsersMeeting { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

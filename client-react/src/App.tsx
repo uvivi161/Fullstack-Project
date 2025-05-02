@@ -37,9 +37,9 @@ function App() {
         color: "white",
         width: "100%"
       }}>
-        <UserContext value={[user, dispatch]}>
+        <UserContext.Provider value={[user, dispatch]}>
           <RouterProvider router={myRouter} />
-        </UserContext>
+        </UserContext.Provider>
       </Box>
   </>)
 }

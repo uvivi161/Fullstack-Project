@@ -20,6 +20,7 @@ namespace DevNote.Data
 
         public void save()
         {
+            
             _context.SaveChanges();
         }
     }

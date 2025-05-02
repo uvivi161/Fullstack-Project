@@ -7,5 +7,5 @@
             public string Role { get; set; } = "user"; // ברירת מחדל - משתמש רגיל
             public string Country { get; set; }
             public string CompanyName { get; set; }
-    }
+        }
 }
