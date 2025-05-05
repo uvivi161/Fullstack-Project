@@ -43,7 +43,7 @@ using iText.Layout;
 using iText.Layout.Element;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
-using DevNote.Core.Models;
+using DevNote.Core.Models.files;
 using iText.IO.Font;
 using iText.Layout.Properties;
 
@@ -203,44 +203,6 @@ namespace DevNote.Service
                     FileUrl = request.FileUrl
                 };
             }
-            //    // ✅ יצירת קובץ PDF
-            //    using var pdfStream = new MemoryStream();
-            //    var writer = new PdfWriter(pdfStream);
-            //    var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            //    var pdf = new PdfDocument(writer);
-            //    var doc = new Document(pdf);
-            //    doc.SetFont(font);
-            //    doc.Add(new Paragraph(transcriptText));
-            //    doc.Close();
-            //    pdfStream.Position = 0;
-
-            //    // ✅ העלאת קובץ PDF ל-S3
-            //    string pdfKey = $"transcriptions/{Guid.NewGuid()}.pdf";
-            //    var uploadRequest = new TransferUtilityUploadRequest
-            //    {
-            //        InputStream = pdfStream,
-            //        Key = pdfKey,
-            //        BucketName = _config["AWS:BucketName"],
-            //        ContentType = "application/pdf"
-            //    };
-
-            //    var transferUtility = new TransferUtility(_s3Client);
-            //    await transferUtility.UploadAsync(uploadRequest);
-
-            //    string pdfUrl = $"https://{_config["AWS:BucketName"]}.s3.amazonaws.com/{pdfKey}";
-
-            //    Console.WriteLine($"📄 קובץ PDF הועלה: {pdfUrl}");
-
-            //    // ✅ שמירה במסד נתונים
-            //    var transcription = new Transcription
-            //    {
-            //        UserId = request.UserId.ToString(),
-            //        OriginalFileUrl = request.FileUrl,
-            //        TranscriptionPdfUrl = pdfUrl
-            //    };
-
-            //    return await _repo.SaveTranscriptionAsync(transcription);
-            //}
             catch (Exception ex)
             {
                 Console.WriteLine("❌ שגיאה בתהליך תמלול:");
@@ -255,58 +217,6 @@ namespace DevNote.Service
             return new TranscriptionResultDto { Success = false, ErrorMessage = "הודעת השגיאה הרלוונטית" };
         }
 
-
-        //public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
-        //{
-        //    try
-        //    {
-        //        using var originalStream = new MemoryStream();
-        //        var writer = new PdfWriter(originalStream);
-        //        var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "NotoSansHebrew_Condensed-Regular.ttf");
-        //        var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-        //        var pdf = new PdfDocument(writer);
-        //        var doc = new Document(pdf);
-        //        doc.SetFont(font);
-        //        doc.Add(new Paragraph(dto.EditedText));
-        //        doc.Close();  // כאן נסגר ה־originalStream
-
-        //        // שמירת התוכן לתוך byte[] לפני סגירה
-        //        var pdfBytes = originalStream.ToArray();
-
-        //        // יצירת MemoryStream חדש מתוך ה־byte[]
-        //        using var pdfStream = new MemoryStream(pdfBytes);
-        //        pdfStream.Position = 0;
-
-        //        string pdfKey = $"transcriptions/{Guid.NewGuid()}.pdf";
-        //        var uploadRequest = new TransferUtilityUploadRequest
-        //        {
-        //            InputStream = pdfStream,
-        //            Key = pdfKey,
-        //            BucketName = _config["AWS:BucketName"],
-        //            ContentType = "application/pdf"
-        //        };
-
-        //        var transferUtility = new TransferUtility(_s3Client);
-        //        await transferUtility.UploadAsync(uploadRequest);
-
-        //        string pdfUrl = $"https://{_config["AWS:BucketName"]}.s3.amazonaws.com/{pdfKey}";
-
-        //        var transcription = new Transcription
-        //        {
-        //            UserId = dto.UserId.ToString(),
-        //            OriginalFileUrl = dto.OriginalFileUrl,
-        //            TranscriptionPdfUrl = pdfUrl
-        //        };
-
-        //        var saved = await _repo.SaveTranscriptionAsync(transcription);
-        //        return saved ? pdfUrl : string.Empty;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine(ex);
-        //        return string.Empty;
-        //    }
-        //}
 
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {
@@ -375,9 +285,6 @@ namespace DevNote.Service
                 return string.Empty;
             }
         }
-
-
-
     }
 
 

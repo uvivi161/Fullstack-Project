@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DevNote.Core.Models.files;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,10 @@ namespace DevNote.Core.Models
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "user"; // Admin/User
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string country { get; set; }
-        public string CompanyName { get; set; }
+        public string country { get; set; } = string.Empty;
+        public string CompanyName { get; set; } = string.Empty;
 
-        List<Meeting> MeetingList { get; set; }= new List<Meeting>();
+        public List<Meeting> MeetingList { get; set; }= new List<Meeting>();
         public List<FileUpload> Files { get; set; } = new();
     }
 }

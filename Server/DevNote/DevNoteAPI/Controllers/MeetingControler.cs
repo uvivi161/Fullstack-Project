@@ -2,6 +2,7 @@
 using DevNote.API.Models;
 using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
+using DevNote.Core.Models.files;
 using DevNote.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,13 +34,13 @@ namespace DevNote.API.Controllers
 
 
         //שליפת כל המפגשים לפי מי שיצר אותם
-         //GET api/<MeetingControler>/5
+        //GET api/<MeetingControler>/5
         [HttpGet("getByCreatorId/{creatorId}")]
         public ActionResult GetByCreatorId(int creatorId)
         {
             var meetings = _meetingService.GetByCreator(creatorId);
             var meetingDto = new List<MeetingDto>();
-            foreach (var meeting in meetings) 
+            foreach (var meeting in meetings)
             {
                 meetingDto.Add(_mapper.Map<MeetingDto>(meeting));
             }
@@ -48,13 +49,30 @@ namespace DevNote.API.Controllers
             return Ok(meetingDto);
         }
 
+        [HttpGet("getById")]
+        public ActionResult GetById(int id)
+        {
+            var meeting = _meetingService.GetById(id);
+            if (meeting == null)
+                return NotFound("this meeting is not found");
+            return Ok(meeting);
+        }
+
         // POST api/<MeetingControler>
         [HttpPost]
         public ActionResult PostNewMeeting([FromBody] MeetingPostModel meet)
         {
-            var meeting = new Meeting { CreatorId = meet.CreatorId, occurredIn = new DateTime(), Title = meet.title };
-            if (_meetingService.PostNewMeeting(meeting)) 
-                return Ok(meeting);
+            var meeting = new Meeting
+            {
+                CreatorId = meet.CreatorId,
+                OccurredIn = new DateTime(),
+                Title = meet.Title,
+                TranscriptionPdfUrl = meet.TranscriptionPdfUrl,
+                Participants = meet.Participants.Select(p => new User { Mail = p.Mail })
+                .ToList()
+            };
+            if (_meetingService.PostNewMeeting(meeting))
+                return Ok();
             return NotFound("this meeting is already exist");
         }
 
@@ -66,10 +84,13 @@ namespace DevNote.API.Controllers
         //}
 
 
-        //// DELETE api/<MeetingControler>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        // DELETE api/<MeetingControler>/5
+        [HttpDelete("deleteMeeting")]
+        public ActionResult Delete(int id)
+        {
+            if (_meetingService.Delete(id))
+                return Ok();
+            return NotFound($"this meeting {id} is not exist");
+        }
     }
 }

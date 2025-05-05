@@ -5,14 +5,14 @@
 namespace DevNote.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class userCompany : Migration
+    public partial class addPdfToMeetingTabl : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "CompanyName",
-                table: "Users",
+                name: "TranscriptionPdfUrl",
+                table: "Meetings",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "");
@@ -22,8 +22,8 @@ namespace DevNote.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "CompanyName",
-                table: "Users");
+                name: "TranscriptionPdfUrl",
+                table: "Meetings");
         }
     }
 }

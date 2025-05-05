@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using DevNote.Core;
 using DevNote.Core.Models;
 using System.Data;
+using DevNote.Core.Models.files;
 
 
 namespace DevNote.Data
@@ -20,12 +21,12 @@ namespace DevNote.Data
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<RolePermissions> RolePermissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<Meeting> Meetings { get; set; }
-        public DbSet<UserMeeting> UsersMeeting { get; set; }
+        public DbSet<Meeting> Meetings { get; set; } 
+        //public DbSet<UserMeeting> UsersMeeting { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=devNote_db");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DevNote2_db");
         }
     }
 } 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevNote.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250320194920_UserStatistics")]
-    partial class UserStatistics
+    [Migration("20250502141717_createDb")]
+    partial class createDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,9 +51,6 @@ namespace DevNote.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -62,6 +59,29 @@ namespace DevNote.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Files");
+                });
+
+            modelBuilder.Entity("DevNote.Core.Models.Meeting", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("occurredIn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Meetings");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.Permissions", b =>
@@ -139,20 +159,22 @@ namespace DevNote.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("FileId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("TranscribedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TranscribedText")
+                    b.Property<string>("OriginalFileUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TranscriptionPdfUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FileId")
-                        .IsUnique();
 
                     b.ToTable("Transcriptions");
                 });
@@ -165,12 +187,19 @@ namespace DevNote.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Mail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("MeetingId")
+                        .HasColumnType("int");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -185,6 +214,8 @@ namespace DevNote.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("MeetingId");
 
                     b.ToTable("Users");
                 });
@@ -210,29 +241,23 @@ namespace DevNote.Data.Migrations
 
             modelBuilder.Entity("DevNote.Core.Models.FileUpload", b =>
                 {
-                    b.HasOne("DevNote.Core.Models.User", "User")
+                    b.HasOne("DevNote.Core.Models.User", null)
                         .WithMany("Files")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("DevNote.Core.Models.Transcription", b =>
+            modelBuilder.Entity("DevNote.Core.Models.User", b =>
                 {
-                    b.HasOne("DevNote.Core.Models.FileUpload", "File")
-                        .WithOne("Transcription")
-                        .HasForeignKey("DevNote.Core.Models.Transcription", "FileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("File");
+                    b.HasOne("DevNote.Core.Models.Meeting", null)
+                        .WithMany("Participants")
+                        .HasForeignKey("MeetingId");
                 });
 
-            modelBuilder.Entity("DevNote.Core.Models.FileUpload", b =>
+            modelBuilder.Entity("DevNote.Core.Models.Meeting", b =>
                 {
-                    b.Navigation("Transcription");
+                    b.Navigation("Participants");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.User", b =>

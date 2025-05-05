@@ -1,11 +1,13 @@
-﻿using DevNote.Core.Models;
+﻿using DevNote.Core.Dto_s;
+using DevNote.Core.Models;
 
 namespace DevNote.API.Models
 {
     public class MeetingPostModel
     {
-        public string title { get; set; }
+        public string Title { get; set; }
         public int CreatorId { get; set; }
-        public List<UserPostModel> Participants { get; set; } = new List<UserPostModel>();
+        public string TranscriptionPdfUrl { get; set; }//קישור לקובץ הPDF של התמלול
+        public List< UserMeeting_mailDto> Participants { get; set; } = new List<UserMeeting_mailDto>();
     }
 }

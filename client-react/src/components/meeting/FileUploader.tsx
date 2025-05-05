@@ -4,7 +4,9 @@ import TranscriptionControls from './TranscriptionControls';
 import AlertSnackbar from './AlertSnackbar';
 import useFileUploader from './useFileUploader';
 
-const FileUploader = () => {
+
+
+const FileUploader= () => {
   const {
     file,
     uploadProgress,

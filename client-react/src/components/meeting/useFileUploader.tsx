@@ -1,6 +1,7 @@
 import { useContext, useState } from 'react';
 import axios, { AxiosProgressEvent } from 'axios';
 import { UserContext } from '../login/UserReducer';
+import { LinkContext } from './context';
 
 const useFileUploader = () => {
   const [s3K, setS3K] = useState<string | null>(null);
@@ -10,7 +11,7 @@ const useFileUploader = () => {
   const [transcribeProgress, setTranscribeProgress] = useState(0);
   const [loading, setLoading] = useState(false);
   const [uploadedFileUrl, setUploadedFileUrl] = useState<string | null>(null);
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  // const [pdfUrl, setPdfUrl] = useState<string | null>(null);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [editedTranscript, setEditedTranscript] = useState('');
@@ -18,7 +19,9 @@ const useFileUploader = () => {
   const [open, setOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
   const [alertSeverity, setAlertSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+  const { pdfUrl, setPdfUrl } = useContext(LinkContext);
 
+  // const [pdfUrl, setPdfUrl] = useContext(LinkContext)
   const buttonStyle = {
     color: '#595047',
     margin: '5px',
@@ -120,6 +123,10 @@ const useFileUploader = () => {
       });
 
       if (data.pdfUrl) {
+        console.log(data.pdfUrl); // For debugging purposes, you can remove this line later
+        
+        debugger;
+        setPdfUrl(data.pdfUrl);
         setPdfUrl(data.pdfUrl);
         showAlert('הקובץ נשמר כ־PDF בהצלחה!', 'success');
       } else {

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DevNote.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250502115219_all")]
-    partial class all
+    [Migration("20250502142058_first")]
+    partial class first
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -198,9 +198,6 @@ namespace DevNote.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MeetingId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -215,28 +212,7 @@ namespace DevNote.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MeetingId");
-
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("DevNote.Core.Models.UserMeeting", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("MeetingId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UsersMeeting");
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.UserRole", b =>
@@ -258,6 +234,21 @@ namespace DevNote.Data.Migrations
                     b.ToTable("UserRoles");
                 });
 
+            modelBuilder.Entity("MeetingUser", b =>
+                {
+                    b.Property<int>("MeetingListId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ParticipantsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("MeetingListId", "ParticipantsId");
+
+                    b.HasIndex("ParticipantsId");
+
+                    b.ToTable("MeetingUser");
+                });
+
             modelBuilder.Entity("DevNote.Core.Models.FileUpload", b =>
                 {
                     b.HasOne("DevNote.Core.Models.User", null)
@@ -267,16 +258,19 @@ namespace DevNote.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DevNote.Core.Models.User", b =>
+            modelBuilder.Entity("MeetingUser", b =>
                 {
                     b.HasOne("DevNote.Core.Models.Meeting", null)
-                        .WithMany("Participants")
-                        .HasForeignKey("MeetingId");
-                });
+                        .WithMany()
+                        .HasForeignKey("MeetingListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("DevNote.Core.Models.Meeting", b =>
-                {
-                    b.Navigation("Participants");
+                    b.HasOne("DevNote.Core.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("ParticipantsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DevNote.Core.Models.User", b =>

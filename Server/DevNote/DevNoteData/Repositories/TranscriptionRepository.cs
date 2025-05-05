@@ -1,4 +1,4 @@
-﻿using DevNote.Core.Models;
+﻿using DevNote.Core.Models.files;
 using DevNote.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;

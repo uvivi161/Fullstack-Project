@@ -5,25 +5,24 @@
 namespace DevNote.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateMeeting : Migration
+    public partial class updateUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Title",
+            migrationBuilder.RenameColumn(
+                name: "occurredIn",
                 table: "Meetings",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                newName: "OccurredIn");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Title",
-                table: "Meetings");
+            migrationBuilder.RenameColumn(
+                name: "OccurredIn",
+                table: "Meetings",
+                newName: "occurredIn");
         }
     }
 }

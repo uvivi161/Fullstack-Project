@@ -8,6 +8,7 @@ import { initialUserState, UserContext, UserReducer } from './components/login/U
 import { Box } from '@mui/material'
 import { useReducer } from 'react'
 import { myRouter } from './Router'
+import { LinkProvider } from './components/meeting/LinkProvider'
 
 function App() {
 
@@ -38,7 +39,9 @@ function App() {
         width: "100%"
       }}>
         <UserContext.Provider value={[user, dispatch]}>
+          <LinkProvider>
           <RouterProvider router={myRouter} />
+          </LinkProvider>
         </UserContext.Provider>
       </Box>
   </>)

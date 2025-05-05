@@ -110,10 +110,11 @@ import {
         <List>
           <Box mb={3}>
             <ListItem disablePadding>
+        
               <ListItemButton onClick={() => navigate("create-meeting")}>
                 <ListItemIcon>
                   <AddCircleIcon />
-                </ListItemIcon>
+                </ListItemIcon> 
                 <ListItemText primary="Create Meeting" />
               </ListItemButton>
             </ListItem>

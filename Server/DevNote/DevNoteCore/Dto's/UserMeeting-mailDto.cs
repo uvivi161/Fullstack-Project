@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DevNote.Core.Models
+namespace DevNote.Core.Dto_s
 {
-    public class TranscriptionResult
+    public class UserMeeting_mailDto
     {
-        public string Text { get; set; }
-
+        public string Mail { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using DevNote.Core;
-using DevNote.Core.Models;
+using DevNote.Core.Models.files;
 using DevNote.Core.Repositories;
 using DevNote.Core.Services;
 using System;

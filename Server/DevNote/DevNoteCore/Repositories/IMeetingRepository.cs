@@ -1,4 +1,4 @@
-﻿using DevNote.Core.Models;
+﻿using DevNote.Core.Models.files;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,8 @@ namespace DevNote.Core.Repositories
     {
         IEnumerable<Meeting> Get();
         IEnumerable<Meeting> GetByCreator(int creatorId);
+        Meeting GetById(int id);
         void PostNewMeeting(Meeting meet);
+        void Delete(Meeting meet);
     }
 }

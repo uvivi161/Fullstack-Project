@@ -1,5 +1,6 @@
 ﻿using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
+using DevNote.Core.Models.graph;
 using DevNote.Core.Repositories;
 using DevNote.Core.Services;
 using System;

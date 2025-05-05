@@ -1,4 +1,4 @@
-﻿using DevNote.Core.Models;
+﻿using DevNote.Core.Models.files;
 using DevNote.Core.Repositories;
 using System;
 using System.Collections.Generic;
@@ -25,11 +25,20 @@ namespace DevNote.Data.Repositories
             var meetings = _context.Meetings.Where(m => m.CreatorId == creatorId);
             return meetings;
         }
+        public Meeting GetById(int id)
+        {
+            var meeting = _context.Meetings.FirstOrDefault(m => m.Id == id);
+            return meeting;
+        }
 
         public void PostNewMeeting(Meeting meet)
         { 
             _context.Meetings.Add(meet);
         }
 
+        public void Delete(Meeting meet)
+        {
+            _context.Meetings.Remove(meet);
+        }
     }
 }

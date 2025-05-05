@@ -6,11 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DevNote.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DBCreate : Migration
+    public partial class createDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Meetings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    occurredIn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Meetings", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Permissions",
                 columns: table => new
@@ -56,6 +71,22 @@ namespace DevNote.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Transcriptions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OriginalFileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TranscriptionPdfUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Transcriptions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserRoles",
                 columns: table => new
                 {
@@ -78,11 +109,19 @@ namespace DevNote.Data.Migrations
                     Mail = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    country = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MeetingId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Meetings_MeetingId",
+                        column: x => x.MeetingId,
+                        principalTable: "Meetings",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +132,10 @@ namespace DevNote.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FileUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    S3Key = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -106,42 +148,23 @@ namespace DevNote.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Transcriptions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FileId = table.Column<int>(type: "int", nullable: false),
-                    TranscribedText = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TranscribedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transcriptions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transcriptions_Files_FileId",
-                        column: x => x.FileId,
-                        principalTable: "Files",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Files_UserId",
                 table: "Files",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transcriptions_FileId",
-                table: "Transcriptions",
-                column: "FileId",
-                unique: true);
+                name: "IX_Users_MeetingId",
+                table: "Users",
+                column: "MeetingId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Files");
+
             migrationBuilder.DropTable(
                 name: "Permissions");
 
@@ -158,10 +181,10 @@ namespace DevNote.Data.Migrations
                 name: "UserRoles");
 
             migrationBuilder.DropTable(
-                name: "Files");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Meetings");
         }
     }
 }

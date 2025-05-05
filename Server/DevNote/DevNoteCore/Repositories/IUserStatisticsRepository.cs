@@ -1,5 +1,6 @@
 ﻿using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
+using DevNote.Core.Models.graph;
 using System;
 using System.Collections.Generic;
 using System.Linq;

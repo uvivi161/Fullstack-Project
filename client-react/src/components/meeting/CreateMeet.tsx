@@ -156,6 +156,8 @@ import { UserContext } from '../login/UserReducer';
 import FileUploader from './FileUploader';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox';
+import { LinkContext } from './context';
+// import { LinkContext } from './context';
 
 interface User {
   id: number;
@@ -171,6 +173,7 @@ const CreateMeeting = () => {
   const [meetingTitle, setMeetingTitle] = useState('');
   const [loading, setLoading] = useState(true);
   const [user] = useContext(UserContext);
+  const {pdfUrl, setPdfUrl } = useContext(LinkContext);
 
   // Alert states
   const [snackOpen, setSnackOpen] = useState(false);
@@ -192,6 +195,7 @@ const CreateMeeting = () => {
   }, []);
 
   const toggleSelection = (user: User) => {
+    debugger;
     setSelectedUsers(prevSelected =>
       prevSelected.includes(user)
         ? prevSelected.filter(u => u.id !== user.id)
@@ -212,6 +216,7 @@ const CreateMeeting = () => {
   };
 
   const handleCreateMeeting = async () => {
+    debugger;
     if (!meetingTitle.trim() || selectedUsers.length === 0) {
       setSnackMessage('אנא הזן כותרת ובחר משתתפים');
       setSnackSeverity('error');
@@ -220,11 +225,19 @@ const CreateMeeting = () => {
     }
 
     try {
-      await axios.post('https://localhost:7170/api/Meetings', {
+      console.log({
         title: meetingTitle,
         creatorId: user.id,
-        participantIds: selectedUsers.map(u => u.id),
+        participants: selectedUsers.map(u => ({ Mail: u.mail })),
+        transcriptionPdfUrl: pdfUrl
       });
+      await axios.post('https://localhost:7170/api/MeetingControler', {
+        Title: meetingTitle,
+        CreatorId: user.id,
+        Participants: selectedUsers.map(u =>({ Mail: u.mail })),
+        TranscriptionPdfUrl: pdfUrl
+      });
+      debugger;
 
       setSnackMessage('המפגש נוצר בהצלחה!');
       setSnackSeverity('success');
@@ -336,7 +349,7 @@ const CreateMeeting = () => {
       <Grid item xs={12} md={6}>
         <Paper sx={{ padding: 5 ,backgroundColor: 'transparent', border: '2px solid #595047', borderRadius: '12px'}}>
           <Typography variant="h5" gutterBottom>העלה קובץ</Typography>
-          <FileUploader />
+          <FileUploader/>
         </Paper>
       </Grid>
 

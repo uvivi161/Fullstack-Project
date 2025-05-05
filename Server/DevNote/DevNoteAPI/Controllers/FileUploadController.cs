@@ -1,7 +1,7 @@
 ﻿using Amazon.S3;
 using Amazon.S3.Model;
 using DevNote.API.Models;
-using DevNote.Core.Models;
+using DevNote.Core.Models.files;
 using DevNote.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
