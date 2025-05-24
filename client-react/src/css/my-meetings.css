@@ -1,0 +1,739 @@
+/* Color palette */
+:root {
+  --primary: #ff6b35;
+  --primary-light: #ffe0d1;
+  --secondary: #1a1a2e;
+  --secondary-transparent: rgba(26, 26, 46, 0.8);
+  --secondary-light: #2a2a4e;
+  --white: #ffffff;
+  --error: #dc3545;
+  --gray-50: #fafafa;
+  --gray-100: #f5f5f5;
+  --gray-200: #eeeeee;
+  --gray-300: #e0e0e0;
+  --gray-400: #bdbdbd;
+  --gray-500: #9e9e9e;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+}
+
+/* Main container */
+.meetings-container {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+/* Page header */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+@media (min-width: 900px) {
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+@media (max-width: 899px) {
+  .page-header {
+    flex-direction: column;
+  }
+}
+
+.page-title {
+  font-weight: 700;
+  color: var(--secondary);
+  position: relative;
+  display: inline-block;
+  padding-bottom: 0.5rem;
+}
+
+.page-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40%;
+  height: 3px;
+  background-color: var(--primary);
+  border-radius: 2px;
+}
+
+.page-subtitle {
+  margin-top: 0.5rem;
+  color: var(--gray-600);
+}
+
+/* Search area */
+.search-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+@media (max-width: 899px) {
+  .search-container {
+    width: 100%;
+  }
+}
+
+.search-field {
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-radius: 30px;
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  flex: 1;
+}
+
+@media (min-width: 900px) {
+  .search-field {
+    max-width: 300px;
+  }
+}
+
+.search-icon {
+  color: var(--gray-500);
+  margin-right: 0.5rem;
+}
+
+.search-input input {
+  color: var(--secondary);
+}
+
+.search-input input::placeholder {
+  color: var(--gray-500);
+  opacity: 1;
+}
+
+.action-button {
+  background-color: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: 50%;
+  color: var(--gray-700);
+}
+
+.action-button:hover {
+  background-color: var(--gray-100);
+}
+
+/* Loading state */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.loading-spinner {
+  color: var(--primary);
+  margin-bottom: 1.5rem;
+}
+
+.loading-text {
+  color: var(--secondary);
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  background-color: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state-icon-container {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.empty-state-icon {
+  font-size: 40px;
+  color: var(--primary);
+}
+
+.empty-state-title {
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 0.5rem;
+}
+
+.empty-state-message {
+  color: var(--gray-600);
+  max-width: 500px;
+  text-align: center;
+}
+
+/* Meeting cards */
+.meeting-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: none;
+  position: relative;
+}
+
+.meeting-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+.card-header-stripe {
+  height: 8px;
+  background: linear-gradient(90deg, var(--primary) 0%, rgba(255, 107, 53, 0.6) 100%);
+}
+
+.card-header {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.card-title-container {
+  display: flex;
+  align-items: center;
+}
+
+.meeting-avatar {
+  background-color: rgba(26, 26, 46, 0.9);
+  color: var(--white);
+  font-weight: bold;
+  width: 48px;
+  height: 48px;
+  font-size: 1.2rem;
+}
+
+.card-title-content {
+  margin-left: 1rem;
+}
+
+.card-title {
+  font-weight: 600;
+  color: var(--secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  line-height: 1.3;
+}
+
+.card-date {
+  display: flex;
+  align-items: center;
+  margin-top: 0.25rem;
+  color: var(--gray-600);
+}
+
+.card-date-icon {
+  font-size: 14px;
+  margin-right: 0.25rem;
+}
+
+.delete-button {
+  color: var(--gray-400);
+}
+
+.delete-button:hover {
+  color: var(--error);
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.card-divider {
+  margin-left: 1.5rem;
+  margin-right: 1.5rem;
+  opacity: 0.6;
+}
+
+.card-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  padding-top: 1rem;
+}
+
+.card-actions {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.view-details-button {
+  background-color: #1a1a2e;
+
+  /* background-color: rgba(26, 26, 46, 0.9); */
+  color: var(--white);
+  border-radius: 30px;
+  text-transform: none;
+  font-weight: 500;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.view-details-button:hover {
+  background-color: var(--secondary);
+  box-shadow: 0 6px 15px rgba(26, 26, 46, 0.2);
+}
+
+/* Pagination */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.pagination .MuiPaginationItem-root {
+  color: var(--secondary);
+  border-color: var(--gray-300);
+}
+
+.pagination .MuiPaginationItem-root:hover {
+  background-color: var(--gray-100);
+}
+
+.pagination .Mui-selected {
+  background-color: var(--primary-light) !important;
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  font-weight: bold;
+}
+
+/* Meeting dialog */
+.meeting-dialog .MuiDialog-paper {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.dialog-loading-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  background-color: var(--white);
+}
+
+.dialog-header {
+  position: relative;
+  padding: 0;
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(42, 42, 78, 0.9) 100%);
+}
+
+.dialog-header-content {
+  padding: 2rem;
+  width: 100%;
+}
+
+.dialog-title {
+  font-weight: 700;
+  color: var(--white);
+}
+
+.dialog-content {
+  padding: 0;
+  background-color: var(--white);
+}
+
+.dialog-body {
+  padding: 2rem;
+}
+
+.detail-section {
+  padding: 1.5rem;
+  height: 100%;
+  background-color: var(--gray-50);
+  border-radius: 12px;
+  border: 1px solid var(--gray-200);
+}
+
+.transcription-section {
+  margin-top: 2rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-icon-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: var(--primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-icon {
+  color: var(--primary);
+}
+
+.section-title {
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.section-divider {
+  margin-bottom: 1.5rem;
+}
+
+.detail-item {
+  margin-bottom: 1.5rem;
+}
+
+.detail-item:last-child {
+  margin-bottom: 0;
+}
+
+.detail-label {
+  color: var(--gray-600);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.detail-value-container {
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+}
+
+.detail-value {
+  font-weight: 500;
+  color: var(--secondary);
+}
+
+.creator-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+}
+
+.creator-avatar {
+  background-color: rgba(26, 26, 46, 0.9);
+  width: 40px;
+  height: 40px;
+}
+
+.creator-info {
+  flex: 1;
+}
+
+.creator-email {
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.creator-email:hover {
+  text-decoration: underline;
+}
+
+.participants-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 15px;
+}
+
+.participant-avatar {
+  background-color: rgba(26, 26, 46, 0.9);
+}
+
+.participant-chip {
+  background-color: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
+.participant-chip .MuiChip-label {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.participant-chip:hover {
+  background-color: var(--primary-light);
+  border-color: var(--primary);
+}
+
+.no-participants {
+  padding: 1.5rem;
+  background-color: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--gray-200);
+  text-align: center;
+}
+
+.no-data-message {
+  color: var(--gray-600);
+  font-style: italic;
+}
+
+.download-container {
+  display: flex;
+  justify-content: center;
+}
+
+.download-button {
+  background-color: var(--secondary-light);
+  color: var(--white);
+  text-transform: none;
+  font-weight: 500;
+  border-radius: 30px;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.download-button:hover {
+  color: #ffffff;
+  background-color: var(--secondary);
+  box-shadow: 0 6px 15px rgba(255, 107, 53, 0.2);
+}
+
+.dialog-actions {
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+  background-color: var(--white);
+}
+
+.close-button {
+  border-color: var(--gray-300);
+  color: var(--secondary);
+  border-radius: 30px;
+  text-transform: none;
+  font-weight: 500;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.close-button:hover {
+  border-color: var(--secondary);
+  background-color: rgba(26, 26, 46, 0.05);
+}
+
+/* Confirm delete dialog */
+.confirm-dialog .MuiDialog-paper {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.confirm-header {
+  padding: 1.5rem;
+  background-color: var(--error);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.confirm-icon-container {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirm-title {
+  font-weight: 600;
+}
+
+.confirm-content {
+  padding: 1.5rem;
+  margin-top: 1rem;
+  background-color: var(--white);
+}
+
+.confirm-message {
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+}
+
+.confirm-meeting-name {
+  padding: 1.25rem;
+  background-color: rgba(220, 53, 69, 0.05);
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--secondary);
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.confirm-input .MuiOutlinedInput-root {
+  border-radius: 8px;
+}
+
+.confirm-input .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--primary);
+  border-width: 2px;
+}
+
+.confirm-actions {
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+  background-color: var(--white);
+}
+
+.cancel-button {
+  color: var(--gray-700);
+  text-transform: none;
+  font-weight: 500;
+}
+
+.delete-confirm-button {
+  background-color: var(--error);
+  color: var(--white);
+  border-radius: 30px;
+  text-transform: none;
+  font-weight: 500;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.delete-confirm-button:hover {
+  background-color: #b71c1c;
+}
+
+.delete-confirm-button.Mui-disabled {
+  background-color: var(--gray-300);
+}
+
+.button-spinner {
+  color: var(--white);
+}
+
+/* Unviewed meeting card styling */
+.unviewed-meeting {
+  box-shadow: 0 4px 12px rgba(255, 86, 48, 0.2) !important;
+  border: 1px solid rgba(255, 86, 48, 0.3) !important;
+  position: relative;
+}
+
+.unviewed-meeting::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #ff5630 transparent transparent;
+  z-index: 1;
+}
+
+/* Badge styling */
+.MuiBadge-dot {
+  background-color: #ff5630 !important;
+}
+
+/* Animation for new badge */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.unviewed-meeting .meeting-avatar {
+  animation: pulse 2s infinite;
+}
+/* Add these styles to your my-meetings.css file */
+
+/* Unviewed meeting card styling */
+.unviewed-meeting {
+  box-shadow: 0 4px 12px rgba(255, 86, 48, 0.2) !important;
+  border: 1px solid rgba(255, 86, 48, 0.3) !important;
+  position: relative;
+}
+
+.unviewed-meeting::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #ff5630 transparent transparent;
+  z-index: 1;
+}
+
+/* Badge styling */
+.MuiBadge-dot {
+  background-color: #ff5630 !important;
+}
+
+/* Animation for new badge */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.unviewed-meeting .meeting-avatar {
+  animation: pulse 2s infinite;
+}

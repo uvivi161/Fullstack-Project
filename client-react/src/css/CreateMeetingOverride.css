@@ -1,0 +1,51 @@
+/* Create a new CSS file with higher specificity */
+
+/* Step circle colors - blue for active, orange for completed */
+.step-number.active .step-circle {
+  background-color: #1a365d !important; /* Blue with !important */
+}
+
+.step-number.completed .step-circle {
+  background-color: var(--devnote-primary) !important; /* Orange with !important */
+}
+
+/* Fix width issues */
+.search-container {
+  margin-bottom: 1.5rem !important;
+  width: 100% !important;
+}
+
+.search-field {
+  width: 100% !important;
+}
+
+/* Make sure the Autocomplete component takes full width */
+.MuiAutocomplete-root {
+  width: 100% !important;
+}
+
+/* Ensure form sections use proper width */
+.form-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Button styling overrides */
+.upload-container button.MuiButton-contained {
+  background-color: #1a365d !important;
+  color: white !important;
+}
+
+.upload-container button.MuiButton-contained:hover {
+  background-color: #0f2342 !important;
+}
+
+.upload-container button.MuiButton-outlined {
+  border-color: #1a365d !important;
+  color: #1a365d !important;
+}
+
+.upload-container button.MuiButton-outlined:hover {
+  background-color: rgba(26, 54, 93, 0.05) !important;
+}
