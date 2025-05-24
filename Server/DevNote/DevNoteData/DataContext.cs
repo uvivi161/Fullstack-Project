@@ -8,7 +8,8 @@ using DevNote.Core;
 using DevNote.Core.Models;
 using System.Data;
 using DevNote.Core.Models.files;
-
+using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DevNote.Data
 { 
@@ -22,11 +23,14 @@ namespace DevNote.Data
         public DbSet<RolePermissions> RolePermissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Meeting> Meetings { get; set; } 
-        //public DbSet<UserMeeting> UsersMeeting { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=DevNote2_db");
+
+            var connectionString = Environment.GetEnvironmentVariable("DevNote__DB");
+            var serverVersion = ServerVersion.AutoDetect(connectionString);
+            optionsBuilder.UseMySql(connectionString, serverVersion);
         }
     }
 } 
