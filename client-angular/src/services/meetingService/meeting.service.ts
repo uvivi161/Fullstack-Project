@@ -11,7 +11,7 @@ export class MeetingService {
   constructor(private http: HttpClient,private authService: AuthService) {
      this.tokenData = this.authService.getDecodedToken();
    }
-  private url = 'https://localhost:7170/api/MeetingControler';
+  private url = 'https://fullstack-project-tt0t.onrender.com/api/MeetingControler';
   
 
   getMeetings(){

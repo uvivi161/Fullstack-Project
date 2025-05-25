@@ -16,7 +16,7 @@ interface MyTokenPayload {
 })
 export class AuthService {
 
-  private url='https://localhost:7170/api/Auth';
+  private url='https://fullstack-project-tt0t.onrender.com/api/Auth';
   constructor(private http: HttpClient, private router: Router) { }
   
   login(mail: string, password: string) {

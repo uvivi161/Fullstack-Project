@@ -16,7 +16,7 @@ interface MyTokenPayload {
 })
 export class UsersService {
 
-    private url = 'https://localhost:7170/api/Users';
+    private url = 'https://fullstack-project-tt0t.onrender.com/api/Users';
 
     private tokenData: any;
 
