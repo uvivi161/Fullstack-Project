@@ -1,0 +1,521 @@
+/* 
+Main Dashboard Container
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+Header Section
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.welcome-content h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: #333;
+}
+
+.company-info {
+  color: #666;
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+.date-display {
+  background-color: #f5f5f5;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.date {
+  font-size: 14px;
+  color: #555;
+}
+
+Stats Cards
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 8px;
+}
+
+.stat-card mat-card-content {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.stat-icon.employees {
+  background-color: #e3f2fd;
+}
+
+.stat-icon.employees mat-icon {
+  color: #2196f3;
+}
+
+.stat-icon.meetings {
+  background-color: #e8f5e9;
+}
+
+.stat-icon.meetings mat-icon {
+  color: #4caf50;
+}
+
+.stat-icon.company {
+  background-color: #f3e5f5;
+}
+
+.stat-icon.company mat-icon {
+  color: #9c27b0;
+}
+
+.stat-icon.location {
+  background-color: #fff3e0;
+}
+
+.stat-icon.location mat-icon {
+  color: #ff9800;
+}
+
+.stat-details {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.stat-value mat-icon {
+  color: #f44336;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+Activities Section
+.activities-section {
+  margin-bottom: 24px;
+}
+
+.activities-section mat-card {
+  border-radius: 8px;
+}
+
+.activity-list {
+  margin-top: 16px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e3f2fd;
+  margin-right: 16px;
+}
+
+.activity-icon mat-icon {
+  color: #2196f3;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.activity-date {
+  font-size: 14px;
+  color: #666;
+}
+
+Loading, Error, and Empty States
+.loading-state, .error-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+}
+
+.loading-state p, .error-state p, .empty-state p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.error-state mat-icon, .empty-state mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  color: #999;
+}
+
+Quick Actions
+.quick-actions mat-card {
+  border-radius: 8px;
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.action-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  transition: background-color 0.2s;
+  flex: 1;
+  min-width: 120px;
+}
+
+.action-button:hover {
+  background-color: #e0e0e0;
+}
+
+.action-button mat-icon {
+  font-size: 24px;
+  height: 24px;
+  width: 24px;
+  margin-bottom: 8px;
+}
+
+.action-button span {
+  font-size: 14px;
+}
+
+Responsive Adjustments
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .date-display {
+    margin-top: 16px;
+    align-self: flex-start;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+} */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Main Dashboard Container */
+.dashboard-container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.welcome-content h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0;
+  color: #333;
+}
+
+.company-info {
+  color: #666;
+  margin: 4px 0 0;
+  font-size: 14px;
+}
+
+.date-display {
+  background-color: #f5f5f5;
+  padding: 8px 16px;
+  border-radius: 4px;
+}
+
+.date {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Stats Cards */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  border-radius: 8px;
+}
+
+.stat-card mat-card-content {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  margin-right: 16px;
+}
+
+.stat-icon.employees {
+  background-color: #e3f2fd;
+}
+
+.stat-icon.employees mat-icon {
+  color: #2196f3;
+}
+
+.stat-icon.meetings {
+  background-color: #e8f5e9;
+}
+
+.stat-icon.meetings mat-icon {
+  color: #4caf50;
+}
+
+.stat-icon.company {
+  background-color: #f3e5f5;
+}
+
+.stat-icon.company mat-icon {
+  color: #9c27b0;
+}
+
+.stat-icon.location {
+  background-color: #fff3e0;
+}
+
+.stat-icon.location mat-icon {
+  color: #ff9800;
+}
+
+.stat-details {
+  flex: 1;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.stat-value mat-icon {
+  color: #f44336;
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
+
+.stat-label {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Chart Section */
+.chart-section {
+  margin-bottom: 24px;
+}
+
+.chart-section mat-card {
+  border-radius: 8px;
+}
+
+.chart-container {
+  height: 350px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* Activities Section */
+.activities-section {
+  margin-bottom: 24px;
+}
+
+.activities-section mat-card {
+  border-radius: 8px;
+}
+
+.activity-list {
+  margin-top: 16px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #e3f2fd;
+  margin-right: 16px;
+}
+
+.activity-icon mat-icon {
+  color: #2196f3;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.activity-description {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.activity-date {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Loading, Error, and Empty States */
+.loading-state, .error-state, .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  text-align: center;
+}
+
+.loading-state p, .error-state p, .empty-state p {
+  margin-top: 16px;
+  color: #666;
+}
+
+.error-state mat-icon, .empty-state mat-icon {
+  font-size: 48px;
+  height: 48px;
+  width: 48px;
+  color: #999;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .date-display {
+    margin-top: 16px;
+    align-self: flex-start;
+  }
+  
+  .view {
+    width: 100% !important;
+  }
+}

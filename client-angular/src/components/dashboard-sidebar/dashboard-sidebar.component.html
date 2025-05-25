@@ -1,0 +1,25 @@
+<div class="sidebar-container">
+  <div class="user-info">
+    <div class="company-name">Your Company Name</div>
+    <div class="user-role">Administrator</div>
+  </div>
+  
+  <mat-divider></mat-divider>
+  
+  <mat-nav-list class="nav-list">
+    <a mat-list-item 
+       *ngFor="let item of menuItems" 
+       [routerLink]="item.route" 
+       routerLinkActive="active-link">
+      <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+      <span matListItemTitle>{{ item.name }}</span>
+    </a>
+  </mat-nav-list>
+  
+  <div class="sidebar-footer">
+    <mat-divider></mat-divider>
+    <!-- <div class="version-info">v1.0.0</div> -->
+    <p>&copy; 2025 Ahuva Vinograd.<br/>
+         All rights reserved.</p>
+  </div>
+</div>

@@ -22,3 +22,176 @@
     </div>
 } -->
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h1>City Usage Analytics Dashboard</h1>
+    <p class="dashboard-description">Visualizing user statistics across cities and years</p>
+  </div>
+  
+  <!-- Loading and Error States -->
+  <div class="status-container" *ngIf="loading || error">
+    <div class="loading-container" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Loading data...</p>
+    </div>
+    
+    <div class="error-container" *ngIf="error">
+      <div class="error-icon">⚠️</div>
+      <p>Error loading data: {{ error }}</p>
+      <button (click)="fetchCityYearlyData()">Try Again</button>
+    </div>
+  </div>
+  
+  <!-- Dashboard Content -->
+  <div class="dashboard-content" *ngIf="!loading && !error">
+    <!-- Summary Cards -->
+    <div class="summary-cards" *ngIf="years.length > 0">
+      <div class="summary-card">
+        <div class="card-icon">📊</div>
+        <div class="card-content">
+          <h3>Total Cities</h3>
+          <p class="card-value">{{ rawData.length }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon">👥</div>
+        <div class="card-content">
+          <h3>Total Users ({{ years[years.length-1] }})</h3>
+          <p class="card-value">{{ getTotalUsersForYear(years[years.length-1]) }}</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon">🏙️</div>
+        <div class="card-content">
+          <h3>Top City ({{ years[years.length-1] }})</h3>
+          <p class="card-value">{{ getTopCityForYear(years[years.length-1]).city }}</p>
+          <p class="card-subtext">{{ getTopCityForYear(years[years.length-1]).count }} users</p>
+        </div>
+      </div>
+      
+      <div class="summary-card">
+        <div class="card-icon">📅</div>
+        <div class="card-content">
+          <h3>Years Covered</h3>
+          <p class="card-value">{{ years.length }}</p>
+          <p class="card-subtext">{{ years[0] }} - {{ years[years.length-1] }}</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Chart Navigation -->
+    <div class="chart-navigation">
+      <button [class.active]="activeChart === 'bar'" (click)="activeChart = 'bar'">Bar Chart</button>
+      <button [class.active]="activeChart === 'line'" (click)="activeChart = 'line'">Line Chart</button>
+      <button [class.active]="activeChart === 'pie'" (click)="activeChart = 'pie'">Pie Chart</button>
+      <button [class.active]="activeChart === 'heatmap'" (click)="activeChart = 'heatmap'">Heat Map</button>
+    </div>
+    
+    <!-- Year Selector (for Pie Chart) -->
+    <div class="year-selector" *ngIf="activeChart === 'pie'">
+      <label for="yearSelect">Select Year:</label>
+      <select id="yearSelect" [(ngModel)]="selectedYear" (change)="onYearChange()">
+        <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+      </select>
+    </div>
+    
+    <!-- Charts -->
+    <div class="chart-container">
+      <!-- Bar Chart -->
+      <div class="chart" *ngIf="activeChart === 'bar' && barChartData.length > 0">
+        <h2>City Usage by Year</h2>
+        <ngx-charts-bar-vertical-2d
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="barChartData"
+          [gradient]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Cities'"
+          [yAxisLabel]="'Users'"
+          [legendTitle]="'Years'"
+          [groupPadding]="20"
+          [barPadding]="5"
+          [roundDomains]="true"
+          [showGridLines]="true">
+        </ngx-charts-bar-vertical-2d>
+      </div>
+      
+      <!-- Line Chart -->
+      <div class="chart" *ngIf="activeChart === 'line' && lineChartData.length > 0">
+        <h2>User Growth Trends by City</h2>
+        <ngx-charts-line-chart
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="lineChartData"
+          [gradient]="false"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Year'"
+          [yAxisLabel]="'Users'"
+          [autoScale]="true"
+          [curve]="'monotoneX'"
+          [roundDomains]="true"
+          [showGridLines]="true">
+        </ngx-charts-line-chart>
+      </div>
+      
+      <!-- Pie Chart -->
+      <div class="chart" *ngIf="activeChart === 'pie' && pieChartData.length > 0">
+        <h2>City Distribution for {{ selectedYear }}</h2>
+        <ngx-charts-advanced-pie-chart
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="pieChartData"
+          [gradient]="true">
+        </ngx-charts-advanced-pie-chart>
+      </div>
+      
+      <!-- Heat Map -->
+      <div class="chart" *ngIf="activeChart === 'heatmap' && heatMapData.length > 0">
+        <h2>Usage Intensity by City and Year</h2>
+        <ngx-charts-heat-map
+          [view]="view"
+          [scheme]="colorScheme"
+          [results]="heatMapData"
+          [gradient]="false"
+          [xAxis]="true"
+          [yAxis]="true"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxisLabel]="'Year'"
+          [yAxisLabel]="'City'"
+          [innerPadding]="10">
+        </ngx-charts-heat-map>
+      </div>
+    </div>
+  </div>
+</div>

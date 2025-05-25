@@ -1,8 +1,87 @@
-
+<!-- 
 <div class="base">
     <app-login></app-login>
     <app-signin></app-signin>
     <app-logout></app-logout>
 </div>
-    
-    
+     -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="home-container">
+    <header class="header">
+        <div class="logo-container">
+            <!-- todo - לשנות את זה להוסיף את האייקון -->
+            <div class="logo">
+                <mat-icon class="logo-icon">business</mat-icon>
+            </div>
+            <h1 class="app-title">Team Management Portal</h1>
+        </div>
+        <div class="header-actions">
+            <!-- Any header actions can go here -->
+        </div>
+    </header>
+
+    <div class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Streamline Your Team Management</h1>
+            <p class="hero-subtitle">
+                Powerful tools to help managers organize meetings, track progress, and lead their teams effectively.
+            </p>
+        </div>
+    </div>
+
+    <div class="features-section">
+        <div class="feature-card">
+            <mat-icon class="feature-icon">groups</mat-icon>
+            <h3>Team</h3>
+            <p>Managing your team</p>
+        </div>
+        <div class="feature-card">
+            <mat-icon class="feature-icon">assignment</mat-icon>
+            <h3>Task Management</h3>
+            <p>View the last month's meeting history.</p>
+        </div>
+        <div class="feature-card">
+            <mat-icon class="feature-icon">insights</mat-icon>
+            <h3>Performance Analytics</h3>
+            <p>Get insights into your team's performance.</p>
+        </div>
+    </div>
+
+    <div class="auth-section">
+        <mat-card class="auth-card">
+            <mat-card-header>
+                <mat-card-title>Access Your Dashboard</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>Sign in to your account or create a new one to get started.</p>
+                <div class="auth-components">
+                    <div class="auth-component">
+                        <h3>Existing Users</h3>
+                        <app-login></app-login>
+                    </div>
+                    <mat-divider [vertical]="true"></mat-divider>
+                    <div class="auth-component">
+                        <h3>New Users</h3>
+                        <app-signin></app-signin>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Ahuva Vinograd. All rights reserved.</p>
+    </footer>
+</div>

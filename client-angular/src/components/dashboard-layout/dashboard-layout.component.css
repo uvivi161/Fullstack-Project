@@ -1,0 +1,38 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidenav-container {
+  flex: 1;
+  background-color: #f8f9fa;
+}
+
+.sidenav {
+  width: 250px;
+  background-color: #fff;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 24px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .sidenav {
+    width: 200px;
+  }
+  
+  .content {
+    padding: 16px;
+  }
+}

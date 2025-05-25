@@ -24,9 +24,12 @@ import { MatOption } from '@angular/material/core';
 
 export class SigninComponent {
   signInForm = new FormGroup({
-    email: new FormControl<string>('', [Validators.required]),
+    mail: new FormControl<string>('', [Validators.required]),
     password: new FormControl<string>('', [Validators.required])  ,
-    role: new FormControl<string>('', [Validators.required])
+    // role: new FormControl<string>('', [Validators.required]),
+    country: new FormControl<string>('', [Validators.required]),
+    companyName: new FormControl<string>('', [Validators.required]),
+        
   });
 
   showSignInForm = false;
@@ -42,9 +45,13 @@ export class SigninComponent {
 
   signIn(){
     this.authService.signIn
-    (this.signInForm.value.email as string,
+    (this.signInForm.value.mail as string,
     this.signInForm.value.password as string,
-    this.signInForm.value.role as string);  
+    // this.signInForm.value.role as string,
+    "admin",
+    this.signInForm.value.country as string,
+    this.signInForm.value.companyName as string);
+    console.log('פרטי התחברות:', this.signInForm.value);  
   }
 
   isFieldInvalid(fieldName: string): boolean | undefined {

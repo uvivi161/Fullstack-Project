@@ -1,0 +1,75 @@
+<!-- <mat-toolbar class="header">
+  <div class="header-left">
+    <button mat-icon-button (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="logo-container">
+      <mat-icon class="logo-icon">business</mat-icon>
+      <span class="app-title">Team Management</span>
+    </div>
+  </div>
+  
+  <div class="header-right">    
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+      <div class="user-avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+      <span class="user-name">{{ currenyUser.mail }}</span>
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar> -->
+
+
+
+
+
+
+
+<mat-toolbar class="header">
+  <div class="header-left">
+    <button mat-icon-button (click)="toggleMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <div class="logo-container">
+      <!-- <mat-icon class="logo-icon">business</mat-icon> -->
+       <!-- todo -->
+      <span class="app-title">DevNote</span>
+    </div>
+  </div>
+  
+  <div class="header-right">    
+    <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+      <div class="user-avatar" [style.background-color]="getAvatarColor(currenyUser.mail)">
+        {{ getFirstLetter(currenyUser.mail) }}
+      </div>
+      <!-- <span class="user-name">{{ currenyUser.mail }}</span> -->
+      <mat-icon>arrow_drop_down</mat-icon>
+    </button>
+    
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      <div class="user-menu-header">
+        <div class="user-menu-avatar" [style.background-color]="getAvatarColor(currenyUser.mail)">
+          {{ getFirstLetter(currenyUser.mail) }}
+        </div>
+        <div class="user-menu-info">
+          <span class="user-menu-email">{{ currenyUser.mail }}</span>
+          <span class="user-menu-role">{{ currenyUser.role }}</span>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+</mat-toolbar>

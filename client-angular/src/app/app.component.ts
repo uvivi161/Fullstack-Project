@@ -6,10 +6,10 @@ import { LoginComponent } from "../components/login/login.component";
 @Component({
   selector: 'app-root',
   imports: [
-    RouterLink,
-    RouterLinkActive,
+    // RouterLink,
+    // RouterLinkActive,
     RouterOutlet,
-    MatToolbar,
+    // MatToolbar,
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
