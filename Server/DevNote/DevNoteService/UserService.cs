@@ -9,6 +9,8 @@ using DevNote.Core.Repositories;
 using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
 using DevNote.Core;
+using DevNote.Core.Models.files;
+using Microsoft.AspNetCore.Identity;
 
 namespace DevNote.Service
 {
@@ -16,16 +18,24 @@ namespace DevNote.Service
     {
         private readonly IUserRepository _IUserRepository;
         private readonly IRepositoryManager _irm;
+        private readonly IPasswordGenerator _passwordGenerator;
+        private readonly IEmailService _emailService;
 
-        public UserService(IUserRepository IuserRepository, IRepositoryManager irm)
+        public UserService(IUserRepository IuserRepository, IRepositoryManager irm, IPasswordGenerator passwordGenerator, IEmailService emailService)
         {
             _IUserRepository = IuserRepository;
             _irm = irm;
+            _passwordGenerator = passwordGenerator;
+            _emailService = emailService;
         }
 
         public IEnumerable<User> Get()
         {
             return _IUserRepository.Get();
+        }
+        public async Task<string> GetByIDAsync(int id)
+        {
+            return await _IUserRepository.GetByIDAsync(id);
         }
 
         public User GetByMail(string mail)
@@ -36,31 +46,128 @@ namespace DevNote.Service
         {
             return _IUserRepository.GetByCompany(company);
         }
-
-        public bool PostNewUser(User us)
+        public Task<IEnumerable<Meeting>> GetAllMeetingsAsync(int id)
         {
-            User u = _IUserRepository.Get().FirstOrDefault(f => f.Id.Equals(us.Id));
+            return _IUserRepository.GetAllMeetingsAsync(id);
+        }
+        public int GetLastMonth()
+        {
+            var now = DateTime.Now;
+            return _IUserRepository.GetLastMonth(now.Year, now.Month);
+        }
+        public int GetCountByCompany(string companyName)
+        {
+            return _IUserRepository.GetCountByCompany(companyName);
+        }
+
+        private string HashPassword(string plainPassword)
+        {
+            var hasher = new PasswordHasher<User>();
+            return hasher.HashPassword(null, plainPassword);
+        }
+
+        public async Task<bool> PostNewUserAsync(User us)
+        {
+            var existingUser = _IUserRepository.Get().FirstOrDefault(f => f.Id == us.Id);
+            if (existingUser != null)
+                return false;
+
+            // שלב 1: יצירת סיסמה אקראית
+            //var generatedPassword = GeneratePassword();
+            var password = us.PasswordHash;
+            // שלב 2: הצפנה של הסיסמה
+            us.PasswordHash = HashPassword(us.PasswordHash); // שימי לב – מחייב שימוש בפונקציית הצפנה
+
+            // שלב 3: הוספת המשתמש
+            _IUserRepository.PostNewUser(us);
+            _irm.save();
+
+            // שלב 4: שליחת מייל עם הפרטים
+            var subject = "Welcome to the DevNote system";
+            var body = $"Hi {us.Mail},\n\nYour user was created.\nEmail: {us.Mail}\nYour Password: {password}";
+            await _emailService.SendEmailAsync(us.Mail, subject, body);
+
+            return true;
+        }
+
+        public bool RegisterEmployee(string mail, string role, string city, string companyName, out string generatedPassword)
+        {
+            generatedPassword = _passwordGenerator.GenerateUniquePassword();
+
+            var user = new User
+            {
+                Mail = mail,
+                Role = role,
+                Country = city,
+                CompanyName = companyName,
+                PasswordHash = generatedPassword,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            User u = _IUserRepository.Get().FirstOrDefault(f => f.Id.Equals(user.Id));
             if (u == null)
             {
-                _IUserRepository.PostNewUser(us);
+                _IUserRepository.PostNewUser(user);
                 _irm.save();
                 return true;
             }
             return false;
         }
 
-        public bool Put(int id, User us)
+        public bool PostNewAdmin(User user)
         {
-            User u = _IUserRepository.Get().FirstOrDefault(f => f.Id == id);
-            if (u != null)
+            if (user == null) return false;
+            user.PasswordHash = HashPassword(user.PasswordHash); // שימי לב – מחייב שימוש בפונקציית הצפנה
+
+            // צור אובייקט חברה חדש
+            var company = new Company
             {
-                _IUserRepository.Put(u, us);
-                _irm.save();
-                return true;
-            }
-            return false;
+                Name = user.CompanyName,
+                Country = user.Country,
+                Employees = new List<User> { user } // המנהל הוא העובד הראשון
+            };
+
+            // קרא לפונקציית הריפוזיטורי
+            _IUserRepository.PostNewAdmin(user, company);
+
+            return true;
         }
 
+        public async Task<bool> UpdateUserAsync(int id, UserUpdateDto model)
+        {
+
+            // קבלת המשתמש הקיים לפי מזהה
+            var existingUser = await _IUserRepository.GetUserByIdAsync(id);
+            if (existingUser == null)
+            {
+                return false;
+            }
+
+            // בדיקה אם המייל החדש כבר קיים במערכת (אם הוא שונה מהמייל הנוכחי)
+            if (model.Mail != existingUser.Mail)
+            {
+                bool isEmailUnique = await _IUserRepository.IsEmailUniqueAsync(model.Mail, id);
+                if (!isEmailUnique)
+                {
+                    return false; // המייל כבר קיים במערכת
+                }
+            }
+
+            // עדכון רק השדות הנדרשים - מייל, עיר ותפקיד
+            existingUser.Mail = model.Mail;
+            existingUser.Country = model.Country;
+            existingUser.Role = model.Role;
+
+            // שמירת השינויים
+            bool updated = await _IUserRepository.UpdateUserAsync(id, existingUser);
+            if (!updated)
+            {
+                return false;
+            }
+
+            return true;
+
+        }
         public bool Delete(int id)
         {
             var user = _IUserRepository.Get().FirstOrDefault(f => f.Id == id);
@@ -71,8 +178,6 @@ namespace DevNote.Service
             _irm.save();
             return true;
         }
-
-      
 
     }
 }

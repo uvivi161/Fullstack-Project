@@ -25,28 +25,6 @@ namespace DevNote.API.Controllers
             _userService = userService;
         }
 
-        //[HttpPost("login")]
-        //public IActionResult Login([FromBody] LoginModel model)
-        //{
-        //    // כאן יש לבדוק את שם המשתמש והסיסמה מול מסד הנתונים
-        //    if (model.UserName == "admin" && model.Password == "admin123")
-        //    {
-        //        var token = _authService.GenerateJwtToken(model.UserName, new[] { "Admin" });
-        //        return Ok(new { Token = token });
-        //    }
-        //    else if (model.UserName == "editor" && model.Password == "editor123")
-        //    {
-        //        var token = _authService.GenerateJwtToken(model.UserName, new[] { "Editor" });
-        //        return Ok(new { Token = token });
-        //    }
-        //    else if (model.UserName == "viewer" && model.Password == "viewer123")
-        //    {
-        //        var token = _authService.GenerateJwtToken(model.UserName, new[] { "Viewer" });
-        //        return Ok(new { Token = token });
-        //    }
-
-        //    return Unauthorized();
-        //}
 
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginModel model)
@@ -55,13 +33,21 @@ namespace DevNote.API.Controllers
             var user = _userService.GetByMail(model.Mail);
 
             // אם המשתמש לא קיים או שהסיסמה לא תואמת
-            if (user == null || user.PasswordHash != model.Password)
+            if (user == null || !_authService.VerifyPassword(model.Password, user.PasswordHash))
             {
                 return Unauthorized("שם משתמש או סיסמה שגויים");
             }
+            if (model.SystemContext == "admin" && user.Role != "admin")
+            {
+                return Unauthorized("admin only");
+            }
+            if (model.SystemContext != "admin" && user.Role == "admin")
+            {
+                return Unauthorized("admin not allowed");
+            }
 
             // יצירת ה-JWT עם התפקיד של המשתמש מה-DB
-            var token = _authService.GenerateJwtToken(user.Role, new[] { user.Role });
+            var token = _authService.GenerateJwtToken(user.Mail, user.Id, user.Country, user.CompanyName, user.Role);
             return Ok(new { Token = token });
         }
 
@@ -81,12 +67,39 @@ namespace DevNote.API.Controllers
                 Mail = model.Mail,
                 PasswordHash = model.Password,
                 Role = model.Role,
-                country = model.Country
+                Country = model.Country,
+                CompanyName = model.CompanyName
             };
-            _userService.PostNewUser(user);
+            _userService.PostNewUserAsync(user);
             // יצירת ה-JWT עם התפקיד של המשתמש
-            var token = _authService.GenerateJwtToken(user.Role, new[] { user.Role });
+            var token = _authService.GenerateJwtToken(user.Mail, user.Id, user.Country, user.CompanyName, user.Role);
             return Ok(new { Token = token });
         }
+
+
+        [HttpPost("adminRegister")]
+        public IActionResult adminRegister([FromBody] UserPostModel model)
+        {
+            var checkUser = _userService.GetByMail(model.Mail);
+            // בדיקה האם קיים משתמש עם אותו מייל
+            if (checkUser != null)
+            {
+                return BadRequest("מנהל עם שם משתמש זה כבר קיים");
+            }
+            // הוספת המשתמש למסד הנתונים
+            var user = new User
+            {
+                Mail = model.Mail,
+                PasswordHash = model.Password,
+                Role = model.Role,
+                Country = model.Country,
+                CompanyName = model.CompanyName
+            };
+            _userService.PostNewAdmin(user);
+            // יצירת ה-JWT עם התפקיד של המשתמש
+            var token = _authService.GenerateJwtToken(user.Mail, user.Id, user.Country, user.CompanyName, user.Role);
+            return Ok(new { Token = token });
+        }
+
     }
 }

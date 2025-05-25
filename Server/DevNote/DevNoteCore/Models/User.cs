@@ -14,10 +14,11 @@ namespace DevNote.Core.Models
         public string PasswordHash { get; set; } = string.Empty;
         public string Role { get; set; } = "user"; // Admin/User
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string country { get; set; } = string.Empty;
+        public string Country { get; set; } = string.Empty;
         public string CompanyName { get; set; } = string.Empty;
+        public Company Company { get; set; }
 
         public List<Meeting> MeetingList { get; set; }= new List<Meeting>();
-        public List<FileUpload> Files { get; set; } = new();
+        //public List<FileUpload> Files { get; set; } = new();
     }
 }

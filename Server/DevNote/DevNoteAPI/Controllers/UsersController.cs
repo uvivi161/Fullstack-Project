@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using DevNote.API.Models;
+using DevNote.Core;
 using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
 using DevNote.Core.Services;
@@ -19,10 +20,15 @@ namespace DevNote.API.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public UsersController(IUserService context, IMapper mapper)
+        private readonly IPasswordGenerator _passwordGenerator;
+        private readonly ICompanyService _companyService;
+
+        public UsersController(IUserService context, IMapper mapper, IPasswordGenerator passwordGenerator, ICompanyService companyService)
         {
             _userService = context;
             _mapper = mapper;
+            _passwordGenerator = passwordGenerator;
+            _companyService = companyService;
         }
 
         //מחזיר רשימת לקוחות
@@ -41,6 +47,20 @@ namespace DevNote.API.Controllers
         }
 
 
+        [HttpGet("getByID")]
+        public async Task<string> GetByID(int id)
+        {
+            return await _userService.GetByIDAsync(id);
+        }
+
+        //שליפת המשתמשים שהתחברו בחודש האחרון
+        [HttpGet("getLastMonth")]
+        public ActionResult GetLastMonth()
+        {
+            return Ok(_userService.GetLastMonth());
+        }
+
+
         //שליפת לקוח לפי mail
         // GET api/<UsersController>/5
         [HttpGet("getByMail-admin")]
@@ -55,6 +75,19 @@ namespace DevNote.API.Controllers
 
         }
 
+        //שליפת כל  המפגשים של לקוח מסוים
+        [HttpGet("getAllMeetings")]
+        public async Task<ActionResult> GetAllMeetingsAsync(int id)
+        {
+            var meetings = await _userService.GetAllMeetingsAsync(id);
+            var meetingDto = new List<MeetingDto>();
+            foreach (var meeting in meetings)
+            {
+                meetingDto.Add(_mapper.Map<MeetingDto>(meeting));
+            }
+            return Ok(meetingDto);
+        }
+
         [HttpGet("getByCompanyName")]
         public ActionResult GetByCompany(string company)
         { 
@@ -67,26 +100,47 @@ namespace DevNote.API.Controllers
             return Ok(usersDtos);
         }
 
-        //הוספת לקוח
-        // POST api/<UsersController>
-        [HttpPost]
-        public ActionResult PostNewUser([FromBody] UserPostModel us)
+        [HttpGet("getCountByCompanyName")]
+        public int GetCountByCompanyName(string companyName)
         {
-            var user = new User {Mail = us.Mail,CreatedAt=new DateTime() ,PasswordHash = us.Password,Role = us.Role, CompanyName = us.CompanyName};
-            if (_userService.PostNewUser(user))
-                return Ok();
-            return NotFound("this user is already exist");
+            return _userService.GetCountByCompany(companyName);
         }
 
-        //עדכון פרטי לקוח מסוים לפי קוד לקוח
-        // PUT api/<UsersController>/5
-        [HttpPut("updateUser/{id}")]
-        public ActionResult Put(int id, [FromBody] UserPostModel us)
+        [HttpPost]
+        public async Task<IActionResult> RegisterEmployeeAsync([FromBody] RegisterEmployeeDto dto)
         {
-            var user = new User { Mail = us.Mail, PasswordHash = us.Password, Role= us.Role, CompanyName = us.CompanyName};
-            if (_userService.Put(id, user))
-                return Ok();
-            return NotFound($"this user {id} is not exist");
+            var generatedPassword = _passwordGenerator.GenerateUniquePassword();
+            var company = _companyService.GetByName(dto.CompanyName);
+            var user = new User { Mail = dto.Mail, Country = dto.City, CompanyName = dto.CompanyName, Role = dto.Role, PasswordHash = generatedPassword, Company = company };
+            var checkUser = _userService.GetByMail(user.Mail);
+            // בדיקה האם קיים משתמש עם אותו מייל
+            if (checkUser != null)
+            {
+                return BadRequest("משתמש עם שם משתמש זה כבר קיים");
+            }
+            var result = await _userService.PostNewUserAsync(user);
+            if (!result)
+                return BadRequest(true);
+            return Ok(false);
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _userService.UpdateUserAsync(id, model);
+
+            if (result)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
 
         [HttpDelete("deleteUser-admin")]

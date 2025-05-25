@@ -1,102 +1,3 @@
-//using DevNote.Core.Repositories;
-//using DevNote.Core.Services;
-//using DevNote.Data.Repositories;
-//using DevNote.Service;
-//using DevNote.Data;
-//using System;
-//using DevNote.Core;
-//using Microsoft.AspNetCore.Authentication.JwtBearer;
-//using Microsoft.IdentityModel.Tokens;
-//using System.Text;
-//using Microsoft.OpenApi.Models;
-
-//var builder = WebApplication.CreateBuilder(args);
-
-
-//// Add services to the container.
-
-//builder.Services.AddControllers();
-//// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen(options =>
-//{
-//    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-//    {
-//        Scheme = "Bearer",
-//        BearerFormat = "JWT",
-//        In = ParameterLocation.Header,
-//        Name = "Authorization",
-//        Description = "Bearer Authentication with JWT Token",
-//        Type = SecuritySchemeType.Http
-//    });
-//    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-//    {
-//        {
-//            new OpenApiSecurityScheme
-//            {
-//                Reference = new OpenApiReference
-//                {
-//                    Id = "Bearer",
-//                    Type = ReferenceType.SecurityScheme
-//                }
-//            },
-//            new List<string>()
-//        }
-//    });
-//});
-//builder.Services.AddScoped<IUserService, UserService>();
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
-
-
-//builder.Services.AddDbContext<DataContext>();
-//builder.Services.AddAutoMapper(typeof(MappingProfile));
-
-////JWT
-//builder.Services.AddAuthentication(options =>
-//{
-//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//})
-//    .AddJwtBearer(options =>
-//    {
-//        options.TokenValidationParameters = new TokenValidationParameters
-//        {
-//            ValidateIssuer = true,
-//            ValidateAudience = true,
-//            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
-//            ValidIssuer = builder.Configuration["JWT:Issuer"],
-//            ValidAudience = builder.Configuration["JWT:Audience"],
-//            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]))
-//        };
-//    });
-
-
-
-//var app = builder.Build();
-
-//app.UseAuthentication();
-
-//app.UseAuthorization();
-
-//// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
-
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
-
-//app.MapControllers();
-
-//app.Run();
-
-
-
-
 using DevNote.Core.Repositories;
 using DevNote.Core.Services;
 using DevNote.Data.Repositories;
@@ -112,46 +13,19 @@ using Amazon.S3;
 using Amazon;
 using Amazon.Extensions.NETCore.Setup;
 using Amazon.Runtime;
-
+using DotNetEnv;
+using DevNote.Core.Models;
+DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 
-
-//var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
-
-//var credentials = new BasicAWSCredentials(
-//builder.Configuration["AWS:AccessKey"],
-//builder.Configuration["AWS:SecretKey"]
-////AccessKey,
-////SecretAccess
-//);
-
-//var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
-////var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
-
-//var s3Client = new AmazonS3Client(credentials, region);
-
-//builder.Services.AddSingleton<IAmazonS3>(s3Client);
-//Console.WriteLine(s3Client);
-
-
-//// 1. יצירת AWSOptions עם Region
-//var awsOptions = new AWSOptions
-//{
-//    Region = Amazon.RegionEndpoint.EUNorth1
-//};
-
-//// 2. רישום AWSOptions וה-S3 Service
-///
-
-var awsRegion = Environment.GetEnvironmentVariable("AWS_REGION");
+var awsRegion = Environment.GetEnvironmentVariable("AWS__REGION");
 
 var credentials = new BasicAWSCredentials(
 builder.Configuration["AWS:AccessKey"],
 builder.Configuration["AWS:SecretKey"]
-//AccessKey,
-//SecretAccess
 );
+builder.Services.AddControllers();
 
 var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Region"]);
 //var region = Amazon.RegionEndpoint.GetBySystemName(awsRegion);
@@ -159,24 +33,9 @@ var region = Amazon.RegionEndpoint.GetBySystemName(builder.Configuration["AWS:Re
 var s3Client = new AmazonS3Client(credentials, region);
 
 builder.Services.AddSingleton<IAmazonS3>(s3Client);
-Console.WriteLine(s3Client);
 
-
-
-
-
-
-
-
-
-
-
-//builder.Services.AddDefaultAWSOptions(awsOptions);
-//builder.Services.AddAWSService<IAmazonS3>();
-
-// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -218,9 +77,19 @@ builder.Services.AddScoped<IMeetingRepository, MeetingRepository>();
 builder.Services.AddScoped<IMeetingService, MeetingService>();
 builder.Services.AddScoped<ITranscriptionRepository, TranscriptionRepository>();
 builder.Services.AddScoped<ITranscriptionService, TranscriptionService>();
+builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+//הוספת מייל
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // הוספת JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -238,7 +107,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Jwt__Key")))
     };
 });
 
@@ -261,6 +130,7 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Configuration.AddEnvironmentVariables();
 var app = builder.Build();
 
 app.UseCors("AllowAll");
@@ -269,14 +139,17 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
+app.MapGet("/", () => "server is running");
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
 
 app.Run();
+
+

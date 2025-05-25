@@ -3,6 +3,7 @@ using DevNote.API.Models;
 using DevNote.Core.Dto_s;
 using DevNote.Core.Models;
 using DevNote.Core.Models.files;
+using DevNote.Core.Repositories;
 using DevNote.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,10 +17,13 @@ namespace DevNote.API.Controllers
     {
         private readonly IMeetingService _meetingService;
         private readonly IMapper _mapper;
-        public MeetingControler(IMeetingService context, IMapper mapper)
+        private readonly IUserRepository _userRepo;
+
+        public MeetingControler(IMeetingService context, IMapper mapper,IUserRepository userRepository)
         {
             _meetingService = context;
             _mapper = mapper;
+            _userRepo = userRepository;
         }
 
 
@@ -32,56 +36,81 @@ namespace DevNote.API.Controllers
         //}
 
 
+        [HttpGet("getCountByCreatorId")]//קבלת כמות פגישות שמשתמש יצר לפי המייל שלו
+        public int GetCountByCreatorId(string creatorMail)
+        {
+            return _meetingService.GetCountByCreator(creatorMail);
+        }
+
+        //קבלת כמות שעדין לא נצפו
+        [HttpGet("getCountNotViewd")]
+        public int GetCountNotViewd(string creatorMail)
+        {
+            return _meetingService.GetCountNotViewd(creatorMail);
+        }
 
         //שליפת כל המפגשים לפי מי שיצר אותם
         //GET api/<MeetingControler>/5
-        [HttpGet("getByCreatorId/{creatorId}")]
-        public ActionResult GetByCreatorId(int creatorId)
+        [HttpGet("getByCreatorId")]
+        public ActionResult GetByCreatorId(string creatorMail)
         {
-            var meetings = _meetingService.GetByCreator(creatorId);
+            var meetings = _meetingService.GetByCreator(creatorMail);
             var meetingDto = new List<MeetingDto>();
             foreach (var meeting in meetings)
             {
                 meetingDto.Add(_mapper.Map<MeetingDto>(meeting));
             }
-            if (meetings == null)
+            if (!meetings.Any())
                 return NotFound("this creatorId is not found");
             return Ok(meetingDto);
         }
-
-        [HttpGet("getById")]
+        [HttpGet("getById")]//לקבל פרטים של מפגש מסוים לפי ID  
         public ActionResult GetById(int id)
         {
             var meeting = _meetingService.GetById(id);
             if (meeting == null)
                 return NotFound("this meeting is not found");
-            return Ok(meeting);
+            var meetingDto = new GetMeetDto
+            {
+                Id = meeting.Id,
+                Title = meeting.Title,
+                OccurredIn = meeting.OccurredIn,
+                TranscriptionPdfUrl = meeting.TranscriptionPdfUrl,
+                CreatorId = meeting.CreatorId,
+                Participants = meeting.Participants.Select(p => new UserMeeting_mailDto { Mail = p.Mail }).ToList()
+            };
+            return Ok(meetingDto);
         }
 
-        // POST api/<MeetingControler>
-        [HttpPost]
-        public ActionResult PostNewMeeting([FromBody] MeetingPostModel meet)
+        [HttpGet("getLastMonth")]//מפגשים שנוצרו בחודש האחרון
+        public ActionResult GetLastMonth(string companyName)
         {
+            return Ok(_meetingService.GetLastMonth(companyName));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PostNewMeeting([FromBody] MeetingPostModel meet)
+        {
+            var mails = meet.Participants.Select(p => p.Mail).ToList();
+            var users = await _userRepo.GetByMailsAsync(mails);
+
             var meeting = new Meeting
             {
                 CreatorId = meet.CreatorId,
-                OccurredIn = new DateTime(),
+                OccurredIn = DateTime.UtcNow,
                 Title = meet.Title,
                 TranscriptionPdfUrl = meet.TranscriptionPdfUrl,
-                Participants = meet.Participants.Select(p => new User { Mail = p.Mail })
-                .ToList()
+                IsViewed = false,
+                Participants = users
             };
-            if (_meetingService.PostNewMeeting(meeting))
+
+            bool created = await _meetingService.PostNewMeeting(meeting); // הוספת await
+
+            if (created)
                 return Ok();
-            return NotFound("this meeting is already exist");
+
+            return NotFound("this meeting already exists");
         }
-
-
-        //// PUT api/<MeetingControler>/5
-        //[HttpPut("{id}")]
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
 
 
         // DELETE api/<MeetingControler>/5

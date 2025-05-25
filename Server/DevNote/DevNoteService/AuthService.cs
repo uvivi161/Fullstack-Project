@@ -11,6 +11,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using DevNote.Core.Services;
+using Microsoft.AspNetCore.Identity;
 
 namespace DevNote.Service
 {
@@ -23,21 +24,26 @@ namespace DevNote.Service
             _configuration = configuration;
         }
 
-        public string GenerateJwtToken(string username, string[] roles)
+        public bool VerifyPassword(string enteredPassword, string storedHashedPassword)
+        {
+            var hasher = new PasswordHasher<User>();
+            var result = hasher.VerifyHashedPassword(null, storedHashedPassword, enteredPassword);
+            return result == PasswordVerificationResult.Success;
+        }
+
+        public string GenerateJwtToken(string mail, int id, string city, string companyName, string role)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, username)
-        };
-
-            // הוספת תפקידים כ-Claims
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
+    {
+        new Claim("id", id.ToString()),
+        new Claim("mail", mail),
+        new Claim("city", city),
+        new Claim("companyName", companyName),
+        new Claim("role", role)
+    };
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

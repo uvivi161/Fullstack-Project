@@ -33,7 +33,7 @@ namespace DevNote.Data.Repositories
 
             if (!string.IsNullOrEmpty(country))
             {
-                query = query.Where(u => u.country == country);
+                query = query.Where(u => u.Country == country);
             }
 
             return await query.ToListAsync();
@@ -51,7 +51,7 @@ namespace DevNote.Data.Repositories
 
             if (!string.IsNullOrEmpty(country))
             {
-                query = query.Where(u => u.country == country);
+                query = query.Where(u => u.Country == country);
             }
 
             // המרה ל-DTO
@@ -59,7 +59,7 @@ namespace DevNote.Data.Repositories
                 .Select(u => new graphDto
                 {
                     Id = u.Id,
-                    country = u.country,
+                    country = u.Country,
                     CreatedAt = u.CreatedAt
                 })
                 .ToListAsync();
@@ -77,7 +77,7 @@ namespace DevNote.Data.Repositories
 
             if (!string.IsNullOrEmpty(country))
             {
-                query = query.Where(u => u.country == country);
+                query = query.Where(u => u.Country == country);
             }
 
             return await query.CountAsync();
@@ -86,7 +86,7 @@ namespace DevNote.Data.Repositories
         public async Task<IEnumerable<CountryYearStatistic>> GetUserStatisticsByCitiesAndYearsAsync(int? fromYear = null, int? toYear = null)
         {
             var query = _context.Users
-                .Where(u => u.country != null) // ודא שיש עיר
+                .Where(u => u.Country != null) // ודא שיש עיר
                 .AsQueryable();
 
             // סינון לפי טווח שנים אם סופק
@@ -102,10 +102,10 @@ namespace DevNote.Data.Repositories
 
             // קיבוץ לפי עיר ושנה וספירת המשתמשים
             var result = await query
-                .GroupBy(u => new { u.country, Year = u.CreatedAt.Year })
+                .GroupBy(u => new { u.Country, Year = u.CreatedAt.Year })
                 .Select(g => new CountryYearStatistic
                 {
-                    Country = g.Key.country,
+                    Country = g.Key.Country,
                     Year = g.Key.Year,
                     UserCount = g.Count()
                 })

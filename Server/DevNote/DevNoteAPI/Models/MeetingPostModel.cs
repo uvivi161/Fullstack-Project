@@ -8,6 +8,6 @@ namespace DevNote.API.Models
         public string Title { get; set; }
         public int CreatorId { get; set; }
         public string TranscriptionPdfUrl { get; set; }//קישור לקובץ הPDF של התמלול
-        public List< UserMeeting_mailDto> Participants { get; set; } = new List<UserMeeting_mailDto>();
+        public List< UserMailPostModel> Participants { get; set; } = new List<UserMailPostModel>();
     }
 }

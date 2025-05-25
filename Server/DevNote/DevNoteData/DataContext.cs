@@ -8,8 +8,6 @@ using DevNote.Core;
 using DevNote.Core.Models;
 using System.Data;
 using DevNote.Core.Models.files;
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 namespace DevNote.Data
 { 
@@ -22,7 +20,8 @@ namespace DevNote.Data
         public DbSet<Permissions> Permissions { get; set; }
         public DbSet<RolePermissions> RolePermissions { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<Meeting> Meetings { get; set; } 
+        public DbSet<Meeting> Meetings { get; set; }
+        public DbSet<Company> Companys { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

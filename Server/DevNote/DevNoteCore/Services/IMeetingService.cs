@@ -10,9 +10,13 @@ namespace DevNote.Core.Services
     public interface IMeetingService
     {
         IEnumerable<Meeting> Get();
-        IEnumerable<Meeting> GetByCreator(int creatorId);
-        Meeting GetById(int id);
-        bool PostNewMeeting(Meeting newMeeting);
+        IEnumerable<Meeting> GetByCreator(string creatorMail);
+        int GetCountByCreator(string creatorMail);
+        //IEnumerable<Meeting> GetFiveMeetings(string companyName);
+        int GetCountNotViewd(string creatorMail);
+        Meeting GetById(int Id);
+        IEnumerable<Meeting> GetLastMonth(string companyName);
+        Task<bool> PostNewMeeting(Meeting newMeeting);
         bool Delete(int id);
     }
 }

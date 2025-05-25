@@ -11,6 +11,7 @@ namespace DevNote.Core.Dto_s
         public int Id { get; set; }
         public string Title { get; set; }
         public DateTime occurredIn { get; set; }//מתי היה המפגש
-        public int CreatorId { get; set; }//מי יצר את המפגש
+        public bool IsViewd { get; set; }
+
     }
 }

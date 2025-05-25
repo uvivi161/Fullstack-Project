@@ -10,7 +10,6 @@ namespace DevNote.Core.Dto_s
     {
         public bool Success { get; set; }
         public string? ErrorMessage { get; set; }
-
         public string? TranscriptText { get; set; }
         public string? TranscriptionId { get; set; }
         public string? PdfUrl { get; set; }

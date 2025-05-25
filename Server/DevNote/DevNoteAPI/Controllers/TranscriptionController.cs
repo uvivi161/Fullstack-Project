@@ -44,14 +44,6 @@ namespace DevNote.API.Controllers
 
             return Ok(new { PdfUrl = result });
         }
-        //[HttpPost("transcribe")]
-        //public async Task<IActionResult> TranscribeAudio([FromBody] TranscriptionDto request)
-        //{
-        //    var result = await _service.TranscribeAndUploadAsync(request.FileUrl, request.UserId);
-        //    if (!result.Success)
-        //        return BadRequest(result.Message);
 
-        //    return Ok(new { result.DownloadUrl });
-        //}
     }
 }

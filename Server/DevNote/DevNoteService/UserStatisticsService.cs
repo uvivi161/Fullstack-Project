@@ -26,7 +26,7 @@ namespace DevNote.Service
 
             // קיבוץ התוצאות לפי מדינה ושנה
             var statistics = users
-                .GroupBy(u => new { Country = u.country, Year = u.CreatedAt.Year })
+                .GroupBy(u => new { Country = u.Country, Year = u.CreatedAt.Year })
                 .Select(g => new CountryYearStatistic
                 {
                     Country = g.Key.Country,
@@ -47,7 +47,7 @@ namespace DevNote.Service
 
             // יצירת אובייקט עם סיכום לפי מדינות ושנים לטובת גרפים
             var countrySummary = users
-                .GroupBy(u => u.country)
+                .GroupBy(u => u.Country)
                 .Select(g => new CountryStatistics
                 {
                     Country = g.Key,

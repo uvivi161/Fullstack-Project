@@ -68,7 +68,7 @@ namespace DevNote.Service
         {
             try
             {
-                var apiKey = _config["HebrewAI:ApiKey"];
+                var apiKey = Environment.GetEnvironmentVariable("HebrewAI__ApiKey");
                 if (string.IsNullOrWhiteSpace(apiKey))
                 {
                     Console.WriteLine("❌ apiKey לא נמצא בקובץ ההגדרות או שהוא ריק!");
@@ -79,7 +79,7 @@ namespace DevNote.Service
                     };
                 }
 
-                var url = "https://hebrew-ai.com/api/transcribe";
+                var url = Environment.GetEnvironmentVariable("Hebrew__Url");
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
@@ -217,6 +217,13 @@ namespace DevNote.Service
             return new TranscriptionResultDto { Success = false, ErrorMessage = "הודעת השגיאה הרלוונטית" };
         }
 
+        private string ReverseString(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return input;
+            var array = input.ToCharArray();
+            Array.Reverse(array);
+            return new string(array);
+        }
 
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace DevNote.Core
 {
-    public interface IDataContext
+    public interface IPasswordGenerator
     {
+        string GenerateUniquePassword(int length = 10);
     }
 }

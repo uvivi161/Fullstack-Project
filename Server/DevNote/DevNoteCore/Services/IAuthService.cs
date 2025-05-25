@@ -9,9 +9,7 @@ namespace DevNote.Core.Services
 {
     public interface IAuthService
     {
-        //Task<AuthResponseDto> RegisterAsync(RegisterDto registerDto);
-        //Task<AuthResponseDto> LoginAsync(LoginDto loginDto);
-
-        string GenerateJwtToken(string username, string[] roles);
+        bool VerifyPassword(string enteredPassword, string storedHashedPassword);
+        string GenerateJwtToken(string email, int id, string city, string companyName, string role);
     }
 }

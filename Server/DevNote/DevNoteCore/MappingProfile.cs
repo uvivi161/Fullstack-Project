@@ -17,7 +17,6 @@ namespace DevNote.Core
         {
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Meeting, MeetingDto>().ReverseMap();
-
         }
     }
 }
