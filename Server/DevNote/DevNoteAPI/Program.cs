@@ -133,6 +133,8 @@ builder.Services.AddCors(options =>
 builder.Configuration.AddEnvironmentVariables();
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
 app.UseCors("AllowAll");
 app.UseAuthentication();
 
@@ -146,7 +148,6 @@ app.UseAuthorization();
 //}
 app.MapGet("/", () => "server is running");
 
-app.UseHttpsRedirection();
 
 app.MapControllers();
 
