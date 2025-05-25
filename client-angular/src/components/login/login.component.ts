@@ -32,14 +32,6 @@ export class LoginComponent{
   });
   constructor(private fb: FormBuilder, private authService: AuthService) { }
 
-  // ngOnInit(): void {
-  //   // יצירת טופס ריאקטיבי עם ולידציות
-  //   this.logInForm = this.fb.group({
-  //     mail: ['', [Validators.required, Validators.mail]],
-  //     password: ['', [Validators.required, Validators.minLength(3)]]
-  //   });
-  // }
-
   setShowLoginForm(): void {
     this.showLoginForm = !this.showLoginForm;
     if (this.showLoginForm === false) {

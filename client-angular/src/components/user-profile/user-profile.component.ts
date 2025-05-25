@@ -1,17 +1,3 @@
-// import { Component } from '@angular/core';
-
-// @Component({
-//   selector: 'app-user-profile',
-//   imports: [],
-//   templateUrl: './user-profile.component.html',
-//   styleUrl: './user-profile.component.css'
-// })
-// export class UserProfileComponent {
-
-// }
-
-
-
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -43,17 +29,6 @@ import { AuthService } from '../../services/authService/auth.service';
 })
 export class UserProfileComponent implements OnInit {
   profileForm!: FormGroup;
-  
-  // Sample user data - replace with data from your auth service
-  // user = {
-  //   name: 'Admin User',
-  //   email: 'admin@example.com',
-  //   role: 'Administrator',
-  //   company: 'Your Company',
-  //   country: 'United States',
-  //   avatar: '/assets/avatar-placeholder.png'
-  // };
-
   
   constructor(
     private fb: FormBuilder,
