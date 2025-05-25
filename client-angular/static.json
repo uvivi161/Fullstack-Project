@@ -1,0 +1,6 @@
+{
+  "public": "dist/client-angular",
+  "rewrites": [
+    { "source": "**", "destination": "/index.html" }
+  ]
+}
