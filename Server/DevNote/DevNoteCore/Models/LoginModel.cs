@@ -8,7 +8,6 @@ namespace DevNote.Core.Models
 {
     public class LoginModel
     {
-        //public string UserName { get; set; }
         public string Password { get; set; }    
         public string Mail { get; set; }
         public string SystemContext { get; set; } // ערכים אפשריים: "admin" או "employee"

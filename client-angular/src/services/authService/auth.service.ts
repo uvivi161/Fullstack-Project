@@ -21,8 +21,13 @@ export class AuthService {
   
   login(mail: string, password: string) {
     debugger;
-    const permission = "admin";
-    return this.http.post(`${this.url}/login`, {password, mail, permission }).subscribe((res:any) => {
+    const systemContext = "admin";
+    const body= {
+      mail,
+      password,
+      systemContext
+    }
+    return this.http.post(`${this.url}/login`,body).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);
       console.log(res.token);
       // alert('Login Successful');
