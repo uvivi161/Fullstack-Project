@@ -621,7 +621,7 @@ export class CityChartsDashboardComponent implements OnInit {
     this.error = null
 
     this.http
-      .get<CityYearlyData[]>("'https://fullstack-project-tt0t.onrender.com/api/UserStatistics/cities-yearly?fromYear=2020&toYear=2025")
+      .get<CityYearlyData[]>("https://fullstack-project-tt0t.onrender.com/api/UserStatistics/cities-yearly?fromYear=2020&toYear=2025")
       .subscribe({
         next: (data) => {
           this.rawData = data
