@@ -28,7 +28,7 @@ export class UsersService {
     }
 
     getUsers(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.url}/getByCompanyName?companyName=${this.tokenData.companyName}`);
+        return this.http.get<any[]>(`${this.url}/getByCompanyName?company=${this.tokenData.companyName}`);
     }
 
     getUserByMail(mail: string) {
