@@ -20,6 +20,7 @@ export class AuthService {
   constructor(private http: HttpClient, private router: Router) { }
   
   login(mail: string, password: string) {
+    debugger;
     const permission = "admin";
     return this.http.post(`${this.url}/login`, {password, mail, permission }).subscribe((res:any) => {
       sessionStorage.setItem('token', res.token);
