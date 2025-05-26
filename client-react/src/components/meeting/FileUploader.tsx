@@ -1,12 +1,9 @@
-import React from 'react';
-import FileUploadControls from './FileUploadControls';
-import TranscriptionControls from './TranscriptionControls';
-import AlertSnackbar from './AlertSnackbar';
-import useFileUploader from './useFileUploader';
+import FileUploadControls from "./FileUploadControls"
+import TranscriptionControls from "./TranscriptionControls"
+import useFileUploader from "./useFileUploader"
+import { Box, Paper } from "@mui/material"
 
-
-
-const FileUploader= () => {
+const FileUploader = () => {
   const {
     file,
     uploadProgress,
@@ -22,61 +19,57 @@ const FileUploader= () => {
     handleTranscription,
     handleSavePdf,
     loading,
-    open,
-    alertMessage,
-    alertSeverity,
-    closeAlert,
     buttonStyle,
-  } = useFileUploader();
+  } = useFileUploader()
 
   return (
-    <div style={{
-      border: '2px solid #595047',
-      borderRadius: '12px',
-      padding: '20px',
-      margin: '0 auto',
-      textAlign: 'center',
-      minWidth: '18px',
-      overflow: 'visible'
-    }}>
-      <FileUploadControls
-        file={file}
-        uploadProgress={uploadProgress}
-        onFileChange={handleFileChange}
-        onUpload={handleUpload}
-        buttonStyle={buttonStyle}
-      />
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <Paper
+        elevation={0}
+        sx={{
+          width: "100%",
+          border: "2px solid rgba(89, 80, 71, 0.3)",
+          borderRadius: "12px",
+          padding: "24px",
+          backgroundColor: "rgba(249, 248, 246, 0.5)",
+          transition: "all 0.3s ease",
+          "&:hover": {
+            borderColor: "rgba(89, 80, 71, 0.6)",
+            backgroundColor: "rgba(249, 248, 246, 0.8)",
+          },
+        }}
+      >
+        <FileUploadControls
+          file={file}
+          uploadProgress={uploadProgress}
+          onFileChange={handleFileChange}
+          onUpload={handleUpload}
+          buttonStyle={buttonStyle}
+        />
 
-      <TranscriptionControls
-        uploadedFileUrl={uploadedFileUrl}
-        pdfUrl={pdfUrl}
-        isTranscribing={isTranscribing}
-        transcribeProgress={transcribeProgress}
-        transcript={transcript}
-        editedTranscript={editedTranscript}
-        setEditedTranscript={setEditedTranscript}
-        onTranscribe={handleTranscription}
-        onSavePdf={handleSavePdf}
-        loading={loading}
-        buttonStyle={buttonStyle}
-      />
+        <TranscriptionControls
+          uploadedFileUrl={uploadedFileUrl}
+          pdfUrl={pdfUrl}
+          isTranscribing={isTranscribing}
+          transcribeProgress={transcribeProgress}
+          transcript={transcript}
+          editedTranscript={editedTranscript}
+          setEditedTranscript={setEditedTranscript}
+          onTranscribe={handleTranscription}
+          onSavePdf={handleSavePdf}
+          loading={loading}
+          buttonStyle={buttonStyle}
+        />
+      </Paper>
+    </Box>
+  )
+}
 
-      <AlertSnackbar
-        open={open}
-        onClose={closeAlert}
-        message={alertMessage}
-        severity={alertSeverity}
-      />
-    </div>
-  );
-};
-
-export default FileUploader;
-
-
-
-
-
-
-
-
+export default FileUploader

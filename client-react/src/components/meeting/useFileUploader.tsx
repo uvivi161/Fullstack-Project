@@ -15,12 +15,15 @@ const useFileUploader = () => {
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [editedTranscript, setEditedTranscript] = useState('');
-  const [transcriptionId, setTranscriptionId] = useState('');
-  const [open, setOpen] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('');
-  const [alertSeverity, setAlertSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
+  const [, setTranscriptionId] = useState('');
+  const [open] = useState(false);
+  const [alertMessage] = useState('');
+  const [alertSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
   const { pdfUrl, setPdfUrl } = useContext(LinkContext);
 
+  console.log("useFileUploader initialized") // 🔍 זה מדפיס כל פעם?
+  
+  console.log("Initial pdfUrl:", pdfUrl) // 🔍 מה זה מדפיס?
   // const [pdfUrl, setPdfUrl] = useContext(LinkContext)
   const buttonStyle = {
     color: '#595047',
@@ -33,13 +36,13 @@ const useFileUploader = () => {
     },
   };
 
-  const showAlert = (message: string, severity: typeof alertSeverity) => {
-    setAlertMessage(message);
-    setAlertSeverity(severity);
-    setOpen(true);
-  };
+  // const showAlert = (message: string, severity: typeof alertSeverity) => {
+  //   setAlertMessage(message);
+  //   setAlertSeverity(severity);
+  //   setOpen(true);
+  // };
 
-  const closeAlert = () => setOpen(false);
+  // const closeAlert = () => setOpen(false);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files?.length) setFile(e.target.files[0]);
@@ -48,7 +51,7 @@ const useFileUploader = () => {
   const handleUpload = async () => {
     if (!file) return;
     try {
-      const { data } = await axios.get('https://localhost:7170/api/FileUpload/presigned-url', {
+      const { data } = await axios.get('https://fullstack-project-tt0t.onrender.com/api/FileUpload/presigned-url', {
         params: { fileName: file.name }
       });
 
@@ -64,7 +67,7 @@ const useFileUploader = () => {
       });
 
       const fileUrl = presignedUrl.split('?')[0];
-      await axios.post('https://localhost:7170/api/FileUpload/UploadTo-DB', {
+      await axios.post('https://fullstack-project-tt0t.onrender.com/api/FileUpload/UploadTo-DB', {
         fileName: file.name,
         FileUrl: fileUrl,
         UserId: user.id,
@@ -72,10 +75,10 @@ const useFileUploader = () => {
       });
 
       setUploadedFileUrl(fileUrl);
-      showAlert('הקובץ הועלה בהצלחה!', 'success');
+      // showAlert('הקובץ הועלה בהצלחה!', 'success');
     } catch (error) {
       console.error(error);
-      showAlert('שגיאה בהעלאת הקובץ', 'error');
+      // showAlert('שגיאה בהעלאת הקובץ', 'error');
     }
   };
 
@@ -92,7 +95,7 @@ const useFileUploader = () => {
     }, 300);
 
     try {
-      const { data } = await axios.post('https://localhost:7170/api/Transcription/transcribe', {
+      const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/transcribe', {
         FileUrl: uploadedFileUrl,
         S3Key: s3K,
         UserId: user.id
@@ -107,7 +110,7 @@ const useFileUploader = () => {
     } catch (error) {
       clearInterval(interval);
       console.error(error);
-      showAlert('שגיאה בתמלול הקובץ', 'error');
+      // showAlert('שגיאה בתמלול הקובץ', 'error');
     } finally {
       setIsTranscribing(false);
     }
@@ -116,7 +119,7 @@ const useFileUploader = () => {
   const handleSavePdf = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.post('https://localhost:7170/api/Transcription/save-edited-transcription', {
+      const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/save-edited-transcription', {
         EditedText: editedTranscript,
         OriginalFileUrl: uploadedFileUrl,
         UserId: user.id,
@@ -124,16 +127,13 @@ const useFileUploader = () => {
 
       if (data.pdfUrl) {
         console.log(data.pdfUrl); // For debugging purposes, you can remove this line later
-        
-        debugger;
         setPdfUrl(data.pdfUrl);
-        setPdfUrl(data.pdfUrl);
-        showAlert('הקובץ נשמר כ־PDF בהצלחה!', 'success');
+        // showAlert('הקובץ נשמר כ־PDF בהצלחה!', 'success');
       } else {
-        showAlert(data.errorMessage || 'שגיאה בשמירת הקובץ כ־PDF', 'error');
+        // showAlert(data.errorMessage || 'שגיאה בשמירת הקובץ כ־PDF', 'error');
       }
     } catch (err) {
-      showAlert('שגיאה בשמירת הקובץ כ־PDF', 'error');
+      // showAlert('שגיאה בשמירת הקובץ כ־PDF', 'error');
     } finally {
       setLoading(false);
     }
@@ -157,7 +157,7 @@ const useFileUploader = () => {
     open,
     alertMessage,
     alertSeverity,
-    closeAlert,
+    // closeAlert,
     buttonStyle,
   };
 };

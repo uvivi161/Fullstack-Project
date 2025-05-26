@@ -30,7 +30,7 @@ export async function fetchDashboardData(user: User): Promise<DashboardData> {
   try {
     // Fetch participant count
     const participantsResponse = await fetch(
-      `https://localhost:7170/api/Users/getCountByCompanyName?companyName=${user.companyName}`,
+      `https://fullstack-project-tt0t.onrender.com/api/Users/getCountByCompanyName?companyName=${user.companyName}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -38,7 +38,7 @@ export async function fetchDashboardData(user: User): Promise<DashboardData> {
 
     // Fetch meetings count
     const meetingsResponse = await fetch(
-      `https://localhost:7170/api/MeetingControler/getCountByCreatorId?creatorMail=${user.mail}`,
+      `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getCountByCreatorId?creatorMail=${user.mail}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -46,7 +46,7 @@ export async function fetchDashboardData(user: User): Promise<DashboardData> {
 
     // Fetch meetings list
     const meetingsListResponse = await fetch(
-      `https://localhost:7170/api/MeetingControler/getByCreatorMail?creatorMail=${user.mail}`,
+      `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorMail?creatorMail=${user.mail}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },
@@ -92,7 +92,7 @@ export async function fetchUnviewedMeetings(userId: string): Promise<Meeting[]> 
 
   try {
     // This is a placeholder - implement the actual API call to get unviewed meetings
-    const response = await fetch(`https://localhost:7170/api/MeetingControler/getUnviewedByUserId?userId=${userId}`, {
+    const response = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getUnviewedByUserId?userId=${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
 

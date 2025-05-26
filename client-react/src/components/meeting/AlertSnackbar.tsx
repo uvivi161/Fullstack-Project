@@ -1,19 +1,36 @@
 import React from 'react';
-import { Snackbar, Alert } from '@mui/material';
+import { Snackbar, Alert, AlertColor } from '@mui/material';
+import '../../theme.css';
 
-type Props = {
+interface AlertSnackbarProps {
   open: boolean;
   onClose: () => void;
   message: string;
-  severity: 'success' | 'error' | 'info' | 'warning';
-};
+  severity: AlertColor;
+}
 
-const AlertSnackbar = ({ open, onClose, message, severity }: Props) => (
-  <Snackbar open={open} autoHideDuration={6000} onClose={onClose}>
-    <Alert onClose={onClose} severity={severity} sx={{ width: '100%' }}>
-      {message}
-    </Alert>
-  </Snackbar>
-);
+const AlertSnackbar: React.FC<AlertSnackbarProps> = ({ open, onClose, message, severity }) => {
+  return (
+    <Snackbar
+      open={open}
+      autoHideDuration={6000}
+      onClose={onClose}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
+      <Alert 
+        onClose={onClose} 
+        severity={severity} 
+        variant="filled"
+        sx={{ 
+          borderRadius: 'var(--devnote-radius-md)',
+          fontWeight: 500,
+          boxShadow: 'var(--devnote-shadow-lg)'
+        }}
+      >
+        {message}
+      </Alert>
+    </Snackbar>
+  );
+};
 
 export default AlertSnackbar;

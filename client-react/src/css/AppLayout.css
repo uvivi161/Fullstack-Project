@@ -1,0 +1,128 @@
+.appLayoutRoot {
+  display: flex;
+  height: 100vh;
+}
+
+.appBarMobile {
+  z-index: 1300; /* MUI zIndex.drawer + 1 */
+  background-color: white;
+  color: #2c3e50;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.toolbarTitle {
+  flex-grow: 1;
+  font-weight: 600;
+}
+
+.avatarBoxToolbar {
+  margin-bottom: 16px;
+  padding-top: 13px;
+}
+
+.navBox {
+  flex-shrink: 0;
+}
+
+.drawerPaper {
+  width: 280px;
+  box-sizing: border-box;
+  border-right: 1px solid #f0f0f0;
+  background-color: white;
+}
+
+.drawerPaperMobile {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.drawerContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.userProfileSection {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  margin-bottom: 16px;
+}
+
+.userAvatarBox {
+  margin-bottom: 16px;
+}
+
+.menuList {
+  flex-grow: 1;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.menuListItem {
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.menuListItemActive {
+  background-color: rgba(255, 112, 67, 0.12);
+  color: #2c3e50;
+}
+
+.menuListItemActive:hover {
+  background-color: rgba(255, 112, 67, 0.16);
+}
+
+.menuListItemHover {
+  background-color: rgba(255, 112, 67, 0.08);
+}
+
+.menuListItemIcon {
+  min-width: 40px;
+}
+
+.menuListItemIconActive {
+  color: #ff7043;
+}
+
+.menuListItemIconInactive {
+  color: #7f8c8d;
+}
+
+.menuListItemTextActive {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.menuListItemTextInactive {
+  font-weight: 400;
+  color: #7f8c8d;
+}
+
+.footerBox {
+  padding: 25px;
+  border-top: 1px solid #f0f0f0;
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+.mainContent {
+  flex-grow: 1;
+  padding: 16px;
+  background-color: #f8f9fa;
+  overflow: auto;
+  width: calc(100% - 280px);
+}
+
+@media (max-width: 960px) {
+  .mainContent {
+    padding: 16px;
+    width: 100%;
+  }
+}
