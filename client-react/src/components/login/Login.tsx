@@ -56,6 +56,7 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAdd = async (event: React.FormEvent) => {
+    debugger;
     event.preventDefault();
 
     let isValid = true;
