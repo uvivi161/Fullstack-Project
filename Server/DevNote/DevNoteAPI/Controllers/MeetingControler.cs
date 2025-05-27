@@ -64,6 +64,7 @@ namespace DevNote.API.Controllers
                 return NotFound("this creatorId is not found");
             return Ok(meetingDto);
         }
+
         [HttpGet("getById")]//לקבל פרטים של מפגש מסוים לפי ID  
         public ActionResult GetById(int id)
         {

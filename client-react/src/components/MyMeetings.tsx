@@ -103,7 +103,10 @@ const MyMeetings = () => {
         console.warn("Unrecognized role, no meetings loaded.")
         return
       }
-
+      if (!res.ok) {
+         const errorText = await res.text(); // לא json
+          throw new Error(errorText);
+      }
       const data = await res.json()
       setMeetings(data)
     } catch (err) {
