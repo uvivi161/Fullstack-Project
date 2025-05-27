@@ -35,14 +35,17 @@ namespace DevNote.API.Controllers
             // אם המשתמש לא קיים או שהסיסמה לא תואמת
             if (user == null || !_authService.VerifyPassword(model.Password, user.PasswordHash))
             {
+                Console.WriteLine("User not found");
                 return Unauthorized("שם משתמש או סיסמה שגויים");
             }
             if (model.SystemContext == "admin" && user.Role != "admin")
             {
+                Console.WriteLine("Wrong password");
                 return Unauthorized("admin only");
             }
             if (model.SystemContext != "admin" && user.Role == "admin")
             {
+                Console.WriteLine("Non-admin tried to access admin");
                 return Unauthorized("admin not allowed");
             }
 
