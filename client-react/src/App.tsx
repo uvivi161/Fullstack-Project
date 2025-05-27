@@ -1,5 +1,5 @@
 
-import { RouterProvider } from 'react-router-dom'
+import { HashRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 // import AppLayout from './components/Layout/AppLayout'
 // import LogIn from './components/login/Login'
@@ -8,7 +8,7 @@ import './App.css'
 // import { UserContext } from './components/login/UserReducer'
 import { Box } from '@mui/material'
 // import { useContext } from 'react'
-import { myRouter } from './Router'
+import { AppRouter, myRouter } from './Router'
 import { LinkProvider } from './components/meeting/LinkProvider'
 import { UserProvider } from './components/login/UserProvider'
 
@@ -29,7 +29,10 @@ function App() {
     }}>
       <UserProvider>
         <LinkProvider>
-          <RouterProvider router={myRouter} />
+          <HashRouter>
+            <AppRouter />
+          </HashRouter>
+          {/* <RouterProvider router={myRouter} /> */}
         </LinkProvider>
       </UserProvider>
     </Box>
