@@ -59,7 +59,7 @@ export default function Dashboard() {
 
         // Fetch meetings list
         const meetingsResponse = await fetch(
-          `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorMail?creatorMail=${user.mail}`,
+          `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorId?creatorMail=${user.mail}`,
           { headers: { Authorization: `Bearer ${token}` } },
         )
 
