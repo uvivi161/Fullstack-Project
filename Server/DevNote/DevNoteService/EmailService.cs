@@ -18,7 +18,7 @@ namespace DevNote.Service
         public EmailService(IOptions<EmailSettings> emailSettings)
         {
             _emailSettings = emailSettings.Value;
-        }
+        } 
 
         public async Task SendEmailAsync(string toEmail, string subject, string body)
         {

@@ -135,9 +135,9 @@ var app = builder.Build();
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowAll");
-app.UseAuthentication();
+app.UseCors("AllowAll"); 
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
@@ -146,10 +146,9 @@ app.UseAuthorization();
     app.UseSwagger();
     app.UseSwaggerUI();
 //}
-app.MapGet("/", () => "server is running");
-
-
 app.MapControllers();
+
+app.MapGet("/", () => "server is running");
 
 app.Run();
 
