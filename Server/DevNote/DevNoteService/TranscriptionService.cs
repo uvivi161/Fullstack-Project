@@ -79,7 +79,7 @@ namespace DevNote.Service
                     };
                 }
 
-                var url = Environment.GetEnvironmentVariable("Hebrew__Url");
+                var url = Environment.GetEnvironmentVariable("HebrewAI__Url");
                 using var httpClient = new HttpClient();
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
