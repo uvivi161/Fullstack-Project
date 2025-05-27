@@ -8,7 +8,7 @@ import './App.css'
 // import { UserContext } from './components/login/UserReducer'
 import { Box } from '@mui/material'
 // import { useContext } from 'react'
-import { AppRouter, myRouter } from './Router'
+import { AppRouter} from './Router'
 import { LinkProvider } from './components/meeting/LinkProvider'
 import { UserProvider } from './components/login/UserProvider'
 

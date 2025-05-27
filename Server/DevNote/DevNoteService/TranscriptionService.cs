@@ -240,6 +240,7 @@ namespace DevNote.Service
                 var pdf = new PdfDocument(writer);
                 var doc = new Document(pdf);
                 doc.SetFont(font);
+                Console.WriteLine("editedTest - " , dto.EditedText);
 
                 // הגדרת יישור לימין (RTL)
                 var paragraph = new Paragraph(dto.EditedText)
