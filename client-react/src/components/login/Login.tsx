@@ -57,6 +57,8 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
 
   const handleAdd = async (event: React.FormEvent) => {
     debugger;
+    console.log("נכנס לפונקציה handleAdd");
+    
     event.preventDefault();
 
     let isValid = true;
@@ -80,7 +82,8 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
     }
 
     if (isValid) {
-      debugger;
+      console.log("Valid credentials, proceeding with login");
+      
       setIsLoading(true);
       try {
         const response = await axios.post<{ token: string }>('https://fullstack-project-tt0t.onrender.com/api/Auth/login', {
