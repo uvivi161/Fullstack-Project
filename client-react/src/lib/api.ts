@@ -46,7 +46,7 @@ export async function fetchDashboardData(user: User): Promise<DashboardData> {
 
     // Fetch meetings list
     const meetingsListResponse = await fetch(
-      `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorMail?creatorMail=${user.mail}`,
+      `https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorId?creatorMail=${user.mail}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       },

@@ -233,7 +233,7 @@ namespace DevNote.Service
                 var writer = new PdfWriter(originalStream);
 
                 // הגדרת הפונט לעברית
-                var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
+                //var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
                 //var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
                 var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
 

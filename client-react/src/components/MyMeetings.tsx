@@ -95,7 +95,7 @@ const MyMeetings = () => {
 
       if (user.role === "teamLeader") {
         // Team Leader - fetch by creator
-        res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorMail?creatorMail=${user.mail}`)
+        res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorId?creatorMail=${user.mail}`)
       } else if (user.role === "developer") {
         // Developer - fetch by participant
         res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/Users/getAllMeetings?id=${user.id}`)
