@@ -88,7 +88,7 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
       try {
         const response = await axios.post<{ token: string }>('https://fullstack-project-tt0t.onrender.com/api/Auth/login', {
           Mail: emailRef.current?.value,
-          password: passwordRef.current?.value,
+          Password: passwordRef.current?.value,
           SystemContext: "user"
         });
         const token = response.data.token;
