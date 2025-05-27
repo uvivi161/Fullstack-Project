@@ -21,6 +21,27 @@ namespace DevNote.API.Controllers
         [HttpPost("transcribe")]
         public async Task<IActionResult> TranscribeAudio([FromBody] TranscriptionDto request)
         {
+            if (request == null)
+                Console.WriteLine("Request body is null");
+
+            if (string.IsNullOrEmpty(request.FileUrl))
+                Console.WriteLine("FileUrl is missing");
+
+            if (string.IsNullOrEmpty(request.S3Key))
+                Console.WriteLine("S3Key is missing");
+
+            if (request.UserId <= 0)
+                return BadRequest("UserId is invalid"); if (request == null)
+                Console.WriteLine("Request body is null");
+
+            if (string.IsNullOrEmpty(request.FileUrl))
+                return BadRequest("FileUrl is missing");
+
+            if (string.IsNullOrEmpty(request.S3Key))
+                return BadRequest("S3Key is missing");
+
+            if (request.UserId <= 0)
+                return BadRequest("UserId is invalid");
             var result = await _service.TranscribeAndSaveAsync(request);
             if (!result.Success)
                 return BadRequest(result.ErrorMessage);
