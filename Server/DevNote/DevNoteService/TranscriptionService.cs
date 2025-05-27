@@ -125,7 +125,7 @@ namespace DevNote.Service
                 form.Add(languageContent);
 
                 // ✅ שליחה ל-API לתמלול
-                Console.WriteLine("🚀 שולח בקשה לתמלול...");
+                Console.WriteLine("🚀 שולח בקשה לתמלול...", url);
                 var response = await httpClient.PostAsync(url, form);
                 var responseContent = await response.Content.ReadAsStringAsync();
 
