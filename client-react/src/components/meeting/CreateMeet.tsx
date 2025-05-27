@@ -71,7 +71,7 @@ const CreateMeeting = () => {
       try {
         const company = user.companyName
         const token = sessionStorage.getItem("token")
-
+        if (!user || !user.companyName) return
         const response = await axios.get(`https://fullstack-project-tt0t.onrender.com/api/Users/getByCompanyName?companyName=${company}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
