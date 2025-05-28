@@ -64,7 +64,7 @@ const CreateMeeting = () => {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
   const [resetKey, setResetKey] = useState(0)
-  console.log("pdfUrl from context:", pdfUrl) 
+  // console.log("pdfUrl from context:", pdfUrl) 
 
   useEffect(() => {
     const fetchUsersByCompany = async () => {
@@ -76,7 +76,7 @@ const CreateMeeting = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         setAllUsers(response.data)
-        console.log(response.data, "------------------------")
+        // console.log(response.data, "------------------------")
       } catch (error) {
         console.error("Error fetching users:", error)
         setError("Failed to load users. Please try again.")

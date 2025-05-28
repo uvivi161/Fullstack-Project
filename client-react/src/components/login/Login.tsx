@@ -56,9 +56,6 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAdd = async (event: React.FormEvent) => {
-    debugger;
-    console.log("נכנס לפונקציה handleAdd");
-    
     event.preventDefault();
 
     let isValid = true;
@@ -82,7 +79,6 @@ const LogIn: React.FC<LogInProps> = ({ onClick }) => {
     }
 
     if (isValid) {
-      console.log("Valid credentials, proceeding with login");
       
       setIsLoading(true);
       try {

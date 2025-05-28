@@ -21,9 +21,9 @@ const useFileUploader = () => {
   const [alertSeverity] = useState<'success' | 'error' | 'info' | 'warning'>('success');
   const { pdfUrl, setPdfUrl } = useContext(LinkContext);
 
-  console.log("useFileUploader initialized") // 🔍 זה מדפיס כל פעם?
+  // console.log("useFileUploader initialized") // 🔍 זה מדפיס כל פעם?
   
-  console.log("Initial pdfUrl:", pdfUrl) // 🔍 מה זה מדפיס?
+  // console.log("Initial pdfUrl:", pdfUrl) // 🔍 מה זה מדפיס?
   // const [pdfUrl, setPdfUrl] = useContext(LinkContext)
   const buttonStyle = {
     color: '#595047',
@@ -100,7 +100,8 @@ const useFileUploader = () => {
         S3Key: s3K,
         UserId: user.id
       });
-
+      console.log(data.transcriptText,"transcription data");
+      
       clearInterval(interval);
       setTranscribeProgress(100);
       setTranscript(data.transcriptText);
