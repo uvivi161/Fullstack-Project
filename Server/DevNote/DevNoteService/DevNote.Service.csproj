@@ -19,7 +19,12 @@
   <ItemGroup>
     <ProjectReference Include="..\DevNoteCore\DevNote.Core.csproj" />
   </ItemGroup>
-
+	<ItemGroup>
+		<None Update="fonts\DAVID.ttf">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+	</ItemGroup>
   <ItemGroup>
     <None Update="fonts\DAVID.TTF">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
