@@ -250,7 +250,7 @@ namespace DevNote.Service
                 Console.WriteLine("paragraph"+ paragraph);
                 doc.Add(paragraph);
                 doc.Close();
-                originalStream.Position = 0;
+                //originalStream.Position = 0;
 
                 // המרת ה-Stream ל-byte[] עבור העלאה ל-S3
                 var pdfBytes = originalStream.ToArray();
