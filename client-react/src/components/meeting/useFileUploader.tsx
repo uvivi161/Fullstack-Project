@@ -142,6 +142,22 @@ const useFileUploader = () => {
     }
   };
 
+
+  const handleFormatTranscript = async () => {
+  try {
+    const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/format-transcript', {
+      RawText: editedTranscript,
+    });
+
+    if (data && data.formattedText) {
+      setEditedTranscript(data.formattedText);
+      // אפשר גם להראות הודעה אם תרצי
+    }
+  } catch (error) {
+    console.error('שגיאה בעיצוב הטקסט:', error);
+  }
+};
+
   return {
     file,
     uploadProgress,
@@ -162,6 +178,7 @@ const useFileUploader = () => {
     alertSeverity,
     // closeAlert,
     buttonStyle,
+    handleFormatTranscript,
   };
 };
 

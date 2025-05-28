@@ -80,6 +80,7 @@ builder.Services.AddScoped<ITranscriptionService, TranscriptionService>();
 builder.Services.AddScoped<IPasswordGenerator, PasswordGenerator>();
 builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddHttpClient<ITextFormatterService, TextFormatterService>();
 
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));

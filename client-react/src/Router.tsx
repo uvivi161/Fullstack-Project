@@ -18,6 +18,10 @@ interface AuthGuardProps {
 
 function TeamLeaderGaurd({ children } : AuthGuardProps) {
     const [user] = useContext(UserContext);
+    if (!user) {
+        // אפשר להחזיר סתם ספן זמני, או קומפוננטת טעינה יפה
+        return <span>טוען...</span>;
+    }
     return user.role === 'teamLeader' ? children : <Navigate to="/app" replace />; 
 }
 

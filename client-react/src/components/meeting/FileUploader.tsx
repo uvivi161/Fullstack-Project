@@ -55,8 +55,8 @@ const FileUploader = () => {
         />
 
         <TranscriptionControls
-          uploadedFileUrl={uploadedFileUrl}
-          pdfUrl={pdfUrl}
+          uploadedFileUrl={uploadedFileUrl ?? undefined}
+          pdfUrl={pdfUrl ?? undefined}
           isTranscribing={isTranscribing}
           transcribeProgress={transcribeProgress}
           transcript={transcript}
@@ -65,8 +65,9 @@ const FileUploader = () => {
           onTranscribe={handleTranscription}
           onSavePdf={handleSavePdf}
           loading={loading}
-          buttonStyle={buttonStyle}
-        />
+          buttonStyle={buttonStyle} handleFormatTranscript={function (): Promise<void> {
+            throw new Error("Function not implemented.")
+          } }        />
       </Paper>
     </Box>
   )

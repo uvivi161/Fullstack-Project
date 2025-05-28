@@ -250,7 +250,7 @@ namespace DevNote.Service
 
                 // הוספת תאריך נוכחי למעלה
                 var currentDate = DateTime.Now.ToString("dd/MM/yyyy");
-                var dateParagraph = new Paragraph($"תאריך: {currentDate}")
+                var dateParagraph = new Paragraph($"Date: {currentDate}")
                     .SetFont(font)
                     .SetFontSize(12)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
