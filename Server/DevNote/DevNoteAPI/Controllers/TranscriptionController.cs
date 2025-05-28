@@ -59,6 +59,7 @@ namespace DevNote.API.Controllers
         [HttpPost("save-edited-transcription")]
         public async Task<IActionResult> SaveEditedTranscription([FromBody] SaveEditedTranscriptDto dto)
         {
+            Console.WriteLine(dto.EditedText,"edited text");
             var result = await _service.SaveEditedTranscriptAsync(dto);
             if (string.IsNullOrWhiteSpace(result))
                 return StatusCode(500, "אירעה שגיאה בשמירת התמלול.");
