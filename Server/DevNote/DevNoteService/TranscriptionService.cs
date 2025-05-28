@@ -228,40 +228,50 @@ namespace DevNote.Service
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {
             var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.TTF");
-            Console.WriteLine(dto.EditedText + "in service");
+            var goodText = ReverseString(dto.EditedText);
             try
             {
                 using var originalStream = new MemoryStream();
                 var writer = new PdfWriter(originalStream);
 
-                //הגדרת הפונט לעברית
+                // הגדרת הפונט לעברית
                 var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 
                 var pdf = new PdfDocument(writer);
                 var doc = new Document(pdf);
+
+                // הוספת שוליים – 36 נקודות מכל צד (כ-0.5 אינץ')
+                doc.SetMargins(36, 36, 36, 36);
+
+                // הגדרת פונט
                 doc.SetFont(font);
+
                 Console.WriteLine("editedTest - " + dto.EditedText);
 
-                // הגדרת יישור לימין (RTL)
-                var paragraph = new Paragraph(dto.EditedText)
+                // הוספת תאריך נוכחי למעלה
+                var currentDate = DateTime.Now.ToString("dd/MM/yyyy");
+                var dateParagraph = new Paragraph($"תאריך: {currentDate}")
+                    .SetFont(font)
+                    .SetFontSize(12)
+                    .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                    .SetBaseDirection(iText.Layout.Properties.BaseDirection.RIGHT_TO_LEFT)
+                    .SetBold();
+                doc.Add(dateParagraph);
+
+                // הגדרת פסקה עם הטקסט הערוך
+                var paragraph = new Paragraph(goodText)
                     .SetFont(font)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
                     .SetBaseDirection(iText.Layout.Properties.BaseDirection.RIGHT_TO_LEFT);
-                Console.WriteLine("paragraph"+ paragraph);
+                Console.WriteLine("paragraph" + paragraph);
                 doc.Add(paragraph);
                 doc.Close();
-                //originalStream.Position = 0;
 
-                // המרת ה-Stream ל-byte[] עבור העלאה ל-S3
                 var pdfBytes = originalStream.ToArray();
-
                 using var pdfStream = new MemoryStream(pdfBytes);
                 pdfStream.Position = 0;
 
-                // יצירת מפתח ייחודי ל-PDF
                 string pdfKey = $"transcriptions/{Guid.NewGuid()}.pdf";
-
-                // הגדרת בקשה להעלאה ל-S3
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     InputStream = pdfStream,
@@ -270,14 +280,11 @@ namespace DevNote.Service
                     ContentType = "application/pdf"
                 };
 
-                // העלאת הקובץ ל-S3
                 var transferUtility = new TransferUtility(_s3Client);
                 await transferUtility.UploadAsync(uploadRequest);
 
-                // יצירת URL להורדה
                 string pdfUrl = $"https://{_config["AWS:BucketName"]}.s3.amazonaws.com/{pdfKey}";
 
-                // שמירת פרטי התמלול במסד הנתונים
                 var transcription = new Transcription
                 {
                     UserId = dto.UserId.ToString(),
@@ -292,11 +299,11 @@ namespace DevNote.Service
             {
                 Console.WriteLine($"Looking for font at: {fontPath}");
                 Console.WriteLine($"File exists? {File.Exists(fontPath)}");
-                // הדפסת שגיאה במקרה של כשלון
                 Console.WriteLine(ex);
                 return string.Empty;
             }
         }
+
     }
 
 
