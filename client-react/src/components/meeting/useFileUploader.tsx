@@ -119,6 +119,8 @@ const useFileUploader = () => {
 
   const handleSavePdf = async () => {
     setLoading(true);
+    console.log(editedTranscript);
+    
     try {
       const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/save-edited-transcription', {
         EditedText: editedTranscript,
