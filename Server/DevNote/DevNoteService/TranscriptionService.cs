@@ -233,11 +233,7 @@ namespace DevNote.Service
                 using var originalStream = new MemoryStream();
                 var writer = new PdfWriter(originalStream);
 
-                // הגדרת הפונט לעברית
-                //var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
-                //var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-                //var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-                // הגדרת הפונט לעברית
+                //הגדרת הפונט לעברית
                 var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
                 var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 
