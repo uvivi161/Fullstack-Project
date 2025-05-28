@@ -236,7 +236,10 @@ namespace DevNote.Service
                 // הגדרת הפונט לעברית
                 //var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
                 //var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
-                var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                //var font = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                // הגדרת הפונט לעברית
+                var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
+                var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 
                 var pdf = new PdfDocument(writer);
                 var doc = new Document(pdf);
@@ -251,6 +254,7 @@ namespace DevNote.Service
 
                 doc.Add(paragraph);
                 doc.Close();
+                originalStream.Position = 0;
 
                 // המרת ה-Stream ל-byte[] עבור העלאה ל-S3
                 var pdfBytes = originalStream.ToArray();
