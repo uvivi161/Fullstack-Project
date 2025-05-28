@@ -227,6 +227,7 @@ namespace DevNote.Service
 
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {
+            var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
             Console.WriteLine(dto.EditedText + "in service");
             try
             {
@@ -234,7 +235,6 @@ namespace DevNote.Service
                 var writer = new PdfWriter(originalStream);
 
                 //הגדרת הפונט לעברית
-                var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
                 var font = PdfFontFactory.CreateFont(fontPath, PdfEncodings.IDENTITY_H, PdfFontFactory.EmbeddingStrategy.PREFER_EMBEDDED);
 
                 var pdf = new PdfDocument(writer);
@@ -290,6 +290,8 @@ namespace DevNote.Service
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Looking for font at: {fontPath}");
+                Console.WriteLine($"File exists? {File.Exists(fontPath)}");
                 // הדפסת שגיאה במקרה של כשלון
                 Console.WriteLine(ex);
                 return string.Empty;
