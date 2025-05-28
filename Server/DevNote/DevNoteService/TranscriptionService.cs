@@ -227,7 +227,7 @@ namespace DevNote.Service
 
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {
-            var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.ttf");
+            var fontPath = Path.Combine(AppContext.BaseDirectory, "fonts", "DAVID.TTF");
             Console.WriteLine(dto.EditedText + "in service");
             try
             {
