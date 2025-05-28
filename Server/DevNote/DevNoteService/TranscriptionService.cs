@@ -227,6 +227,7 @@ namespace DevNote.Service
 
         public async Task<string> SaveEditedTranscriptAsync(SaveEditedTranscriptDto dto)
         {
+            Console.WriteLine(dto.EditedText + "in service");
             try
             {
                 using var originalStream = new MemoryStream();
@@ -240,7 +241,7 @@ namespace DevNote.Service
                 var pdf = new PdfDocument(writer);
                 var doc = new Document(pdf);
                 doc.SetFont(font);
-                Console.WriteLine("editedTest - " , dto.EditedText);
+                Console.WriteLine("editedTest - " + dto.EditedText);
 
                 // הגדרת יישור לימין (RTL)
                 var paragraph = new Paragraph(dto.EditedText)
