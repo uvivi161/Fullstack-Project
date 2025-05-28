@@ -251,7 +251,7 @@ namespace DevNote.Service
                     .SetFont(font)
                     .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
                     .SetBaseDirection(iText.Layout.Properties.BaseDirection.RIGHT_TO_LEFT);
-
+                Console.WriteLine("paragraph"+ paragraph);
                 doc.Add(paragraph);
                 doc.Close();
                 originalStream.Position = 0;
