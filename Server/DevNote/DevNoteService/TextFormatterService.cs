@@ -33,7 +33,7 @@ namespace DevNote.Service
                 new
                 {
                     role = "user",
-                    content = $"Please format the following transcript text to be clean and readable, with line breaks after sentences, and clear structure:\n\n{rawText}"
+                    content = $"Please format the following transcript. Do not add any introductions or explanations. Just return the final text only, exactly as requested.\n\n{rawText}"
                 }
             },
                 temperature = 0.2,
