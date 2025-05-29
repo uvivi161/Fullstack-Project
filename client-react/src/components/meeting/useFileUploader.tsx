@@ -22,7 +22,7 @@ const useFileUploader = () => {
   const { pdfUrl, setPdfUrl } = useContext(LinkContext);
 
   // console.log("useFileUploader initialized") // 🔍 זה מדפיס כל פעם?
-  
+
   // console.log("Initial pdfUrl:", pdfUrl) // 🔍 מה זה מדפיס?
   // const [pdfUrl, setPdfUrl] = useContext(LinkContext)
   const buttonStyle = {
@@ -100,8 +100,8 @@ const useFileUploader = () => {
         S3Key: s3K,
         UserId: user.id
       });
-      console.log(data.transcriptText,"transcription data");
-      
+      console.log(data.transcriptText, "transcription data");
+
       clearInterval(interval);
       setTranscribeProgress(100);
       setTranscript(data.transcriptText);
@@ -120,7 +120,7 @@ const useFileUploader = () => {
   const handleSavePdf = async () => {
     setLoading(true);
     console.log(editedTranscript);
-    
+
     try {
       const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/save-edited-transcription', {
         EditedText: editedTranscript,
@@ -144,19 +144,21 @@ const useFileUploader = () => {
 
 
   const handleFormatTranscript = async () => {
-  try {
-    const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/Transcription/format-transcript', {
-      RawText: editedTranscript,
-    });
+    try {
+      const { data } = await axios.post('https://fullstack-project-tt0t.onrender.com/api/TextFormatter/format', editedTranscript, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (data && data.formattedText) {
-      setEditedTranscript(data.formattedText);
-      // אפשר גם להראות הודעה אם תרצי
+      if (data && data.formattedText) {
+        setEditedTranscript(data.formattedText);
+        // אפשר גם להראות הודעה אם תרצי
+      }
+    } catch (error) {
+      console.error('שגיאה בעיצוב הטקסט:', error);
     }
-  } catch (error) {
-    console.error('שגיאה בעיצוב הטקסט:', error);
-  }
-};
+  };
 
   return {
     file,

@@ -26,7 +26,7 @@ namespace DevNote.Service
 
             var requestBody = new
             {
-                model = "gpt-4",
+                model = "gpt-4o-mini",
                 messages = new[]
                 {
                 new { role = "system", content = "You are an assistant that improves text formatting." },
@@ -43,9 +43,11 @@ namespace DevNote.Service
             var content = new StringContent(
                 JsonSerializer.Serialize(requestBody),
                 Encoding.UTF8,
-                "application/json");
+                "application/json"
+            );
 
-            var response = await _httpClient.PostAsync(Environment.GetEnvironmentVariable("OpenAi__edit"), content);
+            var resUrl = Environment.GetEnvironmentVariable("OpenAi__edit");
+            var response = await _httpClient.PostAsync(resUrl, content);
             var responseText = await response.Content.ReadAsStringAsync();
             Console.WriteLine("OpenAI response:");
             Console.WriteLine(responseText);
