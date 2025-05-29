@@ -5,11 +5,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'customer-edit-dialog',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatInputModule, MatIconModule],
+  imports: [CommonModule, ReactiveFormsModule, MatButtonModule, MatInputModule, MatIconModule, MatSelectModule],
   template: `
     <div class="dialog-container">
       <h2 mat-dialog-title class="dialog-title">
@@ -24,11 +25,20 @@ import { MatIconModule } from '@angular/material/icon';
           <mat-icon matSuffix color="primary">email</mat-icon>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-field">
+        <!-- <mat-form-field appearance="outline" class="form-field">
           <mat-label>Role</mat-label>
           <input matInput formControlName="role">
           <mat-icon matSuffix color="primary">work</mat-icon>
-        </mat-form-field>
+        </mat-form-field> -->
+
+                  <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Role</mat-label>
+            <mat-select formControlName="role" placeholder="Select role">
+              <mat-option value="developer">Developer</mat-option>
+              <mat-option value="teamLeader">Team Leader</mat-option>
+            </mat-select>
+            <mat-icon matSuffix color="accent">work</mat-icon>
+          </mat-form-field>
         
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>City</mat-label>

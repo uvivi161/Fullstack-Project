@@ -14,6 +14,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatCheckboxModule, MatCheckbox } from '@angular/material/checkbox';
 import { SelectionModel } from '@angular/cdk/collections';
 
+import { MatSelectModule } from '@angular/material/select';
 import { UsersService } from '../../services/usersService/users.service';
 import { UserUpdateDialogeComponent } from '../user-update-dialoge/user-update-dialoge.component';
 import { DeleteConfirmationDialogComponent } from '../delete-confirmation-dialog/delete-confirmation-dialog.component';
@@ -35,7 +36,8 @@ import { AuthService } from '../../services/authService/auth.service';
     MatCardModule,
     MatTooltipModule,
     MatExpansionModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatSelectModule
   ],
   templateUrl: `./users-manegmant.component.html`,
   styleUrls: ['./users-manegmant.component.css']
