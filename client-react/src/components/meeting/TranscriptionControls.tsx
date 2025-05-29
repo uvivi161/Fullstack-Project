@@ -213,7 +213,7 @@ interface TranscriptionControlsProps {
   onSavePdf: () => void
   loading: boolean
   buttonStyle?: any
-  handleFormatTranscript: () => Promise<void>
+  handleFormatTranscript: () => void
 }
 
 const TranscriptionControls = ({
@@ -262,7 +262,7 @@ const TranscriptionControls = ({
               },
             }}
           >
-            {isTranscribing ? "מתמלל..." : "תמלל שיחה"}
+            {isTranscribing ? "Transcription..." : "Transcibe your text"}
           </Button>
         </Box>
       )}
@@ -334,12 +334,12 @@ const TranscriptionControls = ({
                   },
                 },
               }}
-              placeholder="הטקסט המתומלל יופיע כאן..."
+              placeholder="transcrption text will be here..."
             />
 
             {/* Floating AI Format Button */}
             {editedTranscript && (
-              <Tooltip title="עיצוב טקסט באמצעות AI" placement="top">
+              <Tooltip title="Edit your text by AI" placement="top">
                 <IconButton
                   onClick={handleAIFormat}
                   disabled={isFormatting}
@@ -354,7 +354,7 @@ const TranscriptionControls = ({
                     border: "1px solid rgba(89, 80, 71, 0.2)",
                     transition: "all 0.2s ease",
                     "&:hover": {
-                      backgroundColor: "#595047",
+                      backgroundColor: "rgba(242, 213, 68, 0.7)",
                       color: "#ffffff",
                       transform: "scale(1.05)",
                     },
@@ -396,7 +396,7 @@ const TranscriptionControls = ({
                     : {},
               }}
             >
-              שמור כ־PDF
+              save as PDF
             </Button>
 
             {pdfUrl && (
@@ -420,7 +420,7 @@ const TranscriptionControls = ({
                   },
                 }}
               >
-                הורד קובץ PDF
+                Download PDF
               </Button>
             )}
           </Box>

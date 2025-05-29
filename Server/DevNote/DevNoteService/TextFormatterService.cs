@@ -12,12 +12,12 @@ namespace DevNote.Service
     public class TextFormatterService : ITextFormatterService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = "YOUR_OPENAI_API_KEY"; // עדיף לטעון מה־appsettings
+        private readonly string _apiKey = Environment.GetEnvironmentVariable("OpenAi__API-Key"); // עדיף לטעון מה־appsettings
 
         public TextFormatterService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-        }
+        } 
 
         public async Task<string> FormatTranscriptAsync(string rawText)
         {
@@ -45,9 +45,10 @@ namespace DevNote.Service
                 Encoding.UTF8,
                 "application/json");
 
-            var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
+            var response = await _httpClient.PostAsync(Environment.GetEnvironmentVariable("OpenAi__edit"), content);
             var responseText = await response.Content.ReadAsStringAsync();
-
+            Console.WriteLine("OpenAI response:");
+            Console.WriteLine(responseText);
             using var doc = JsonDocument.Parse(responseText);
             return doc.RootElement
                 .GetProperty("choices")[0]
