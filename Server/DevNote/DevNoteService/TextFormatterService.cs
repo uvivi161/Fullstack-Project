@@ -48,7 +48,7 @@ namespace DevNote.Service
 
             var resUrl = Environment.GetEnvironmentVariable("OpenAi__edit");
             Console.WriteLine(resUrl);
-            var response = await _httpClient.PostAsync(resUrl, content);
+            var response = await _httpClient.PostAsync("https://api.openai.com/v1/chat/completions", content);
             var responseText = await response.Content.ReadAsStringAsync();
             Console.WriteLine("OpenAI response:");
             Console.WriteLine(responseText);
