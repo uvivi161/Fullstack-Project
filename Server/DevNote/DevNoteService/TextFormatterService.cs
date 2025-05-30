@@ -13,7 +13,7 @@ namespace DevNote.Service
     {
         private readonly HttpClient _httpClient;
         private readonly string _apiKey = Environment.GetEnvironmentVariable("OpenAi__API-Key"); // עדיף לטעון מה־appsettings
-
+        
         public TextFormatterService(HttpClient httpClient)
         {
             _httpClient = httpClient;
@@ -21,6 +21,7 @@ namespace DevNote.Service
 
         public async Task<string> FormatTranscriptAsync(string rawText)
         {
+            Console.WriteLine("textt format api key " + _apiKey);
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _apiKey);
 
@@ -33,7 +34,7 @@ namespace DevNote.Service
                 new
                 {
                     role = "user",
-                    content = $"Please format the following transcript. Do not add any introductions or explanations. Just return the final text only, exactly as requested.\n\n{rawText}"
+                    content = $"Please format the following transcript. Do not add any introductions or explanations. Just return the final text only, exactly as requested.\n\n{rawText}",
                 }
             },
                 temperature = 0.2,
