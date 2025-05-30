@@ -201,7 +201,7 @@ const CreateMeeting = () => {
                     className="text-field"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <TextField
                     fullWidth
                     label="Meeting Description (Optional)"
@@ -213,7 +213,7 @@ const CreateMeeting = () => {
                     placeholder="Add any additional details about the meeting"
                     className="text-field"
                   />
-                </Grid>
+                </Grid> */}
               </Grid>
             </Box>
 
