@@ -66,29 +66,56 @@ namespace DevNote.Service
             return hasher.HashPassword(null, plainPassword);
         }
 
+        //public async Task<bool> PostNewUserAsync(User us)
+        //{
+        //    var existingUser = _IUserRepository.Get().FirstOrDefault(f => f.Id == us.Id);
+        //    if (existingUser != null)
+        //        return false;
+
+        //    // שלב 1: יצירת סיסמה אקראית
+        //    //var generatedPassword = GeneratePassword();
+        //    var password = us.PasswordHash;
+        //    // שלב 2: הצפנה של הסיסמה
+        //    us.PasswordHash = HashPassword(us.PasswordHash); // שימי לב – מחייב שימוש בפונקציית הצפנה
+
+        //    // שלב 3: הוספת המשתמש
+        //    _IUserRepository.PostNewUser(us);
+        //    _irm.save();
+
+        //    // שלב 4: שליחת מייל עם הפרטים
+        //    var subject = "Welcome to the DevNote system";
+        //    var body = $"Hi {us.Mail},\n\nYour user was created.\nEmail: {us.Mail}\nYour Password: {password}";
+        //    await _emailService.SendEmailAsync(us.Mail, subject, body);
+
+        //    return true;
+        //}
+
         public async Task<bool> PostNewUserAsync(User us)
         {
             var existingUser = _IUserRepository.Get().FirstOrDefault(f => f.Id == us.Id);
             if (existingUser != null)
                 return false;
 
-            // שלב 1: יצירת סיסמה אקראית
-            //var generatedPassword = GeneratePassword();
             var password = us.PasswordHash;
-            // שלב 2: הצפנה של הסיסמה
-            us.PasswordHash = HashPassword(us.PasswordHash); // שימי לב – מחייב שימוש בפונקציית הצפנה
+            us.PasswordHash = HashPassword(us.PasswordHash);
 
-            // שלב 3: הוספת המשתמש
             _IUserRepository.PostNewUser(us);
             _irm.save();
 
-            // שלב 4: שליחת מייל עם הפרטים
             var subject = "Welcome to the DevNote system";
-            var body = $"Hi {us.Mail},\n\nYour user was created.\nEmail: {us.Mail}\nYour Password: {password}";
-            await _emailService.SendEmailAsync(us.Mail, subject, body);
+            var body = $@"
+        <div style='font-family:Arial,sans-serif; font-size:14px; color:#333;'>
+            <p>Hi {us.Mail},</p>
+            <p>Your user was created.</p>
+            <p>Email: {us.Mail}</p>
+            <p>Your Password: {password}</p>
+        </div>";
+
+            await _emailService.SendEmailAsync(us.Mail, subject, body, isHtml: true);
 
             return true;
         }
+
 
         public bool RegisterEmployee(string mail, string role, string city, string companyName, out string generatedPassword)
         {

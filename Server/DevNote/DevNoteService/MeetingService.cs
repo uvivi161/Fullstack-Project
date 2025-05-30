@@ -87,9 +87,9 @@ namespace DevNote.Service
         <hr style='margin:20px 0;' />
         <div style='color: #555; font-size: 14px;'>
           <p style='margin:0; font-weight:bold;'>🎉 DevNote – Your ideas. Structured.</p>
-          <p style='margin:4px 0;'>🎨 A smart platform for meeting transcriptions and insights.</p>
+          <p style='margin:4px 0;'>🖥️ A smart platform for meeting transcriptions and insights.</p>
           <p style='margin:4px 0;'>🌐 
-            <a href='https://devnote-client.onrender.com' style='color:#0066cc; text-decoration:none;'>
+            <a href='https://fullstack-project-react.onrender.com/' style='color:#0066cc; text-decoration:none;'>
               www.DevNote.com
             </a>
           </p>
@@ -122,20 +122,17 @@ namespace DevNote.Service
                 string subject = "You've been added to a new meeting";
 
                 string body = $@"
-            <div style='font-family:Arial,sans-serif; font-size:14px; color:#333;'>
-                <p>Hi {user.Mail},</p>
-                <p>{creatorMail} has added you to the meeting titled <strong>""{meeting.Title}""</strong>.</p>
-                <p><strong>Date:</strong> {meeting.OccurredIn:MMMM dd, yyyy}</p>
-                <p>You're welcome to join!</p>
-
-                {GetEmailFooter()}
-            </div>";
+            <p>Hi {user.Mail},</p>
+            <p>{creatorMail} has added you to the meeting titled <strong>""{meeting.Title}""</strong>.</p>
+            <p><strong>Date:</strong> {meeting.OccurredIn:MMMM dd, yyyy}</p>
+            <p>You're welcome to join!</p>";
 
                 _ = _emailService.SendEmailAsync(user.Mail, subject, body, isHtml: true);
             }
 
             return true;
         }
+
 
         public bool Delete(int id)
         {
