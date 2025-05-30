@@ -16,14 +16,14 @@ interface AuthGuardProps {
     children: React.ReactNode;
 }
 
-function TeamLeaderGaurd({ children } : AuthGuardProps) {
-    const [user] = useContext(UserContext);
-    if (!user) {
-        // אפשר להחזיר סתם ספן זמני, או קומפוננטת טעינה יפה
-        return <span>טוען...</span>;
-    }
-    return user.role === 'teamLeader' ? children : <Navigate to="/app" replace />; 
-}
+// function TeamLeaderGaurd({ children } : AuthGuardProps) {
+//     const [user] = useContext(UserContext);
+//     if (!user) {
+//         // אפשר להחזיר סתם ספן זמני, או קומפוננטת טעינה יפה
+//         return <span>טוען...</span>;
+//     }
+//     return user.role === 'teamLeader' ? children : <Navigate to="/app" replace />; 
+// }
 
 // function DeveloperGaurd({ children } : AuthGuardProps) {
 //     const [user] = useContext(UserContext);
@@ -60,9 +60,9 @@ export function AppRouter() {
         <Route index element={<Dashboard />} />
         <Route path="my-meetings" element={<MyMeetings />} />
         <Route path="create-meeting" element={
-          <TeamLeaderGaurd>
+          // <TeamLeaderGaurd>
             <CreateMeeting />
-          </TeamLeaderGaurd>
+          // </TeamLeaderGaurd>
         } />
       </Route>
       <Route path="*" element={<>Not Found</>} />
