@@ -50,6 +50,7 @@ namespace DevNote.Data.Repositories
                 meeting.IsViewed = true;
                 _context.SaveChanges();
             }
+            Console.WriteLine(meeting);
             return meeting;
 
         }

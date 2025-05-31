@@ -89,6 +89,7 @@ User menu styling
 .user-menu-info {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .user-menu-email {

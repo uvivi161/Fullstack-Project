@@ -152,9 +152,12 @@ const MyMeetings = () => {
       setSelectedMeeting(data)
 
       // Update meetings list to mark this meeting as viewed
+      // עדכון סטייט לוקאלי בלבד, לא מעדכן בשרת
       if (user.role === "developer" && !data.isViewd) {
-        // Update local state to reflect the meeting is now viewed
-        setMeetings((prevMeetings) => prevMeetings.map((m) => (m.id === meetingId ? { ...m, isViewd: true } : m)))
+        setMeetings((prevMeetings) =>
+          prevMeetings.map((m) => (m.id === meetingId ? { ...m, isViewd: true } : m))
+        )
+        
       }
     } catch (err) {
       console.error("Error fetching meeting details:", err)

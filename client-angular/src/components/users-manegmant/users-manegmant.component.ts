@@ -235,7 +235,7 @@ export class UsersManegmantComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error adding employee', err);
-        alert('Failed to add employee. Please try again.');
+        alert('this user is already exist');
       }
     });
   }
