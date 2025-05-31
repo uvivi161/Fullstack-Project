@@ -144,6 +144,8 @@ const MyMeetings = () => {
     try {
       const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getById?id=${meetingId}`)
       const data = await res.json()
+      console.log(data, "data");
+      
       // Save data in reference - updates immediately
       currentMeetingDataRef.current = data
       console.log("Data received in ref:", currentMeetingDataRef.current)

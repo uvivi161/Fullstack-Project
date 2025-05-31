@@ -13,6 +13,7 @@ namespace DevNote.Core.Dto_s
         public DateTime OccurredIn { get; set; }//מתי היה המפגש
         public string TranscriptionPdfUrl { get; set; }
         public int CreatorId { get; set; }//מי יצר את המפגש
+        public bool IsViewed { get; set; }
         public List<UserMeeting_mailDto> Participants { get; set; } = new List<UserMeeting_mailDto>();
     }
 }

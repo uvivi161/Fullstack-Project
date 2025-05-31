@@ -78,6 +78,7 @@ namespace DevNote.API.Controllers
                 OccurredIn = meeting.OccurredIn,
                 TranscriptionPdfUrl = meeting.TranscriptionPdfUrl,
                 CreatorId = meeting.CreatorId,
+                IsViewed = meeting.IsViewed,
                 Participants = meeting.Participants.Select(p => new UserMeeting_mailDto { Mail = p.Mail }).ToList()
             };
             return Ok(meetingDto);
