@@ -21,7 +21,7 @@ namespace DevNote.Service
 
         public async Task<string> FormatTranscriptAsync(string rawText)
         {
-            Console.WriteLine("textt format api key " + _apiKey);
+            //Console.WriteLine("textt format api key " + _apiKey);
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _apiKey);
 
