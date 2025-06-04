@@ -99,13 +99,14 @@ const MyMeetings = () => {
       } else if (user.role === "developer") {
         // Developer - fetch by participant
         res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/Users/getAllMeetings?id=${user.id}`)
+        console.log(res);
       } else {
         console.warn("Unrecognized role, no meetings loaded.")
         return
       }
       if (!res.ok) {
-         const errorText = await res.text(); // לא json
-          throw new Error(errorText);
+        const errorText = await res.text(); // לא json
+        throw new Error(errorText);
       }
       const data = await res.json()
       setMeetings(data)
@@ -140,33 +141,64 @@ const MyMeetings = () => {
   }
 
   // Separate function to load meeting details
-  const fetchMeetingDetails = async (meetingId: any) => {
-    try {
-      const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getById?id=${meetingId}`)
-      const data = await res.json()
-      console.log(data, "data");
-      
-      // Save data in reference - updates immediately
-      currentMeetingDataRef.current = data
-      console.log("Data received in ref:", currentMeetingDataRef.current)
-      getCreatorMail(data.creatorId) // Load creator's email
-      // Update state - will update in next render cycle
-      setSelectedMeeting(data)
+  // const fetchMeetingDetails = async (meetingId: any) => {
+  //   try {
+  //     const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getById?id=${meetingId}`)
+  //     const data = await res.json()
+  //     console.log(data, "data");
 
-      // Update meetings list to mark this meeting as viewed
-      // עדכון סטייט לוקאלי בלבד, לא מעדכן בשרת
-      if (user.role === "developer" && !data.isViewd) {
-        setMeetings((prevMeetings) =>
-          prevMeetings.map((m) => (m.id === meetingId ? { ...m, isViewd: true } : m))
-        )
-        
-      }
-    } catch (err) {
-      console.error("Error fetching meeting details:", err)
-    } finally {
-      setIsDetailLoading(false)
+  //     // Save data in reference - updates immediately
+  //     currentMeetingDataRef.current = data
+  //     console.log("Data received in ref:", currentMeetingDataRef.current)
+  //     getCreatorMail(data.creatorId) // Load creator's email
+  //     // Update state - will update in next render cycle
+  //     setSelectedMeeting(data)
+
+  //     // Update meetings list to mark this meeting as viewed
+  //     // עדכון סטייט לוקאלי בלבד, לא מעדכן בשרת
+  //     if (user.role === "developer" && !data.isViewd) {
+  //       setMeetings((prevMeetings) =>
+  //         prevMeetings.map((m) => (m.id === meetingId ? { ...m, isViewd: true } : m))
+  //       )
+
+  //     }
+  //   } catch (err) {
+  //     console.error("Error fetching meeting details:", err)
+  //   } finally {
+  //     setIsDetailLoading(false)
+  //   }
+  // }
+const fetchMeetingDetails = async (meetingId: number) => {
+  try {
+    const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getById?id=${meetingId}`);
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText);
     }
+
+    const data = await res.json();
+    currentMeetingDataRef.current = data;
+    getCreatorMail(data.creatorId);
+    setSelectedMeeting(data);
+
+    // עדכון מיידי לוקאלי לצורך UX חלק
+    if (user.role === "developer" && !data.isViewd) {
+      setMeetings((prevMeetings) =>
+        prevMeetings.map((m) => (m.id === meetingId ? { ...m, isViewd: true } : m))
+      );
+    }
+
+    // רענון מהשרת אחרי הצפייה
+    await fetchMeetings();
+
+  } catch (err) {
+    console.error("Error fetching meeting details:", err);
+  } finally {
+    setIsDetailLoading(false);
   }
+};
+
+
 
   const handleClose = () => {
     setOpen(false)
@@ -443,15 +475,15 @@ const MyMeetings = () => {
               <Grid item xs={12} sm={6} md={4} key={meeting.id}>
                 <Card
                   className="meeting-card"
-                  // sx={{
-                  //   position: "relative",
-                  //   border:
-                  //     user?.role === "developer" && isUnviewed(meeting) ? "2px solid #ff5630 !important" : undefined,
-                  //   boxShadow:
-                  //     user?.role === "developer" && isUnviewed(meeting)
-                  //       ? "0 4px 12px rgba(255, 86, 48, 0.3) !important"
-                  //       : undefined,
-                  // }}
+                // sx={{
+                //   position: "relative",
+                //   border:
+                //     user?.role === "developer" && isUnviewed(meeting) ? "2px solid #ff5630 !important" : undefined,
+                //   boxShadow:
+                //     user?.role === "developer" && isUnviewed(meeting)
+                //       ? "0 4px 12px rgba(255, 86, 48, 0.3) !important"
+                //       : undefined,
+                // }}
                 >
                   {/* Unviewed indicator */}
                   {user?.role === "developer" && isUnviewed(meeting) && (
@@ -493,9 +525,9 @@ const MyMeetings = () => {
                         >
                           <Avatar
                             className="meeting-avatar"
-                            // sx={{
-                            //   border: isUnviewed(meeting) ? "2px solid #ff5630" : undefined,
-                            // }}
+                          // sx={{
+                          //   border: isUnviewed(meeting) ? "2px solid #ff5630" : undefined,
+                          // }}
                           >
                             {getInitials(meeting.title)}
                           </Avatar>
@@ -536,13 +568,13 @@ const MyMeetings = () => {
                         disabled={isLoading}
                         className="view-details-button"
                         fullWidth
-                        // sx={{
-                        //   bgcolor: user?.role === "developer" && isUnviewed(meeting) ? "#ff5630 !important" : undefined,
-                        //   "&:hover": {
-                        //     bgcolor:
-                        //       user?.role === "developer" && isUnviewed(meeting) ? "#e04120 !important" : undefined,
-                        //   },
-                        // }}
+                      // sx={{
+                      //   bgcolor: user?.role === "developer" && isUnviewed(meeting) ? "#ff5630 !important" : undefined,
+                      //   "&:hover": {
+                      //     bgcolor:
+                      //       user?.role === "developer" && isUnviewed(meeting) ? "#e04120 !important" : undefined,
+                      //   },
+                      // }}
                       >
                         {isLoading
                           ? "Loading..."
@@ -615,13 +647,13 @@ const MyMeetings = () => {
                           <Typography variant="body1" className="detail-value">
                             {getCurrentMeetingData().occurredIn
                               ? new Date(getCurrentMeetingData().occurredIn).toLocaleString("en-US", {
-                                  weekday: "long",
-                                  year: "numeric",
-                                  month: "long",
-                                  day: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                })
+                                weekday: "long",
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
                               : "Not available"}
                           </Typography>
                         </Box>
@@ -831,3 +863,338 @@ const MyMeetings = () => {
 }
 
 export default MyMeetings
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//לא מציג את פרטי המפגש
+
+// import { useContext, useState, useEffect, useRef, type SetStateAction } from "react";
+// import {
+//   Card,
+//   CardContent,
+//   Typography,
+//   Button,
+//   Dialog,
+//   DialogContent,
+//   DialogActions,
+//   Grid,
+//   Container,
+//   IconButton,
+//   TextField,
+//   Link,
+//   CircularProgress,
+//   Chip,
+//   Divider,
+//   Paper,
+//   Avatar,
+//   Box,
+//   Tooltip,
+//   Pagination,
+//   Menu,
+//   MenuItem,
+//   ListItemIcon,
+//   ListItemText
+// } from "@mui/material";
+// import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+// import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+// import DescriptionIcon from "@mui/icons-material/Description";
+// import PeopleIcon from "@mui/icons-material/People";
+// import EmailIcon from "@mui/icons-material/Email";
+// import SearchIcon from "@mui/icons-material/Search";
+// import FilterListIcon from "@mui/icons-material/FilterList";
+// import SortIcon from "@mui/icons-material/Sort";
+// import CheckIcon from "@mui/icons-material/Check";
+// import { UserContext } from "./login/UserReducer";
+// import "../theme.css";
+// import "../css/my-meetings.css";
+
+// const MyMeetings = () => {
+//   const emptyMeeting = {
+//     id: 0,
+//     creatorId: 1,
+//     title: "",
+//     occurredIn: "",
+//     transcriptionPdfUrl: "",
+//     participants: [{ id: 0, mail: "" }],
+//   };
+
+//   const [user] = useContext(UserContext);
+//   const [meetings, setMeetings] = useState<{ id: number; title: string; occurredIn: string }[]>([]);
+//   const [selectedMeeting, setSelectedMeeting] = useState(emptyMeeting);
+//   const [open, setOpen] = useState(false);
+//   const [confirmOpen, setConfirmOpen] = useState(false);
+//   const [meetingToDelete, setMeetingToDelete] = useState<{ id: number; title: string } | null>(null);
+//   const [confirmationText, setConfirmationText] = useState("");
+//   const [isLoading, setIsLoading] = useState(false);
+//   const [isDetailLoading, setIsDetailLoading] = useState(false);
+//   const [creatorMail, setCreatorMail] = useState("");
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [page, setPage] = useState(1);
+//   const meetingsPerPage = 6;
+//   const [sortAnchorEl, setSortAnchorEl] = useState<null | HTMLElement>(null);
+//   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
+//   const [sortOrder, setSortOrder] = useState<"newest" | "oldest">("newest");
+//   const [filterKeyword, setFilterKeyword] = useState<string | null>(null);
+//   const filterKeywords = ["meeting", "review", "planning", "discussion", "update"];
+
+//   const currentMeetingDataRef = useRef(null);
+
+//   useEffect(() => {
+//     if (user) fetchMeetings();
+//   }, [user]);
+
+//   const fetchMeetings = async () => {
+//     try {
+//       setIsLoading(true);
+//       let res;
+
+//       if (user.role === "teamLeader") {
+//         res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getByCreatorId?creatorMail=${user.mail}`);
+//       } else if (user.role === "developer") {
+//         res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/Users/getAllMeetings?id=${user.id}`);
+//       } else {
+//         return;
+//       }
+
+//       if (!res.ok) throw new Error(await res.text());
+
+//       const data = await res.json();
+//       setMeetings(data);
+//     } catch (err) {
+//       console.error("Error fetching meetings:", err);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   const fetchMeetingDetails = async (meetingId: number) => {
+//     try {
+//       const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/getById?id=${meetingId}`);
+//       if (!res.ok) throw new Error(await res.text());
+
+//       const data = await res.json();
+//       currentMeetingDataRef.current = data;
+//       getCreatorMail(data.creatorId);
+//       setSelectedMeeting(data);
+//       await fetchMeetings();
+//     } catch (err) {
+//       console.error("Error fetching meeting details:", err);
+//     } finally {
+//       setIsDetailLoading(false);
+//     }
+//   };
+
+//   const getCreatorMail = async (creatorId: number) => {
+//     try {
+//       const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/Users/getById?id=${creatorId}`);
+//       const data = await res.text();
+//       setCreatorMail(data);
+//     } catch (error) {
+//       console.error("Error fetching creator mail:", error);
+//     }
+//   };
+
+//   const handleOpen = (meeting: any) => {
+//     setIsDetailLoading(true);
+//     setOpen(true);
+//     fetchMeetingDetails(meeting.id);
+//   };
+
+//   const handleClose = () => {
+//     setOpen(false);
+//     setTimeout(() => {
+//       setSelectedMeeting(emptyMeeting);
+//       currentMeetingDataRef.current = null;
+//     }, 300);
+//   };
+
+//   const handleDeleteClick = (meeting: any) => {
+//     setMeetingToDelete(meeting);
+//     setConfirmationText("");
+//     setConfirmOpen(true);
+//   };
+
+//   const handleConfirmDelete = async () => {
+//     if (!meetingToDelete) return;
+//     try {
+//       setIsLoading(true);
+//       const res = await fetch(`https://fullstack-project-tt0t.onrender.com/api/MeetingControler/deleteMeeting?id=${meetingToDelete.id}`, {
+//         method: "DELETE",
+//       });
+//       if (res.ok) {
+//         setMeetings((prev) => prev.filter((meeting) => meeting.id !== meetingToDelete.id));
+//         setConfirmOpen(false);
+//       } else {
+//         console.error("Failed to delete meeting:", await res.text());
+//       }
+//     } catch (error) {
+//       console.error("Error deleting meeting:", error);
+//     } finally {
+//       setIsLoading(false);
+//     }
+//   };
+
+//   const handleSortClick = (event: React.MouseEvent<HTMLElement>) => setSortAnchorEl(event.currentTarget);
+//   const handleSortClose = () => setSortAnchorEl(null);
+//   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
+//   const handleFilterClose = () => setFilterAnchorEl(null);
+//   const handleSortChange = (order: "newest" | "oldest") => {
+//     setSortOrder(order);
+//     handleSortClose();
+//   };
+//   const handleFilterChange = (keyword: string | null) => {
+//     setFilterKeyword(keyword);
+//     handleFilterClose();
+//   };
+//   const handlePageChange = (_event: any, value: SetStateAction<number>) => {
+//     setPage(value);
+//     window.scrollTo({ top: 0, behavior: "smooth" });
+//   };
+
+//   const getCurrentMeetingData = () => currentMeetingDataRef.current || selectedMeeting;
+//   const getInitials = (title: string) => title?.split(" ").map((w) => w[0]).join("").substring(0, 2).toUpperCase() || "M";
+
+//   const filteredBySearch = meetings.filter((meeting) => meeting.title.toLowerCase().includes(searchTerm.toLowerCase()));
+//   const filteredByKeyword = filterKeyword
+//     ? filteredBySearch.filter((meeting) => meeting.title.toLowerCase().includes(filterKeyword.toLowerCase()))
+//     : filteredBySearch;
+//   const filteredMeetings = filteredByKeyword;
+//   const sortedMeetings = [...filteredMeetings].sort((a, b) => new Date(b.occurredIn).getTime() - new Date(a.occurredIn).getTime());
+//   const totalPages = Math.ceil(filteredMeetings.length / meetingsPerPage);
+//   const displayedMeetings = sortedMeetings.slice((page - 1) * meetingsPerPage, page * meetingsPerPage);
+
+//   return (
+//     <Container maxWidth="xl" className="meetings-container">
+//       <Box className="page-header">
+//         <Box>
+//           <Typography variant="h4" className="page-title">
+//             {user?.role === "teamLeader" ? "My Created Meetings" : "My Meetings"}
+//           </Typography>
+//           <Typography variant="body1" className="page-subtitle">
+//             {user?.role === "teamLeader"
+//               ? "View and manage meetings you've created"
+//               : "View meetings you've participated in"}
+//           </Typography>
+//         </Box>
+
+//         <Box className="search-container">
+//           <Paper elevation={0} className="search-field">
+//             <SearchIcon className="search-icon" />
+//             <TextField
+//               placeholder="Search meetings..."
+//               value={searchTerm}
+//               onChange={(e) => {
+//                 setSearchTerm(e.target.value);
+//                 setPage(1);
+//               }}
+//               variant="standard"
+//               fullWidth
+//               InputProps={{ disableUnderline: true }}
+//               className="search-input"
+//             />
+//           </Paper>
+
+//           <Tooltip title="Filter">
+//             <IconButton className={`action-button ${filterKeyword ? "active" : ""}`} onClick={handleFilterClick}>
+//               <FilterListIcon />
+//               {filterKeyword && <span className="active-filter-badge"></span>}
+//             </IconButton>
+//           </Tooltip>
+
+//           <Tooltip title="Sort">
+//             <IconButton className={`action-button ${sortOrder !== "newest" ? "active" : ""}`} onClick={handleSortClick}>
+//               <SortIcon />
+//             </IconButton>
+//           </Tooltip>
+//         </Box>
+//       </Box>
+
+//       {isLoading && meetings.length === 0 ? (
+//         <Box className="loading-container">
+//           <CircularProgress className="loading-spinner" />
+//           <Typography variant="h6" className="loading-text">Loading meetings...</Typography>
+//         </Box>
+//       ) : filteredMeetings.length === 0 ? (
+//         <Box className="empty-state">
+//           <Box className="empty-state-icon-container">
+//             <CalendarTodayIcon className="empty-state-icon" />
+//           </Box>
+//           <Typography variant="h5" className="empty-state-title">No meetings found</Typography>
+//           <Typography variant="body1" className="empty-state-message">
+//             {searchTerm ? "Try a different search term or clear your search" : "No meetings to display"}
+//           </Typography>
+//         </Box>
+//       ) : (
+//         <>
+//           <Grid container spacing={3}>
+//             {displayedMeetings.map((meeting) => (
+//               <Grid item xs={12} sm={6} md={4} key={meeting.id}>
+//                 <Card className="meeting-card">
+//                   <Box className="card-header-stripe" />
+//                   <Box className="card-header">
+//                     <Box className="card-title-container">
+//                       <Avatar className="meeting-avatar">{getInitials(meeting.title)}</Avatar>
+//                       <Box className="card-title-content">
+//                         <Typography variant="h6" className="card-title">{meeting.title}</Typography>
+//                         <Box className="card-date">
+//                           <CalendarTodayIcon className="card-date-icon" />
+//                           <Typography variant="body2">{new Date(meeting.occurredIn).toLocaleDateString()}</Typography>
+//                         </Box>
+//                       </Box>
+//                     </Box>
+//                     <IconButton aria-label="delete" onClick={(e) => {
+//                       e.stopPropagation();
+//                       handleDeleteClick(meeting);
+//                     }} className="delete-button">
+//                       <DeleteOutlineIcon />
+//                     </IconButton>
+//                   </Box>
+//                   <Divider className="card-divider" />
+//                   <CardContent className="card-content">
+//                     <Box className="card-actions">
+//                       <Button
+//                         variant="contained"
+//                         onClick={() => handleOpen(meeting)}
+//                         disabled={isLoading}
+//                         className="view-details-button"
+//                         fullWidth
+//                       >
+//                         View Meeting Details
+//                       </Button>
+//                     </Box>
+//                   </CardContent>
+//                 </Card>
+//               </Grid>
+//             ))}
+//           </Grid>
+
+//           {totalPages > 1 && (
+//             <Box className="pagination-container">
+//               <Pagination
+//                 count={totalPages}
+//                 page={page}
+//                 onChange={handlePageChange}
+//                 variant="outlined"
+//                 shape="rounded"
+//                 className="pagination"
+//               />
+//             </Box>
+//           )}
+//         </>
+//       )}
+//     </Container>
+//   );
+// };
+
+// export default MyMeetings;
