@@ -50,7 +50,7 @@ const FileUploadControls = ({
             },
           }}
         >
-          Select a file
+          Select mp3 file
         </Button>
       </label>
 
@@ -74,7 +74,7 @@ const FileUploadControls = ({
             : {},
         }}
       >
-        Upload a file
+        Upload mp3 file
          </Button>
     </Stack>
 
