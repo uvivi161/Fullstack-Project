@@ -27,7 +27,7 @@ namespace DevNote.Service
 
             var requestBody = new
             {
-                model = "gpt-4-0613",
+                model = "gpt-4.1",
                 messages = new[]
                 {
                 new { role = "system", content = "You are an assistant that improves text formatting." },
