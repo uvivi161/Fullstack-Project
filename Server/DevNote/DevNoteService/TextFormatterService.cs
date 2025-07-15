@@ -55,7 +55,7 @@ namespace DevNote.Service
             Console.WriteLine(responseText);
             using var doc = JsonDocument.Parse(responseText);
             return doc.RootElement
-                //.GetProperty("choices")[0]
+                .GetProperty("choices")[0]
                 .GetProperty("message")
                 .GetProperty("content")
                 .GetString();
